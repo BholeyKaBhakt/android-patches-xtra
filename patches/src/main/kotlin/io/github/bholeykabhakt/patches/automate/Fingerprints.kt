@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.automate
 
-import app.revanced.patcher.fingerprint
+import app.morphe.patcher.fingerprint
 
 internal val isBlockLimitReachedFingerPrint = fingerprint {
     returns("Z")

@@ -1,7 +1,7 @@
-# 👋🧩 ReVanced Patches Xtra
+# 👋🧩 Android Patches Xtra
 
-This repo contains complimentary ReVanced Patches.  
+This repo contains some Android app patches.  
 
 ## 📜 Licence
 
-ReVanced Patches Xtra is licensed under the GPLv3 licence. Please see the [licence file](LICENSE) for more information.
+Android Patches Xtra is licensed under the GPLv3 licence. Please see the [licence file](LICENSE) for more information.

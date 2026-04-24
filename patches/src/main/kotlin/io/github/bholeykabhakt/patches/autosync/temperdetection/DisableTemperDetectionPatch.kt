@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.autosync.temperdetection
 
-import app.revanced.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.bytecodePatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 @Suppress("unused")

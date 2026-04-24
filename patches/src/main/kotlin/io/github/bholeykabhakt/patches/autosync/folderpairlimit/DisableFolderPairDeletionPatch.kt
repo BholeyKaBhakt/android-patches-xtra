@@ -1,7 +1,7 @@
 package io.github.bholeykabhakt.patches.autosync.folderpairlimit
 
-import app.revanced.patcher.extensions.InstructionExtensions.addInstructions
-import app.revanced.patcher.patch.bytecodePatch
+import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.patch.bytecodePatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 @Suppress("unused")

@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.autosync.temperdetection
 
-import app.revanced.patcher.fingerprint
+import app.morphe.patcher.fingerprint
 import com.android.tools.smali.dexlib2.Opcode
 
 internal val temperDetectionVarHGetterFingerprint = fingerprint {

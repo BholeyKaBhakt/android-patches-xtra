@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.speedtest.analytics
 
-import app.revanced.patcher.fingerprint
+import app.morphe.patcher.fingerprint
 
 // Lcom/ookla/speedtest/analytics/google/BillingClientPurchaseManager;->isAdFreeAccount()Z
 internal val loggingInfoFingerprint = fingerprint {
