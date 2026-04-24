@@ -15,7 +15,15 @@
       }
     ],
     "@semantic-release/release-notes-generator",
-    "@semantic-release/changelog",
+    [
+      "@MorpheApp/changelog", {
+        "releaseJson": {
+          "path": "patches-bundle.json",
+          "downloadUrlTemplate": "https://github.com/${owner}/${repo}/releases/download/v${version}/patches-${version}.mpp",
+          "signatureUrlTemplate": "https://github.com/${owner}/${repo}/releases/download/v${version}/patches-${version}.mpp.asc"
+        }
+      }
+    ],
     [
       "@semantic-release/git",
       {
@@ -30,17 +38,17 @@
       {
         "assets": [
           {
-            "path": "patches/build/libs/patches!(*sources*|*javadoc*).rvp?(.asc)"
+            "path": "patches/build/libs/patches-!(*sources*|*javadoc*).mpp?(.asc)"
           }
         ],
-        successComment: false
+        "successComment": false
       }
     ],
     [
       "@saithodev/semantic-release-backmerge",
       {
-        backmergeBranches: [{"from": "main", "to": "dev"}],
-        clearWorkspace: true
+        "backmergeBranches": [{"from": "main", "to": "dev"}],
+        "clearWorkspace": true
       }
     ]
   ]
