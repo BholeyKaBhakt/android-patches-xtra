@@ -26,10 +26,6 @@ public final class io/github/bholeykabhakt/patches/speedtest/noads/AdFreeAccount
 	public static final fun getAdFreePatch ()Lapp/revanced/patcher/patch/BytecodePatch;
 }
 
-public final class io/github/bholeykabhakt/patches/speedtest/vpn/PremiumVpnPatchKt {
-	public static final fun getPremiumVpnPatch ()Lapp/revanced/patcher/patch/BytecodePatch;
-}
-
 public final class io/github/bholeykabhakt/patches/utils/BytecodeUtilsKt {
 	public static final fun returnEarly (Lapp/revanced/patcher/util/proxy/mutableTypes/MutableMethod;Ljava/lang/String;)V
 	public static synthetic fun returnEarly$default (Lapp/revanced/patcher/util/proxy/mutableTypes/MutableMethod;Ljava/lang/String;ILjava/lang/Object;)V
