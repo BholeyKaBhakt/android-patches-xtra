@@ -1,7 +1,7 @@
 package io.github.bholeykabhakt.patches.autosync.purchase
 
-import app.revanced.patcher.fingerprint
-import app.revanced.patcher.patch.bytecodePatch
+import app.morphe.patcher.fingerprint
+import app.morphe.patcher.patch.bytecodePatch
 import com.android.tools.smali.dexlib2.Opcode
 import io.github.bholeykabhakt.patches.utils.returnEarly
 

@@ -1,4 +1,4 @@
 [versions]
-revanced-patcher = "21.0.0"
-# Tracking https://github.com/google/smali/issues/64.
-smali = "3.0.5"
+morphe-patcher = "1.4.2"
+#noinspection GradleDependency
+smali = "b6365a84f4"

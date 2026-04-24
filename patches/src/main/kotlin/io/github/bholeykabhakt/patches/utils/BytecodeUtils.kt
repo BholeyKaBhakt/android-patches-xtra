@@ -1,7 +1,7 @@
 package io.github.bholeykabhakt.patches.utils
 
-import app.revanced.patcher.extensions.InstructionExtensions.addInstructions
-import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod
+import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 
 
 fun MutableMethod.returnEarly(retVal: String = "0x0") {

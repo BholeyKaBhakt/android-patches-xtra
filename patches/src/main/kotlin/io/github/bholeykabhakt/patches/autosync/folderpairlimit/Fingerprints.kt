@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.autosync.folderpairlimit
 
-import app.revanced.patcher.fingerprint
+import app.morphe.patcher.fingerprint
 
 internal val syncSettingsBFingerprint = fingerprint {
     returns("V")
