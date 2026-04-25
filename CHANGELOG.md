@@ -1,3 +1,15 @@
+# [2.0.0-dev.1](https://github.com/BholeyKaBhakt/revanced-patches-xtra/compare/v1.6.0...v2.0.0-dev.1) (2026-04-25)
+
+
+### Features
+
+* revanced -> morphe ([e5c53f3](https://github.com/BholeyKaBhakt/revanced-patches-xtra/commit/e5c53f3e7c80555fe0964e6ff95d01e17b5c5578))
+
+
+### BREAKING CHANGES
+
+* move to morphe
+
 # [1.6.0](https://github.com/BholeyKaBhakt/revanced-patches-xtra/compare/v1.5.0...v1.6.0) (2024-11-14)
 
 
