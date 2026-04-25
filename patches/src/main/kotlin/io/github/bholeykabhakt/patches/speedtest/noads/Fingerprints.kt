@@ -1,22 +1,20 @@
 package io.github.bholeykabhakt.patches.speedtest.noads
 
-import app.morphe.patcher.fingerprint
+import app.morphe.patcher.Fingerprint
 
 // Lcom/ookla/speedtest/purchase/google/BillingClientPurchaseManager;->isAdFreeAccount()Z
-internal val isAdFreeAccountFingerprint = fingerprint {
-    returns("Z")
-    parameters()
-    custom { method, classDef ->
-        classDef.equals("Lcom/ookla/speedtest/purchase/google/BillingClientPurchaseManager;") && method.name == "isAdFreeAccount"
-    }
-}
+internal object IsAdFreeAccountFingerprint : Fingerprint(
+    definingClass = "Lcom/ookla/speedtest/purchase/google/BillingClientPurchaseManager;",
+    name = "isAdFreeAccount",
+    returnType = "Z",
+    parameters = emptyList(),
+)
 
-// Lcom/ookla/speedtest/purchase/google/BillingClientPurchaseManager;->checkPurchases()V
-internal val checkPurchasesFingerprint = fingerprint {
-    returns("V")
-    parameters("Z")
-    custom { method, classDef ->
-        classDef.equals("Lcom/ookla/speedtest/purchase/google/BillingClientPurchaseManager;") && method.name == "checkPurchases"
-    }
-}
+// Lcom/ookla/speedtest/purchase/google/BillingClientPurchaseManager;->checkPurchases(Z)V
+internal object CheckPurchasesFingerprint : Fingerprint(
+    definingClass = "Lcom/ookla/speedtest/purchase/google/BillingClientPurchaseManager;",
+    name = "checkPurchases",
+    returnType = "V",
+    parameters = listOf("Z"),
+)
 

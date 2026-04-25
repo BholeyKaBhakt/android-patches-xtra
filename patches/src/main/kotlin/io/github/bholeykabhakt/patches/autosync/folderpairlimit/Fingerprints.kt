@@ -1,29 +1,18 @@
 package io.github.bholeykabhakt.patches.autosync.folderpairlimit
 
-import app.morphe.patcher.fingerprint
+import app.morphe.patcher.Fingerprint
 
-internal val syncSettingsBFingerprint = fingerprint {
-    returns("V")
-    parameters()
-    strings("PREF_UPGRADED_AT")
-    custom { method, classDef ->
-        classDef.startsWith("Lcom/ttxapps/autosync/sync/SyncSettings") && method.name == "b"
-    }
-}
+internal object SyncSettingsBFingerprint : Fingerprint(
+    definingClass = "Lcom/ttxapps/autosync/sync/SyncSettings",
+    name = "b",
+    returnType = "V",
+    parameters = emptyList(),
+    strings = listOf("PREF_UPGRADED_AT"),
+)
 
-internal val syncSettingsGetLastUpdatedAtFingerprint = fingerprint {
-    returns("J")
-    parameters()
-    custom { _, classDef ->
-        classDef.equals("Lcom/ttxapps/autosync/sync/SyncSettings;")
-    }
-    strings("PREF_LAST_UPDATED_AT")
-//    opcodes(
-//        Opcode.IGET_OBJECT,
-//        Opcode.CONST_STRING,
-//        Opcode.CONST_WIDE_16,
-//        Opcode.INVOKE_INTERFACE,
-//        Opcode.MOVE_RESULT_WIDE,
-//        Opcode.RETURN_WIDE
-//    )
-}
+internal object SyncSettingsGetLastUpdatedAtFingerprint : Fingerprint(
+    definingClass = "Lcom/ttxapps/autosync/sync/SyncSettings;",
+    returnType = "J",
+    parameters = emptyList(),
+    strings = listOf("PREF_LAST_UPDATED_AT"),
+)

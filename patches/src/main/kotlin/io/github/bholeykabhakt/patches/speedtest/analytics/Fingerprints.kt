@@ -1,58 +1,37 @@
 package io.github.bholeykabhakt.patches.speedtest.analytics
 
-import app.morphe.patcher.fingerprint
+import app.morphe.patcher.Fingerprint
 
-// Lcom/ookla/speedtest/analytics/google/BillingClientPurchaseManager;->isAdFreeAccount()Z
-internal val loggingInfoFingerprint = fingerprint {
-    returns("V")
-    parameters(
+// Lcom/ookla/tools/logging/O2DevMetrics;->info(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V
+internal object LoggingInfoFingerprint : Fingerprint(
+    definingClass = "Lcom/ookla/tools/logging/O2DevMetrics;",
+    name = "info",
+    returnType = "V",
+    parameters = listOf(
         "Ljava/lang/String;",
         "Ljava/lang/String;",
         "Ljava/lang/String;",
-        "[Ljava/lang/String;"
-    )
-    custom { method, classDef ->
-        classDef.equals("Lcom/ookla/tools/logging/O2DevMetrics;") && method.name == "info"
-    }
-}
+        "[Ljava/lang/String;",
+    ),
+)
 
 // Lcom/ookla/tools/logging/O2DevMetrics;->watch(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V
-internal val loggingWatchFingerprint = fingerprint {
-    returns("V")
-    parameters(
+internal object LoggingWatchFingerprint : Fingerprint(
+    definingClass = "Lcom/ookla/tools/logging/O2DevMetrics;",
+    name = "watch",
+    returnType = "V",
+    parameters = listOf(
         "Ljava/lang/String;",
         "Ljava/lang/String;",
         "Ljava/lang/String;",
-        "[Ljava/lang/String;"
-    )
-    custom { method, classDef ->
-        classDef.equals("Lcom/ookla/tools/logging/O2DevMetrics;") && method.name == "watch"
-    }
-}
+        "[Ljava/lang/String;",
+    ),
+)
 
 // Lcom/ookla/tools/logging/O2DevMetrics;->alarm(Ljava/lang/Throwable;[Ljava/lang/String;)V
-internal val loggingAlarmFingerprint = fingerprint {
-    returns("V")
-    parameters("Ljava/lang/Throwable;", "[Ljava/lang/String;")
-    custom { method, classDef ->
-        classDef.equals("Lcom/ookla/tools/logging/O2DevMetrics;") && method.name == "alarm"
-    }
-}
-
-// Lcom/ookla/mobile4/app/logging/LoggingInitializer;->initialize(Landroid/content/Context;)V
-//internal val loggingInitializerFingerprint = fingerprint {
-//    returns("V")
-//    parameters("Landroid/content/Context;")
-//    custom { method, classDef ->
-//        classDef.equals("Lcom/ookla/mobile4/app/logging/LoggingInitializer;") && method.name == "initialize"
-//    }
-//}
-
-// Lcom/ookla/speedtest/app/CrashlyticsManager;->initialize()V
-//internal val crashlyticsManagerFingerprint = fingerprint {
-//    returns("V")
-//    parameters()
-//    custom { method, classDef ->
-//        classDef.equals("Lcom/ookla/speedtest/app/CrashlyticsManager;") && method.name == "initialize"
-//    }
-//}
+internal object LoggingAlarmFingerprint : Fingerprint(
+    definingClass = "Lcom/ookla/tools/logging/O2DevMetrics;",
+    name = "alarm",
+    returnType = "V",
+    parameters = listOf("Ljava/lang/Throwable;", "[Ljava/lang/String;"),
+)

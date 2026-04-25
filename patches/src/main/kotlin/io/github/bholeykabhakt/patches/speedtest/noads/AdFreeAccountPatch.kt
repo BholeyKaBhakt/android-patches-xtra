@@ -1,5 +1,6 @@
 package io.github.bholeykabhakt.patches.speedtest.noads
 
+import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.bytecodePatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
@@ -7,13 +8,13 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 val adFreePatch = bytecodePatch(
     name = "AdFree Account Patch",
 ) {
-    compatibleWith("org.zwanoo.android.speedtest")
+    compatibleWith(Compatibility(packageName = "org.zwanoo.android.speedtest"))
 
     execute {
-        // always return true for isAdFreeAccount()
-        isAdFreeAccountFingerprint.method.returnEarly("0x1")
+        // always return true for isAdFreeAccount()Z
+        IsAdFreeAccountFingerprint.method.returnEarly("0x1")
 
-        // skip checkPurchases()
-        checkPurchasesFingerprint.method.returnEarly()
+        // skip checkPurchases(Z)V
+        CheckPurchasesFingerprint.method.returnEarly()
     }
 }

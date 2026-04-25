@@ -1,5 +1,6 @@
 package io.github.bholeykabhakt.patches.autosync.temperdetection
 
+import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.bytecodePatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
@@ -7,14 +8,14 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 val disableTemperDetectionPatch = bytecodePatch(
     name = "Disable Temper Detection",
 ) {
-    compatibleWith("com.ttxapps.autosync")
+    compatibleWith(Compatibility(packageName = "com.ttxapps.autosync"))
 
     execute {
 
-        // VarH => g$a.f() = false (just like old z.g = false but on getter)
-        temperDetectionVarHGetterFingerprint.method.returnEarly("0x0")
+        // VarH => g$a.f()Z = false (just like old z.g = false but on getter)
+        TemperDetectionVarHGetterFingerprint.method.returnEarly("0x0")
 
-        // VarZ => i.z() = false (just like old SyncState.z())
-        temperDetectionVarZGetterFingerprint.method.returnEarly("0x0")
+        // VarZ => i.z()Z = false (just like old SyncState.z())
+        TemperDetectionVarZGetterFingerprint.method.returnEarly("0x0")
     }
 }
