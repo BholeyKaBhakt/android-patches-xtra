@@ -2,6 +2,7 @@ package io.github.bholeykabhakt.patches.speedtest.noads
 
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.bytecodePatch
+import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 @Suppress("unused")
@@ -12,9 +13,9 @@ val adFreePatch = bytecodePatch(
 
     execute {
         // always return true for isAdFreeAccount()Z
-        IsAdFreeAccountFingerprint.method.returnEarly("0x1")
+        IsAdFreeAccountFingerprint.logMatch.method.returnEarly("0x1")
 
         // skip checkPurchases(Z)V
-        CheckPurchasesFingerprint.method.returnEarly()
+        CheckPurchasesFingerprint.logMatch.method.returnEarly()
     }
 }

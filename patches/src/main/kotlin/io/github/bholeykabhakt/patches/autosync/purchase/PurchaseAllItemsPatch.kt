@@ -5,6 +5,7 @@ import app.morphe.patcher.OpcodesFilter
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.bytecodePatch
 import com.android.tools.smali.dexlib2.Opcode
+import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 internal object IsAccountTypePurchasedFingerprint : Fingerprint(
@@ -28,6 +29,6 @@ val purchaseAllItemsPatch = bytecodePatch(
     compatibleWith(Compatibility(packageName = "com.ttxapps.autosync"))
 
     execute {
-        IsAccountTypePurchasedFingerprint.method.returnEarly("0x1")
+        IsAccountTypePurchasedFingerprint.logMatch.method.returnEarly("0x1")
     }
 }
