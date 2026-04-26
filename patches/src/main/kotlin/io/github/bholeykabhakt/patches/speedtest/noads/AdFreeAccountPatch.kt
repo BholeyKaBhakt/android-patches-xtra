@@ -13,7 +13,7 @@ val adFreePatch = bytecodePatch(
 
     execute {
         // always return true for isAdFreeAccount()Z
-        IsAdFreeAccountFingerprint.logMatch.method.returnEarly("0x1")
+        IsAdFreeAccountFingerprint.logMatch.method.returnEarly(true)
 
         // skip checkPurchases(Z)V
         CheckPurchasesFingerprint.logMatch.method.returnEarly()

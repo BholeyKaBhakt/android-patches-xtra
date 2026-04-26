@@ -15,6 +15,6 @@ val purchaseAllItemsPatch = bytecodePatch(
     compatibleWith(Compatibility(packageName = "com.ttxapps.autosync"))
 
     execute {
-        IsAccountTypePurchasedFingerprint.logMatch.method.returnEarly("0x1")
+        IsAccountTypePurchasedFingerprint.logMatch.method.returnEarly(true)
     }
 }
