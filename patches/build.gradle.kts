@@ -2,8 +2,8 @@ group = "io.github.bholeykabhakt"
 
 patches {
     about {
-        name = "Xtra ReVanced Patches"
-        description = "Xtra Patches for ReVanced."
+        name = "Xtra Android Patches"
+        description = "Xtra Patches for Android apps"
         source = "git@github.com:bholeykabhakt/revanced-patches-xtra.git"
         author = "BholeyKaBhakt"
         contact = "bholeykabhakt@proton.me"
@@ -14,6 +14,6 @@ patches {
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs = listOf("-Xcontext-receivers")
+        freeCompilerArgs = listOf("-Xcontext-parameters")
     }
 }

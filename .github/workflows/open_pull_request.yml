@@ -6,8 +6,8 @@ on:
       - dev
   workflow_dispatch:
 
-permissions:
-  pull-requests: write
+env:
+  MESSAGE: Merge branch `${{ github.head_ref || github.ref_name }}` to `main`
 
 jobs:
   pull-request:
@@ -15,15 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Open pull request
-        shell: bash
-        run: |
-          gh_pr_up() {
-            gh pr create -d "$@" || gh pr edit "$@"
-          }
-          gh_pr_up --title "chore: ${{ env.MESSAGE }}" --body "This pull request will ${{ env.MESSAGE }}" --base main
-        env:
-          GH_TOKEN: ${{ github.token }}
-          MESSAGE: Merge branch \`dev\` to \`main\`
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "main"
+          pr_title: "chore: ${{ env.MESSAGE }}"
+          pr_body: "This pull request will ${{ env.MESSAGE }}."
+          pr_draft: true

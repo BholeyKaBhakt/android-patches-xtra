@@ -1,58 +1,39 @@
 package io.github.bholeykabhakt.patches.speedtest.analytics
 
-import app.revanced.patcher.fingerprint
+import app.morphe.patcher.Fingerprint
+import com.android.tools.smali.dexlib2.AccessFlags
 
-// Lcom/ookla/speedtest/analytics/google/BillingClientPurchaseManager;->isAdFreeAccount()Z
-internal val loggingInfoFingerprint = fingerprint {
-    returns("V")
-    parameters(
-        "Ljava/lang/String;",
-        "Ljava/lang/String;",
-        "Ljava/lang/String;",
-        "[Ljava/lang/String;"
-    )
-    custom { method, classDef ->
-        classDef.equals("Lcom/ookla/tools/logging/O2DevMetrics;") && method.name == "info"
-    }
-}
+/**
+ * The Ookla DevMetrics dispatcher class lives in `com/ookla/tools/logging/`. The class name
+ * rotates (v5 `O2DevMetrics`, v7 `a`) and the method names rotate too (v5 `info/watch/alarm`,
+ * v7 `l/w/c`), but the parameter shapes and the `public static final varargs` modifier are
+ * invariant — these are the only varargs sinks for the analytics pipeline.
+ *
+ * Anchor by signature shape + package + accessFlags. Multiple methods match (info-varargs and
+ * watch-varargs share the same signature in both versions); patch them all via [logMatchAll].
+ */
 
-// Lcom/ookla/tools/logging/O2DevMetrics;->watch(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V
-internal val loggingWatchFingerprint = fingerprint {
-    returns("V")
-    parameters(
+private val publicStaticVarargs = listOf(
+    AccessFlags.PUBLIC, AccessFlags.STATIC, AccessFlags.FINAL, AccessFlags.VARARGS,
+)
+
+/** Matches `info(String,String,String,[String])V` AND `watch(String,String,String,[String])V`. */
+internal object LoggingStringVarargsFingerprint : Fingerprint(
+    definingClass = "Lcom/ookla/tools/logging/",
+    accessFlags = publicStaticVarargs,
+    returnType = "V",
+    parameters = listOf(
         "Ljava/lang/String;",
         "Ljava/lang/String;",
         "Ljava/lang/String;",
-        "[Ljava/lang/String;"
-    )
-    custom { method, classDef ->
-        classDef.equals("Lcom/ookla/tools/logging/O2DevMetrics;") && method.name == "watch"
-    }
-}
+        "[Ljava/lang/String;",
+    ),
+)
 
-// Lcom/ookla/tools/logging/O2DevMetrics;->alarm(Ljava/lang/Throwable;[Ljava/lang/String;)V
-internal val loggingAlarmFingerprint = fingerprint {
-    returns("V")
-    parameters("Ljava/lang/Throwable;", "[Ljava/lang/String;")
-    custom { method, classDef ->
-        classDef.equals("Lcom/ookla/tools/logging/O2DevMetrics;") && method.name == "alarm"
-    }
-}
-
-// Lcom/ookla/mobile4/app/logging/LoggingInitializer;->initialize(Landroid/content/Context;)V
-//internal val loggingInitializerFingerprint = fingerprint {
-//    returns("V")
-//    parameters("Landroid/content/Context;")
-//    custom { method, classDef ->
-//        classDef.equals("Lcom/ookla/mobile4/app/logging/LoggingInitializer;") && method.name == "initialize"
-//    }
-//}
-
-// Lcom/ookla/speedtest/app/CrashlyticsManager;->initialize()V
-//internal val crashlyticsManagerFingerprint = fingerprint {
-//    returns("V")
-//    parameters()
-//    custom { method, classDef ->
-//        classDef.equals("Lcom/ookla/speedtest/app/CrashlyticsManager;") && method.name == "initialize"
-//    }
-//}
+/** Matches `alarm(Throwable,[String])V`. */
+internal object LoggingAlarmFingerprint : Fingerprint(
+    definingClass = "Lcom/ookla/tools/logging/",
+    accessFlags = publicStaticVarargs,
+    returnType = "V",
+    parameters = listOf("Ljava/lang/Throwable;", "[Ljava/lang/String;"),
+)

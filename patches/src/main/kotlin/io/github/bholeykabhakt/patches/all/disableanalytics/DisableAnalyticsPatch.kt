@@ -1,12 +1,12 @@
 package io.github.bholeykabhakt.patches.all.disableanalytics
 
-import app.revanced.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.resourcePatch
 import org.w3c.dom.Element
 
 @Suppress("unused")
 val disableAnalyticsPatch = resourcePatch(
     name = "Disable Firebase(Google) Analytics",
-    use = false,
+    default = false,
 ) {
     execute {
         document("AndroidManifest.xml").use { document ->
