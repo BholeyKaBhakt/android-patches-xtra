@@ -12,10 +12,6 @@ val adFreePatch = bytecodePatch(
     compatibleWith(Compatibility(packageName = "org.zwanoo.android.speedtest"))
 
     execute {
-        // always return true for isAdFreeAccount()Z
         IsAdFreeAccountFingerprint.logMatch.method.returnEarly(true)
-
-        // skip checkPurchases(Z)V
-        CheckPurchasesFingerprint.logMatch.method.returnEarly()
     }
 }

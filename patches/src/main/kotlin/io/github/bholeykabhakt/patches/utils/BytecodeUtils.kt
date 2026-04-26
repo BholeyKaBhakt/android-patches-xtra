@@ -26,23 +26,32 @@ private fun isMatchLoggingEnabled() =
 private fun Fingerprint.displayName() = javaClass.simpleName.ifBlank { toString() }
 
 context(_: BytecodePatchContext)
-val Fingerprint.logMatch: Match
-    get() {
-    val label = displayName()
+private fun Fingerprint.matchesAndLog(): List<Match> {
     val matches = matchAllOrNull() ?: throw patchException()
-
     if (isMatchLoggingEnabled()) {
-        matches.forEachIndexed { index, match ->
-            println("MATCH: $label matched[$index]: ${match.originalMethod.fingerprintSignature()}")
+        val label = displayName()
+        matches.forEachIndexed { i, match ->
+            println("MATCH: $label matched[$i]: ${match.originalMethod.fingerprintSignature()}")
         }
     }
+    return matches
+}
 
-    if (matches.size != 1) {
-        throw PatchException("$label expected exactly 1 match but found ${matches.size}")
+/** The single match. Throws if 0 or 2+ matched (catches under-specified fingerprints). */
+context(_: BytecodePatchContext)
+val Fingerprint.logMatch: Match
+    get() {
+        val matches = matchesAndLog()
+        if (matches.size != 1) {
+            throw PatchException("${displayName()} expected exactly 1 match but found ${matches.size}")
+        }
+        return matches.single()
     }
 
-    return matches.single()
-    }
+/** All matches (1 or more). Throws if 0 matched. Use when one fingerprint legitimately covers several methods. */
+context(_: BytecodePatchContext)
+val Fingerprint.logMatchAll: List<Match>
+    get() = matchesAndLog()
 
 
 /**
