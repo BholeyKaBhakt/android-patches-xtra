@@ -95,6 +95,15 @@ def patches_table(patches):
     return "\n".join(rows)
 
 
+def target_version_label(target):
+    """Render a user-facing label for a compatibility target version.
+    Null versions are valid in Morphe metadata and mean any version.
+    """
+    version = target.get("version")
+    label = str(version) if version else "Any version"
+    return f"🧪&nbsp;{label}" if target.get("isExperimental") else label
+
+
 def versions_table(targets):
     """Render a markdown table of supported versions.
     Experimental versions get a 🧪 prefix.
@@ -105,9 +114,7 @@ def versions_table(targets):
 
     cells = []
     for t in targets:
-        ver = t["version"]
-        label = f"🧪&nbsp;{ver}" if t.get("isExperimental") else ver
-        cells.append(label)
+        cells.append(target_version_label(t))
 
     header = "| " + " | ".join(cells) + " |"
     sep = "| " + " | ".join(":---:" for _ in cells) + " |"
