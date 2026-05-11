@@ -9,7 +9,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 val adFreePatch = bytecodePatch(
     name = "AdFree Account Patch",
 ) {
-    compatibleWith(Compatibility(packageName = "org.zwanoo.android.speedtest"))
+    compatibleWith(Compatibility(packageName = "org.zwanoo.android.speedtest", name = "Speedtest"))
 
     execute {
         IsAdFreeAccountFingerprint.logMatch.method.returnEarly(true)

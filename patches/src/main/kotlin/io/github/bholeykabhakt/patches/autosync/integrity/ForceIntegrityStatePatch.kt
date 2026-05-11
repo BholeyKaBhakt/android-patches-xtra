@@ -31,7 +31,7 @@ private const val stockSignatureToken = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
 val forceIntegrityStatePatch = bytecodePatch(
     name = "Force Stable Integrity State (Critical)",
 ) {
-    compatibleWith(Compatibility(packageName = "com.ttxapps.autosync"))
+    compatibleWith(Compatibility(packageName = "com.ttxapps.autosync", name = "Autosync"))
 
     execute {
         SignerDigestComputerFingerprint.logMatch.method.returnEarly(stockSignatureToken)

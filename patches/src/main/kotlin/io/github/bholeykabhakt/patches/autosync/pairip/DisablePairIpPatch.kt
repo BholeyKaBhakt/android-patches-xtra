@@ -9,7 +9,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 val disablePairIpPatch = bytecodePatch(
     name = "Disable PairIP License Check",
 ) {
-    compatibleWith(Compatibility(packageName = "com.ttxapps.autosync"))
+    compatibleWith(Compatibility(packageName = "com.ttxapps.autosync", name = "Autosync"))
 
     execute {
         // PairIP enters through LicenseContentProvider.onCreate -> LicenseClient.initializeLicenseCheck().
