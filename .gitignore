@@ -85,3 +85,5 @@ binaries/
 local.properties
 
 patches/bin/
+*temp*
+*.idsig
