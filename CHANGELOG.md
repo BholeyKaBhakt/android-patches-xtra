@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.0...v2.0.1) (2026-05-11)
+
+
+### Bug Fixes
+
+* **all:** add app names in Compatibility object ([d51fc48](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/d51fc48d99fa14961cefe3da2a8ad6a7b46009f2))
+* **doc:** list patches on readme ([c3f2ad0](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/c3f2ad095701765b6c10a17a02996a028e020efe))
+* **release:** null version means any version ([716f8f5](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/716f8f5d642a6c82d21880fdc3bd6c192303a6ba))
+
 ## [2.0.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.0...v2.0.1-dev.1) (2026-05-11)
 
 
