@@ -17,3 +17,18 @@ kotlin {
         freeCompilerArgs = listOf("-Xcontext-parameters")
     }
 }
+
+dependencies {
+    implementation(libs.gson)
+}
+
+tasks {
+    register<JavaExec>("generatePatchesList") {
+        description = "Build patch with patch list"
+
+        dependsOn(build)
+
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("io.github.bholeykabhakt.patches.utils.PatchListGeneratorKt")
+    }
+}

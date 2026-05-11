@@ -9,7 +9,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 val purchaseAllItemsPatch = bytecodePatch(
     name = "Purchase All Items",
 ) {
-    compatibleWith(Compatibility(packageName = "com.ttxapps.autosync"))
+    compatibleWith(Compatibility(packageName = "com.ttxapps.autosync", name = "Autosync"))
 
     execute {
         IsAccountTypePurchasedFingerprint.logMatch.method.returnEarly(true)
