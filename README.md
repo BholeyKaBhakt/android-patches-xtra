@@ -1,6 +1,12 @@
 # 👋🧩 Android Patches Xtra
 
-This repo contains some Android app patches.  
+This repo contains some Android app patches.
+
+## 🩹 Patches list
+
+<!-- PATCHES_START EXPANDED -->
+
+<!-- PATCHES_END -->
 
 ## 📜 Licence
 
