@@ -25,15 +25,18 @@
       {
         "releaseJson": {
           "path": "patches-bundle.json",
-          "downloadUrlTemplate": "https://github.com/${owner}/${repo}/releases/download/v${version}/patches.mpp",
+          "downloadUrlTemplate": "https://github.com/${owner}/${repo}/releases/download/v${version}/patches-${version}.mpp",
           "signatureUrlTemplate": ""
         }
       }
     ],
+    "gradle-semantic-release-plugin",
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "./gradlew generatePatchesList :patches:buildAndroid && jq '.version=\"${nextRelease.version}\"' patches-list.json > patches-list.json.tmp && mv patches-list.json.tmp patches-list.json && python3 .github/scripts/generate_patches_readme.py $GITHUB_REPOSITORY $GITHUB_REF_NAME patches-list.json README.md"
+        "prepareCmd": "./gradlew generatePatchesList \
+          && jq '.version=\"${nextRelease.version}\"' patches-list.json > patches-list.json.tmp && mv patches-list.json.tmp patches-list.json \
+          && python3 .github/scripts/generate_patches_readme.py $GITHUB_REPOSITORY $GITHUB_REF_NAME patches-list.json README.md"
       }
     ],
     [
@@ -41,6 +44,7 @@
       {
         "assets": [
           "CHANGELOG.md",
+          "gradle.properties",
           "patches-bundle.json",
           "patches-list.json",
           "README.md"
@@ -53,7 +57,7 @@
       {
         "assets": [
           {
-            "path": "patches/build/libs/patches!(*sources*|*javadoc*).mpp?(.asc)"
+            "path": "patches/build/libs/patches-!(*sources*|*javadoc*).mpp?(.asc)"
           }
         ],
         "successComment": false

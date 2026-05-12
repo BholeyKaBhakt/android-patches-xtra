@@ -32,6 +32,10 @@ tasks {
         classpath = patchListGenerator.runtimeClasspath
         mainClass.set("io.github.bholeykabhakt.patches.utils.PatchListGeneratorKt")
     }
+
+    publish {
+        dependsOn("generatePatchesList")
+    }
 }
 
 dependencies {
