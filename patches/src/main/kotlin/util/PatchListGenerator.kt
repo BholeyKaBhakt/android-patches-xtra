@@ -31,7 +31,7 @@
  * applicable to this file.
  */
 
-package io.github.bholeykabhakt.patches.utils
+package util
 
 import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.patch.loadPatchesFromJar
