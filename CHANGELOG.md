@@ -1,3 +1,10 @@
+## [2.0.2-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.1...v2.0.2-dev.1) (2026-05-12)
+
+
+### Bug Fixes
+
+* **release:** don't publish corrupt patch bundle ([3da1f2a](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/3da1f2a18775137b39207e381d4980514326921e))
+
 ## [2.0.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.0...v2.0.1) (2026-05-11)
 
 
