@@ -1,5 +1,5 @@
 {
-  "version": "2.0.2-dev.1",
+  "version": "2.0.2",
   "patches": [
     {
       "name": "AdFree Account Patch",
