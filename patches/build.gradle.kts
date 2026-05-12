@@ -1,5 +1,10 @@
 group = "io.github.bholeykabhakt"
 
+val patchListGenerator by sourceSets.creating
+
+configurations[patchListGenerator.implementationConfigurationName].extendsFrom(configurations["implementation"])
+configurations[patchListGenerator.runtimeOnlyConfigurationName].extendsFrom(configurations["runtimeOnly"])
+
 patches {
     about {
         name = "Xtra Android Patches"
@@ -18,17 +23,17 @@ kotlin {
     }
 }
 
-dependencies {
-    implementation(libs.gson)
-}
-
 tasks {
     register<JavaExec>("generatePatchesList") {
         description = "Build patch with patch list"
 
-        dependsOn(build)
+        dependsOn("jar", patchListGenerator.classesTaskName)
 
-        classpath = sourceSets["main"].runtimeClasspath
+        classpath = patchListGenerator.runtimeClasspath
         mainClass.set("io.github.bholeykabhakt.patches.utils.PatchListGeneratorKt")
     }
+}
+
+dependencies {
+    add(patchListGenerator.implementationConfigurationName, libs.gson)
 }
