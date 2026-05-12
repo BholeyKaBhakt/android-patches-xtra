@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.2...v2.0.3) (2026-05-12)
+
+
+### Bug Fixes
+
+* **release:** use `gradle-semantic-release-plugin` for release ([52c5b18](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/52c5b18420a8d3d99f235abedeed884534f298dd))
+
 ## [2.0.3-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.2...v2.0.3-dev.1) (2026-05-12)
 
 
