@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.3...v2.0.4) (2026-05-20)
+
+
+### Bug Fixes
+
+* **speedtest:** drop `Patch` from patch names ([6d3df8f](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/6d3df8f6a1e43bdba38cc7fdcce105ff0738ad05))
+
 ## [2.0.4-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.3...v2.0.4-dev.1) (2026-05-20)
 
 
