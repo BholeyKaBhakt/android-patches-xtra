@@ -5,15 +5,15 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.0.3](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.0.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;7 patches total
+> **[v2.0.4-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.0.4-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;7 patches total
 <details open>
 <summary>📦 Speedtest&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [AdFree Account Patch](#adfree-account-patch) |  |  |
-| [Disable Logging(analytics) Patch](#disable-logging-analytics-patch) |  |  |
+| [AdFree Account](#adfree-account) |  |  |
+| [Disable Logging(analytics)](#disable-logging-analytics) |  |  |
 
 </details>
 
