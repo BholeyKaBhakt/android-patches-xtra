@@ -67,12 +67,14 @@ val Fingerprint.logMatchAll: List<Match>
  *
  * Use the typed overloads to return a non-zero value.
  */
-fun MutableMethod.returnEarly() = addInstructions(0, when (returnType) {
-    "V"                            -> "return-void"
-    "Z", "B", "C", "S", "I", "F"   -> "const/4 v0, 0x0\nreturn v0"
-    "J", "D"                       -> "const-wide/16 v0, 0x0\nreturn-wide v0"
-    else                           -> "const/4 v0, 0x0\nreturn-object v0"
-})
+fun MutableMethod.returnEarly() = addInstructions(
+    0, when (returnType) {
+        "V" -> "return-void"
+        "Z", "B", "C", "S", "I", "F" -> "const/4 v0, 0x0\nreturn v0"
+        "J", "D" -> "const-wide/16 v0, 0x0\nreturn-wide v0"
+        else -> "const/4 v0, 0x0\nreturn-object v0"
+    }
+)
 
 /** Return a fixed boolean. Method must return `Z`. */
 fun MutableMethod.returnEarly(value: Boolean) {
@@ -86,9 +88,9 @@ fun MutableMethod.returnEarly(value: Int) {
         "returnEarly(Int) needs Z/B/C/S/I return, got $returnType"
     }
     val literal = when (value) {
-        in -8..7                                       -> "const/4 v0, $value"
-        in Short.MIN_VALUE..Short.MAX_VALUE            -> "const/16 v0, $value"
-        else                                            -> "const v0, $value"
+        in -8..7 -> "const/4 v0, $value"
+        in Short.MIN_VALUE..Short.MAX_VALUE -> "const/16 v0, $value"
+        else -> "const v0, $value"
     }
     addInstructions(0, "$literal\nreturn v0")
 }
@@ -97,9 +99,9 @@ fun MutableMethod.returnEarly(value: Int) {
 fun MutableMethod.returnEarly(value: Long) {
     require(returnType == "J") { "returnEarly(Long) needs J return, got $returnType" }
     val literal = when (value) {
-        in Short.MIN_VALUE..Short.MAX_VALUE             -> "const-wide/16 v0, $value"
+        in Short.MIN_VALUE..Short.MAX_VALUE -> "const-wide/16 v0, $value"
         in Int.MIN_VALUE.toLong()..Int.MAX_VALUE.toLong() -> "const-wide/32 v0, $value"
-        else                                             -> "const-wide v0, ${value}L"
+        else -> "const-wide v0, ${value}L"
     }
     addInstructions(0, "$literal\nreturn-wide v0")
 }

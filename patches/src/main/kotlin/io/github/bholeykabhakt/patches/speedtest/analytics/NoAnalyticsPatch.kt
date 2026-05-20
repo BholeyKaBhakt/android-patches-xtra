@@ -7,7 +7,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 
 @Suppress("unused")
 val noAnalyticsPatch = bytecodePatch(
-    name = "Disable Logging(analytics) Patch",
+    name = "Disable Logging(analytics)",
 ) {
     compatibleWith(Compatibility(packageName = "org.zwanoo.android.speedtest", name = "Speedtest"))
 
