@@ -1,8 +1,8 @@
 {
-  "version": "2.0.3",
+  "version": "2.0.4-dev.1",
   "patches": [
     {
-      "name": "AdFree Account Patch",
+      "name": "AdFree Account",
       "description": null,
       "default": true,
       "dependencies": [],
@@ -60,7 +60,7 @@
       "options": []
     },
     {
-      "name": "Disable Logging(analytics) Patch",
+      "name": "Disable Logging(analytics)",
       "description": null,
       "default": true,
       "dependencies": [],

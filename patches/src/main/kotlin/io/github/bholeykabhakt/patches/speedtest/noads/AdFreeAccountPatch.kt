@@ -7,7 +7,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 
 @Suppress("unused")
 val adFreePatch = bytecodePatch(
-    name = "AdFree Account Patch",
+    name = "AdFree Account",
 ) {
     compatibleWith(Compatibility(packageName = "org.zwanoo.android.speedtest", name = "Speedtest"))
 

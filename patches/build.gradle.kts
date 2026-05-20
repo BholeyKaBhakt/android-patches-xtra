@@ -1,10 +1,5 @@
 group = "io.github.bholeykabhakt"
 
-val patchListGenerator by sourceSets.creating
-
-configurations[patchListGenerator.implementationConfigurationName].extendsFrom(configurations["implementation"])
-configurations[patchListGenerator.runtimeOnlyConfigurationName].extendsFrom(configurations["runtimeOnly"])
-
 patches {
     about {
         name = "Xtra Android Patches"
@@ -23,21 +18,27 @@ kotlin {
     }
 }
 
+// Separate configuration so gson is available at runtime for the
+// generatePatchesList task but never bundled into the APK.
+val patchListGeneratorClasspath: Configuration by configurations.creating
+
+dependencies {
+    compileOnly(libs.gson)
+    patchListGeneratorClasspath(libs.gson)
+}
+
 tasks {
     register<JavaExec>("generatePatchesList") {
         description = "Build patch with patch list"
 
-        dependsOn("jar", patchListGenerator.classesTaskName)
+        dependsOn(build)
 
-        classpath = patchListGenerator.runtimeClasspath
-        mainClass.set("io.github.bholeykabhakt.patches.utils.PatchListGeneratorKt")
+        classpath = sourceSets["main"].runtimeClasspath + patchListGeneratorClasspath
+        mainClass.set("util.PatchListGeneratorKt")
     }
 
+    // Used by gradle-semantic-release-plugin.
     publish {
         dependsOn("generatePatchesList")
     }
-}
-
-dependencies {
-    add(patchListGenerator.implementationConfigurationName, libs.gson)
 }
