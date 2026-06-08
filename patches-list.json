@@ -1,5 +1,5 @@
 {
-  "version": "2.0.4",
+  "version": "2.1.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -24,6 +24,14 @@
           ]
         }
       ],
+      "options": []
+    },
+    {
+      "name": "Bypass ADB/Developer Options Detection",
+      "description": null,
+      "default": false,
+      "dependencies": [],
+      "compatiblePackages": null,
       "options": []
     },
     {
@@ -143,6 +151,31 @@
         {
           "packageName": "com.ttxapps.autosync",
           "name": "Autosync",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock All Features",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.proto.circuitsimulator",
+          "name": "Circuit Simulator",
           "description": null,
           "apkFileType": null,
           "appIconColor": null,

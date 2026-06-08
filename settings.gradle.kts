@@ -19,3 +19,12 @@ pluginManagement {
 plugins {
     id("app.morphe.patches") version "1.3.2"
 }
+
+// Shared R8 rules across all extensions. We need R8 to strip the kotlin-stdlib
+// that lands on the extension's runtime classpath (transitively via AGP) so the
+// produced DEX contains only the shim classes.
+configure<app.morphe.patches.gradle.SettingsExtension> {
+    extensions {
+        proguardFiles(rootProject.projectDir.resolve("extensions/extension.pro").toString())
+    }
+}
