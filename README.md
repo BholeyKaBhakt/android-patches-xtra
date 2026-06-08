@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.0.4](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.0.4)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;7 patches total
+> **[v2.1.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.1.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;9 patches total
 <details open>
 <summary>📦 Speedtest&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -40,11 +40,22 @@ This repo contains some Android app patches.
 </details>
 
 <details open>
-<summary>🌐 Universal&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<summary>📦 Circuit Simulator&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
+| [Unlock All Features](#unlock-all-features) |  |  |
+
+</details>
+
+<details open>
+<summary>🌐 Universal&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Bypass ADB/Developer Options Detection](#bypass-adb-developer-options-detection) |  |  |
 | [Disable Firebase(Google) Analytics](#disable-firebase-google-analytics) |  |  |
 
 </details>
