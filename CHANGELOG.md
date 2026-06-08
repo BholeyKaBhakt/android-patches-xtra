@@ -1,3 +1,11 @@
+# [2.1.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.4...v2.1.0) (2026-06-08)
+
+
+### Features
+
+* **circuit-sim:** add patches for circuit simulator ([dfc424c](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/dfc424cc5ec67f9ed08adca6292b2a600b7c78cb))
+* **universal:** bypass ADB & Developer Options detection ([017c94b](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/017c94b85766bf8f4f22cb174e59c6b7c791d8c2))
+
 # [2.1.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.0.4...v2.1.0-dev.1) (2026-06-08)
 
 
