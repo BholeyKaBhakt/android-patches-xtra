@@ -1,3 +1,10 @@
+# [2.3.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.2.2...v2.3.0-dev.1) (2026-06-09)
+
+
+### Features
+
+* **sky-tonight:** Unlock Premium patch ([d8893bc](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/d8893bcb3921c3ee788d2a9f00eee1c143e9f316))
+
 ## [2.2.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.2.1...v2.2.2) (2026-06-09)
 
 

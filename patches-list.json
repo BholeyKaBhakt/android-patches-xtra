@@ -1,5 +1,5 @@
 {
-  "version": "2.2.2",
+  "version": "2.3.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -136,6 +136,43 @@
           "targets": [
             {
               "version": "1.48.0",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Premium",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.vitotechnology.sky.tonight.map.star.walk",
+          "name": "Sky Tonight",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "2.5.0",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "2.4.0",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "2.3.1",
               "isExperimental": false,
               "minSdk": null,
               "description": null
