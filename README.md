@@ -5,9 +5,9 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.2.0](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.2.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;9 patches total
-<details open>
-<summary>📦 Speedtest&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+> **[v2.2.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.2.1-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;9 patches total
+<details close>
+<summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -17,13 +17,13 @@ This repo contains some Android app patches.
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [AdFree Account](#adfree-account) |  |  |
-| [Disable Logging(analytics)](#disable-logging-analytics) |  |  |
+| AdFree Account |  |  |
+| Disable Logging(analytics) |  |  |
 
 </details>
 
-<details open>
-<summary>📦 Automate&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<details close>
+<summary><b>📦 Automate</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -33,12 +33,12 @@ This repo contains some Android app patches.
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [Bypass Blocks Limit](#bypass-blocks-limit) |  |  |
+| Bypass Blocks Limit |  |  |
 
 </details>
 
-<details open>
-<summary>📦 Autosync&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
+<details close>
+<summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -48,14 +48,14 @@ This repo contains some Android app patches.
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [Disable PairIP License Check](#disable-pairip-license-check) |  |  |
-| [Force Stable Integrity State (Critical)](#force-stable-integrity-state-critical) |  |  |
-| [Purchase All Items](#purchase-all-items) |  |  |
+| Disable PairIP License Check |  |  |
+| Force Stable Integrity State (Critical) |  |  |
+| Purchase All Items |  |  |
 
 </details>
 
-<details open>
-<summary>📦 Circuit Simulator&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<details close>
+<summary><b>📦 Circuit Simulator</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -65,18 +65,18 @@ This repo contains some Android app patches.
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [Unlock All Features](#unlock-all-features) |  |  |
+| Unlock All Features |  |  |
 
 </details>
 
-<details open>
-<summary>🌐 Universal&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<details close>
+<summary><b>🌐 Universal</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [Bypass ADB/Developer Options Detection](#bypass-adb-developer-options-detection) |  |  |
-| [Disable Firebase(Google) Analytics](#disable-firebase-google-analytics) |  |  |
+| Bypass ADB/Developer Options Detection |  |  |
+| Disable Firebase(Google) Analytics |  |  |
 
 </details>
 

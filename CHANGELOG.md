@@ -1,3 +1,11 @@
+## [2.2.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.2.0...v2.2.1-dev.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* **docs:** clean up readme update script ([4b674d7](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/4b674d7d80073e9f4449f6170c7d77881ef73693))
+* drop useless 'v' in local patch-list generation ([feb062a](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/feb062a5dce0cd8ab025c42bdacb8666843160ae))
+
 # [2.2.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.1.0...v2.2.0) (2026-06-09)
 
 
