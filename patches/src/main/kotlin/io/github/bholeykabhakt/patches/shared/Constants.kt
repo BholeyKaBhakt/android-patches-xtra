@@ -49,8 +49,6 @@ object Constants {
         packageName = "com.vitotechnology.sky.tonight.map.star.walk",
         targets = listOf(
             AppTarget(version = "2.5.0"),
-            AppTarget(version = "2.4.0"),
-            AppTarget(version = "2.3.1"),
         ),
     )
 }

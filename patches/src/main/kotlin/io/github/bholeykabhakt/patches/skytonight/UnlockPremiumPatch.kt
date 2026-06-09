@@ -70,16 +70,16 @@ private fun lockedItems(offset: Int) = BinaryPatch(
 )
 
 private val PATCHES_BY_VERSION = mapOf(
-    "2.3.1" to listOf(
-        invalidLicense(0x4632BF0),
-        premiumAccess(0x480FE18),
-        lockedItems(0x481038C),
-    ),
-    "2.4.0" to listOf(
-        invalidLicense(0x4795E98),
-        premiumAccess(0x497E5A8),
-        lockedItems(0x497EB1C),
-    ),
+    // "2.3.1" to listOf(
+    //     invalidLicense(0x4632BF0),
+    //     premiumAccess(0x480FE18),
+    //     lockedItems(0x481038C),
+    // ),
+    // "2.4.0" to listOf(
+    //     invalidLicense(0x4795E98),
+    //     premiumAccess(0x497E5A8),
+    //     lockedItems(0x497EB1C),
+    // ),
     "2.5.0" to listOf(
         invalidLicense(0x4B45FA8),
         premiumAccess(0x4D2F934),
