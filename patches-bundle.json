@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-06-09T16:34:01",
-  "description": "# [2.3.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.2.2...v2.3.0-dev.1) (2026-06-09)\n\n\n### Features\n\n* **sky-tonight:** Unlock Premium patch ([d8893bc](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/d8893bcb3921c3ee788d2a9f00eee1c143e9f316))",
-  "download_url": "https://github.com/BholeyKaBhakt/android-patches-xtra/releases/download/v2.3.0-dev.1/patches-2.3.0-dev.1.mpp",
+  "created_at": "2026-06-09T16:38:01",
+  "description": "# [2.3.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.2.2...v2.3.0) (2026-06-09)\n\n\n### Features\n\n* **sky-tonight:** Unlock Premium patch ([d8893bc](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/d8893bcb3921c3ee788d2a9f00eee1c143e9f316))",
+  "download_url": "https://github.com/BholeyKaBhakt/android-patches-xtra/releases/download/v2.3.0/patches-2.3.0.mpp",
   "signature_download_url": "",
-  "version": "2.3.0-dev.1"
+  "version": "2.3.0"
 }
