@@ -43,4 +43,14 @@ object Constants {
             AppTarget(version = "1.48.0"),
         ),
     )
+
+    val COMPATIBILITY_SKY_TONIGHT = Compatibility(
+        name = "Sky Tonight",
+        packageName = "com.vitotechnology.sky.tonight.map.star.walk",
+        targets = listOf(
+            AppTarget(version = "2.5.0"),
+            AppTarget(version = "2.4.0"),
+            AppTarget(version = "2.3.1"),
+        ),
+    )
 }
