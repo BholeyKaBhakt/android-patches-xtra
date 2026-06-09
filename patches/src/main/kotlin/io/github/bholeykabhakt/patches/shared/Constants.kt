@@ -37,7 +37,7 @@ object Constants {
     )
 
     val COMPATIBILITY_CIRCUIT_SIMULATOR = Compatibility(
-        name = "Circuit Simulator",
+        name = "PROTO - circuit simulator",
         packageName = "com.proto.circuitsimulator",
         targets = listOf(
             AppTarget(version = "1.48.0"),
