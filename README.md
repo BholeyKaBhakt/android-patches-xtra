@@ -5,10 +5,15 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.1.0](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.1.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;9 patches total
+> **[v2.2.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.2.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;9 patches total
 <details open>
 <summary>📦 Speedtest&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
+
+**🎯 Supported versions:**
+
+| 7.0.3 |
+| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -21,6 +26,11 @@ This repo contains some Android app patches.
 <summary>📦 Automate&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
+**🎯 Supported versions:**
+
+| 1.51.1 |
+| :---: |
+
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Bypass Blocks Limit](#bypass-blocks-limit) |  |  |
@@ -30,6 +40,11 @@ This repo contains some Android app patches.
 <details open>
 <summary>📦 Autosync&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
+
+**🎯 Supported versions:**
+
+| 7.5.10 |
+| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -42,6 +57,11 @@ This repo contains some Android app patches.
 <details open>
 <summary>📦 Circuit Simulator&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
+
+**🎯 Supported versions:**
+
+| 1.48.0 |
+| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
