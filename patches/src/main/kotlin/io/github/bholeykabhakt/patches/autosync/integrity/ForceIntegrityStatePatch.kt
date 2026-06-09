@@ -24,8 +24,6 @@ private const val stockSignatureToken = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
  *      → 18 h folder-pair wipe in `rk7.k` never fires
  *      → `PREF_UNLOCK_CODE` revocation in `SyncService.j` never matches
  *      → MainActivity warning dialog never shows
- *
- * See `projects/autosync/docs/integrity_flow_v7.5.10.md` for the full flow analysis.
  */
 @Suppress("unused")
 val forceIntegrityStatePatch = bytecodePatch(

@@ -7,7 +7,7 @@ import com.android.tools.smali.dexlib2.Opcode
 /**
  * Main license check (purchase gate) for premium status (changed since v7.4+)
  * 
- * This the 1st check everywhere and checks for real `.License` string.
+ * This is the 1st check everywhere and checks for real `.License` string.
  * Other methods in `LicenseManager` are either for Trial check or Legacy ultimate check.
  * These methods also call this method first and if `true` they return.
  */

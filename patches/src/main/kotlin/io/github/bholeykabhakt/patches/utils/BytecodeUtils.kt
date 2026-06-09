@@ -8,8 +8,8 @@ import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import com.android.tools.smali.dexlib2.iface.Method
 
-private const val matchLoggingEnvVar = "MORPHE_PRINT_MATCHES"
-private const val matchLoggingProperty = "morphe.printMatches"
+private const val MATCH_LOGGING_ENV_VAR = "MORPHE_PRINT_MATCHES"
+private const val MATCH_LOGGING_PROPERTY = "morphe.printMatches"
 
 private fun Method.fingerprintSignature() =
     "$definingClass->$name(${parameterTypes.joinToString(separator = "")})$returnType"
@@ -20,8 +20,8 @@ private fun String?.isEnabledFlag() = when (this?.trim()?.lowercase()) {
 }
 
 private fun isMatchLoggingEnabled() =
-    System.getenv(matchLoggingEnvVar).isEnabledFlag() ||
-            System.getProperty(matchLoggingProperty).isEnabledFlag()
+    System.getenv(MATCH_LOGGING_ENV_VAR).isEnabledFlag() ||
+            System.getProperty(MATCH_LOGGING_PROPERTY).isEnabledFlag()
 
 private fun Fingerprint.displayName() = javaClass.simpleName.ifBlank { toString() }
 

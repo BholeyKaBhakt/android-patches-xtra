@@ -90,12 +90,14 @@ val bypassAdbDetectionPatch = bytecodePatch(
                             insn.registerG,
                             newReference,
                         )
+
                         is BuilderInstruction3rc -> BuilderInstruction3rc(
                             insn.opcode,
                             insn.startRegister,
                             insn.registerCount,
                             newReference,
                         )
+
                         else -> continue
                     }
                     method.replaceInstruction(idx, newInsn)
