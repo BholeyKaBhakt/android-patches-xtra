@@ -24,11 +24,11 @@ private const val STOCK_SIGNATURE_TOKEN = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
  *      → 18 h folder-pair wipe in `rk7.k` never fires
  *      → `PREF_UNLOCK_CODE` revocation in `SyncService.j` never matches
  *      → MainActivity warning dialog never shows
+ *
+ * Nameless: runs only as a dependency of `purchaseAllItemsPatch` so users can't
+ * accidentally skip it. The IAB bypass is meaningless without these short-circuits.
  */
-@Suppress("unused")
-val forceIntegrityStatePatch = bytecodePatch(
-    name = "Force Stable Integrity State (Critical)",
-) {
+val forceIntegrityStatePatch = bytecodePatch {
     compatibleWith(COMPATIBILITY_AUTOSYNC)
 
     execute {

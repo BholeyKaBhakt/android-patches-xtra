@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.2.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.2.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;9 patches total
+> **[v2.2.2-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.2.2-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;7 patches total
 <details close>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -38,7 +38,7 @@ This repo contains some Android app patches.
 </details>
 
 <details close>
-<summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
+<summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -48,8 +48,6 @@ This repo contains some Android app patches.
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| Disable PairIP License Check |  |  |
-| Force Stable Integrity State (Critical) |  |  |
 | Purchase All Items |  |  |
 
 </details>

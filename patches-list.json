@@ -1,5 +1,5 @@
 {
-  "version": "2.2.1",
+  "version": "2.2.2-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -93,60 +93,13 @@
       "options": []
     },
     {
-      "name": "Disable PairIP License Check",
-      "description": null,
-      "default": true,
-      "dependencies": [],
-      "compatiblePackages": [
-        {
-          "packageName": "com.ttxapps.autosync",
-          "name": "Autosync",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "targets": [
-            {
-              "version": "7.5.10",
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Force Stable Integrity State (Critical)",
-      "description": null,
-      "default": true,
-      "dependencies": [],
-      "compatiblePackages": [
-        {
-          "packageName": "com.ttxapps.autosync",
-          "name": "Autosync",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "targets": [
-            {
-              "version": "7.5.10",
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
       "name": "Purchase All Items",
       "description": null,
       "default": true,
-      "dependencies": [],
+      "dependencies": [
+        "BytecodePatch",
+        "BytecodePatch"
+      ],
       "compatiblePackages": [
         {
           "packageName": "com.ttxapps.autosync",
