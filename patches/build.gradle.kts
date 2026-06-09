@@ -41,4 +41,8 @@ tasks {
     publish {
         dependsOn("generatePatchesList")
     }
+
+    jar {
+        exclude("util/**")
+    }
 }
