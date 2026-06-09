@@ -1,5 +1,5 @@
 {
-  "version": "2.3.0",
+  "version": "2.3.1-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -128,7 +128,7 @@
       "compatiblePackages": [
         {
           "packageName": "com.proto.circuitsimulator",
-          "name": "Circuit Simulator",
+          "name": "PROTO - circuit simulator",
           "description": null,
           "apkFileType": null,
           "appIconColor": null,
@@ -161,18 +161,6 @@
           "targets": [
             {
               "version": "2.5.0",
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "2.4.0",
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "2.3.1",
               "isExperimental": false,
               "minSdk": null,
               "description": null
