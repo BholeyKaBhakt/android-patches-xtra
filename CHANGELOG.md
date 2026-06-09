@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.1.0...v2.2.0) (2026-06-09)
+
+
+### Features
+
+* lock per-app compatibility versions ([b433ed6](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/b433ed60fc044719c40384f86ef14ff7dd7a49d0))
+
 # [2.2.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.1.0...v2.2.0-dev.1) (2026-06-09)
 
 
