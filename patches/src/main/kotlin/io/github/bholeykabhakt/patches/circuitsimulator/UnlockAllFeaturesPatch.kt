@@ -2,7 +2,6 @@ package io.github.bholeykabhakt.patches.circuitsimulator
 
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
 import com.android.tools.smali.dexlib2.Opcode
@@ -12,6 +11,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
+import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_CIRCUIT_SIMULATOR
 import io.github.bholeykabhakt.patches.utils.logMatch
 
 /**
@@ -35,12 +35,7 @@ import io.github.bholeykabhakt.patches.utils.logMatch
 val unlockAllFeaturesPatch = bytecodePatch(
     name = "Unlock All Features",
 ) {
-    compatibleWith(
-        Compatibility(
-            packageName = "com.proto.circuitsimulator",
-            name = "Circuit Simulator",
-        ),
-    )
+    compatibleWith(COMPATIBILITY_CIRCUIT_SIMULATOR)
 
     execute {
         val iapEnum = IapStatusEnumFingerprint.logMatch.classDef

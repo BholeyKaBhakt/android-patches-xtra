@@ -1,7 +1,7 @@
 package io.github.bholeykabhakt.patches.automate
 
-import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.bytecodePatch
+import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_AUTOMATE
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
@@ -9,7 +9,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 val bypassBlocksLimitPatch = bytecodePatch(
     name = "Bypass Blocks Limit",
 ) {
-    compatibleWith(Compatibility(packageName = "com.llamalab.automate", name = "Automate"))
+    compatibleWith(COMPATIBILITY_AUTOMATE)
 
     execute {
         IsBlockLimitReachedFingerprint.logMatch.method.returnEarly(true)

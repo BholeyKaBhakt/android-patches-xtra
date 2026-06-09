@@ -1,7 +1,7 @@
 package io.github.bholeykabhakt.patches.autosync.purchase
 
-import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.bytecodePatch
+import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_AUTOSYNC
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
@@ -9,7 +9,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 val purchaseAllItemsPatch = bytecodePatch(
     name = "Purchase All Items",
 ) {
-    compatibleWith(Compatibility(packageName = "com.ttxapps.autosync", name = "Autosync"))
+    compatibleWith(COMPATIBILITY_AUTOSYNC)
 
     execute {
         IsAccountTypePurchasedFingerprint.logMatch.method.returnEarly(true)
