@@ -1,3 +1,11 @@
+## [2.3.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.3.0...v2.3.1-dev.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* **circuit-sim:** use correct app name ([d97cf8a](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/d97cf8a07748a7527ac43aca8bb92921c7f4ca20))
+* **sky-tonight:** doesn't make sense to support old versions ([e451848](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/e451848e76625020418d0e93b32f4bb2157d034d))
+
 # [2.3.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.2.2...v2.3.0) (2026-06-09)
 
 
