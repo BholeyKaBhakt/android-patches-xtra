@@ -5,10 +5,9 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_AUTOSYNC
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
-@Suppress("unused")
-val disablePairIpPatch = bytecodePatch(
-    name = "Disable PairIP License Check",
-) {
+// Nameless: runs only as a dependency of `purchaseAllItemsPatch` so users can't
+// accidentally skip it. PairIP must be neutralised for the IAB bypass to hold.
+val disablePairIpPatch = bytecodePatch {
     compatibleWith(COMPATIBILITY_AUTOSYNC)
 
     execute {
