@@ -29,7 +29,11 @@ private val SHIM_FOR = mapOf(
 )
 
 private val TARGET_METHOD_NAMES = setOf(
-    "getInt", "getString", "getLong", "getFloat", "getUriFor",
+    "getInt",
+    "getString",
+    "getLong",
+    "getFloat",
+    "getUriFor",
 )
 
 /**

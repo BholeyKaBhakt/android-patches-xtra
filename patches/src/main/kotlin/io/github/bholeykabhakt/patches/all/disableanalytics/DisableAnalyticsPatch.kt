@@ -29,12 +29,14 @@ val disableAnalyticsPatch = resourcePatch(
             }
 
             filteredMetadata.forEach { element ->
-                if (element.getAttribute("android:name").endsWith("_deactivated"))
+                if (element.getAttribute("android:name").endsWith("_deactivated")) {
                     element.setAttribute(
                         "android:value",
-                        "true"
+                        "true",
                     )
-                else element.setAttribute("android:value", "false")
+                } else {
+                    element.setAttribute("android:value", "false")
+                }
             }
         }
     }

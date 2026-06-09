@@ -5,15 +5,13 @@ import app.morphe.patcher.fieldAccess
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 
-/**
- * Anchors only on stable surfaces:
- *   - Java string literals embedded in the method (untouched by ProGuard/R8)
- *   - Gson DTO field names (server protocol — stable across releases)
- *   - Method signature shape (return type + parameters)
- *
- * No reference to obfuscated `Ltt/<x>;` class identifiers; those reshuffle every release.
- * Cross-checked against v7.4.0 and v7.5.10 — every fingerprint here matches both.
- */
+// Anchors only on stable surfaces:
+//   - Java string literals embedded in the method (untouched by ProGuard/R8)
+//   - Gson DTO field names (server protocol — stable across releases)
+//   - Method signature shape (return type + parameters)
+//
+// No reference to obfuscated `Ltt/<x>;` class identifiers; those reshuffle every release.
+// Cross-checked against v7.4.0 and v7.5.10 — every fingerprint here matches both.
 
 /**
  * Static method that computes the Base32 digest of the installer signature for a given package.

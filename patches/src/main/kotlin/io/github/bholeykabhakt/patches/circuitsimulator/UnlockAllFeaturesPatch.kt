@@ -38,8 +38,8 @@ val unlockAllFeaturesPatch = bytecodePatch(
     compatibleWith(
         Compatibility(
             packageName = "com.proto.circuitsimulator",
-            name = "Circuit Simulator"
-        )
+            name = "Circuit Simulator",
+        ),
     )
 
     execute {
@@ -74,7 +74,7 @@ val unlockAllFeaturesPatch = bytecodePatch(
                                 Opcode.IF_NE,
                                 ifNe.registerA,
                                 ifNe.registerA,
-                                ifNe.target
+                                ifNe.target,
                             ),
                         )
                         rewrites++

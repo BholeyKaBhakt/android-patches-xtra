@@ -5,7 +5,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
-private const val stockSignatureToken = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
+private const val STOCK_SIGNATURE_TOKEN = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
 
 /**
  * Two surgical patches that together neutralise every tamper / trial / lock path:
@@ -32,7 +32,7 @@ val forceIntegrityStatePatch = bytecodePatch(
     compatibleWith(Compatibility(packageName = "com.ttxapps.autosync", name = "Autosync"))
 
     execute {
-        SignerDigestComputerFingerprint.logMatch.method.returnEarly(stockSignatureToken)
+        SignerDigestComputerFingerprint.logMatch.method.returnEarly(STOCK_SIGNATURE_TOKEN)
         BadApkSigGetterFingerprint.logMatch.method.returnEarly()
         BadUnlockCodeGetterFingerprint.logMatch.method.returnEarly()
     }

@@ -19,9 +19,8 @@ private fun String?.isEnabledFlag() = when (this?.trim()?.lowercase()) {
     else -> false
 }
 
-private fun isMatchLoggingEnabled() =
-    System.getenv(MATCH_LOGGING_ENV_VAR).isEnabledFlag() ||
-            System.getProperty(MATCH_LOGGING_PROPERTY).isEnabledFlag()
+private fun isMatchLoggingEnabled() = System.getenv(MATCH_LOGGING_ENV_VAR).isEnabledFlag() ||
+        System.getProperty(MATCH_LOGGING_PROPERTY).isEnabledFlag()
 
 private fun Fingerprint.displayName() = javaClass.simpleName.ifBlank { toString() }
 
@@ -53,7 +52,6 @@ context(_: BytecodePatchContext)
 val Fingerprint.logMatchAll: List<Match>
     get() = matchesAndLog()
 
-
 /**
  * Insert an early return at method entry, returning the natural zero value for the
  * method's return type:
@@ -68,12 +66,13 @@ val Fingerprint.logMatchAll: List<Match>
  * Use the typed overloads to return a non-zero value.
  */
 fun MutableMethod.returnEarly() = addInstructions(
-    0, when (returnType) {
+    0,
+    when (returnType) {
         "V" -> "return-void"
         "Z", "B", "C", "S", "I", "F" -> "const/4 v0, 0x0\nreturn v0"
         "J", "D" -> "const-wide/16 v0, 0x0\nreturn-wide v0"
         else -> "const/4 v0, 0x0\nreturn-object v0"
-    }
+    },
 )
 
 /** Return a fixed boolean. Method must return `Z`. */
