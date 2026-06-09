@@ -1,11 +1,11 @@
 package io.github.bholeykabhakt.patches.autosync.integrity
 
-import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.bytecodePatch
+import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_AUTOSYNC
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
-private const val stockSignatureToken = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
+private const val STOCK_SIGNATURE_TOKEN = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
 
 /**
  * Two surgical patches that together neutralise every tamper / trial / lock path:
@@ -24,17 +24,15 @@ private const val stockSignatureToken = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
  *      → 18 h folder-pair wipe in `rk7.k` never fires
  *      → `PREF_UNLOCK_CODE` revocation in `SyncService.j` never matches
  *      → MainActivity warning dialog never shows
- *
- * See `projects/autosync/docs/integrity_flow_v7.5.10.md` for the full flow analysis.
  */
 @Suppress("unused")
 val forceIntegrityStatePatch = bytecodePatch(
     name = "Force Stable Integrity State (Critical)",
 ) {
-    compatibleWith(Compatibility(packageName = "com.ttxapps.autosync", name = "Autosync"))
+    compatibleWith(COMPATIBILITY_AUTOSYNC)
 
     execute {
-        SignerDigestComputerFingerprint.logMatch.method.returnEarly(stockSignatureToken)
+        SignerDigestComputerFingerprint.logMatch.method.returnEarly(STOCK_SIGNATURE_TOKEN)
         BadApkSigGetterFingerprint.logMatch.method.returnEarly()
         BadUnlockCodeGetterFingerprint.logMatch.method.returnEarly()
     }

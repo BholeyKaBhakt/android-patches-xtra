@@ -48,7 +48,7 @@ fun main() {
             !fileName.contains("javadoc") &&
                     !fileName.contains("sources") &&
                     fileName.endsWith(".mpp")
-        }!!.first()
+        }!!.first(),
     )
     val loadedPatches = loadPatchesFromJar(patchFiles)
     val patchClassLoader = URLClassLoader(patchFiles.map { it.toURI().toURL() }.toTypedArray())
@@ -105,7 +105,7 @@ private fun generatePatchList(version: String, patches: Set<Patch<*>>) {
                     default = option.default,
                     values = option.values,
                 )
-            }
+            },
         )
     }
 

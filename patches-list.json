@@ -1,5 +1,5 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -16,7 +16,7 @@
           "signatures": null,
           "targets": [
             {
-              "version": null,
+              "version": "7.0.3",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -49,7 +49,7 @@
           "signatures": null,
           "targets": [
             {
-              "version": null,
+              "version": "1.51.1",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -82,7 +82,7 @@
           "signatures": null,
           "targets": [
             {
-              "version": null,
+              "version": "7.0.3",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -107,7 +107,7 @@
           "signatures": null,
           "targets": [
             {
-              "version": null,
+              "version": "7.5.10",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -132,7 +132,7 @@
           "signatures": null,
           "targets": [
             {
-              "version": null,
+              "version": "7.5.10",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -157,7 +157,7 @@
           "signatures": null,
           "targets": [
             {
-              "version": null,
+              "version": "7.5.10",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -182,7 +182,7 @@
           "signatures": null,
           "targets": [
             {
-              "version": null,
+              "version": "1.48.0",
               "isExperimental": false,
               "minSdk": null,
               "description": null

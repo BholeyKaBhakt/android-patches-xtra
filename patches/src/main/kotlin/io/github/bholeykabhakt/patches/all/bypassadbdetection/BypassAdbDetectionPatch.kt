@@ -29,7 +29,11 @@ private val SHIM_FOR = mapOf(
 )
 
 private val TARGET_METHOD_NAMES = setOf(
-    "getInt", "getString", "getLong", "getFloat", "getUriFor",
+    "getInt",
+    "getString",
+    "getLong",
+    "getFloat",
+    "getUriFor",
 )
 
 /**
@@ -90,12 +94,14 @@ val bypassAdbDetectionPatch = bytecodePatch(
                             insn.registerG,
                             newReference,
                         )
+
                         is BuilderInstruction3rc -> BuilderInstruction3rc(
                             insn.opcode,
                             insn.startRegister,
                             insn.registerCount,
                             newReference,
                         )
+
                         else -> continue
                     }
                     method.replaceInstruction(idx, newInsn)

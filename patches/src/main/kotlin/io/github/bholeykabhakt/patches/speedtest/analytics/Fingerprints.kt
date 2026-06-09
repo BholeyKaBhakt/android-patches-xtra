@@ -14,7 +14,10 @@ import com.android.tools.smali.dexlib2.AccessFlags
  */
 
 private val publicStaticVarargs = listOf(
-    AccessFlags.PUBLIC, AccessFlags.STATIC, AccessFlags.FINAL, AccessFlags.VARARGS,
+    AccessFlags.PUBLIC,
+    AccessFlags.STATIC,
+    AccessFlags.FINAL,
+    AccessFlags.VARARGS,
 )
 
 /** Matches `info(String,String,String,[String])V` AND `watch(String,String,String,[String])V`. */

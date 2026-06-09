@@ -1,3 +1,8 @@
 [*.{kt,kts}]
 ktlint_code_style = intellij_idea
 ktlint_standard_no-wildcard-imports = disabled
+
+# We use a per-package `Fingerprints.kt` file that may hold one or many objects —
+# matches the convention in morphe-patches-template. Disable the rule that asks us
+# to rename single-declaration files after their declaration.
+ktlint_standard_filename = disabled

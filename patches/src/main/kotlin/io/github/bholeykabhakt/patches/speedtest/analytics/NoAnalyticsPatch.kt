@@ -1,7 +1,7 @@
 package io.github.bholeykabhakt.patches.speedtest.analytics
 
-import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.bytecodePatch
+import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_SPEEDTEST
 import io.github.bholeykabhakt.patches.utils.logMatchAll
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
@@ -9,7 +9,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 val noAnalyticsPatch = bytecodePatch(
     name = "Disable Logging(analytics)",
 ) {
-    compatibleWith(Compatibility(packageName = "org.zwanoo.android.speedtest", name = "Speedtest"))
+    compatibleWith(COMPATIBILITY_SPEEDTEST)
 
     execute {
         // info() + watch() share the same signature; patch both.
