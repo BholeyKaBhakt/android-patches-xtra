@@ -1,3 +1,10 @@
+## [2.2.2-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.2.1...v2.2.2-dev.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* **autosync:** convert required patches to patch dependencies ([9c39719](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/9c397192f7ebc19c2ea911cca8ce4d751f9aef73))
+
 ## [2.2.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.2.0...v2.2.1) (2026-06-09)
 
 
