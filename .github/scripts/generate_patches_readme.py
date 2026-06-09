@@ -90,7 +90,7 @@ def patches_table(patches):
         else:
             opts_cell = ""
         desc = (p.get("description") or "").replace("\n", "<br>")
-        rows.append(f"| [{p['name']}](#{a}) | {desc} | {opts_cell} |")
+        rows.append(f"| {p['name']} | {desc} | {opts_cell} |")
     return "\n".join(rows)
 
 
@@ -132,9 +132,9 @@ def spoiler(label, count, targets, tbl, expanded=False):
     noun = "patch" if count == 1 else "patches"
     vtbl = versions_table(targets)
     versions_section = f"**🎯 Supported versions:**\n\n{vtbl}\n\n" if vtbl else ""
-    tag = "<details open>" if expanded else "<details>"
+    tag = "<details close>" if expanded else "<details>"
     return f"""{tag}
-<summary>{label}&nbsp;&nbsp;•&nbsp;&nbsp;{count} {noun}</summary>
+<summary><b>{label}</b>&nbsp;&nbsp;•&nbsp;&nbsp;{count} {noun}</summary>
 <br>
 
 {versions_section}{tbl}
@@ -161,9 +161,9 @@ def build_content(expanded=False):
     if universal:
         uni_patches = list(universal.values())
         noun = "patch" if len(uni_patches) == 1 else "patches"
-        tag  = "<details open>" if expanded else "<details>"
+        tag  = "<details close>" if expanded else "<details>"
         lines.append(f"""{tag}
-<summary>🌐 Universal&nbsp;&nbsp;•&nbsp;&nbsp;{len(uni_patches)} {noun}</summary>
+<summary><b>🌐 Universal</b>&nbsp;&nbsp;•&nbsp;&nbsp;{len(uni_patches)} {noun}</summary>
 <br>
 
 {patches_table(uni_patches)}
