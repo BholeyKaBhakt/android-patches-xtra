@@ -52,6 +52,14 @@ object Constants {
         ),
     )
 
+    val COMPATIBILITY_ATM_FEE_SAVER = Compatibility(
+        name = "ATM Fee Saver",
+        packageName = "com.atmfee",
+        targets = listOf(
+            AppTarget(version = "3.7.9", isExperimental = true),
+        ),
+    )
+
     val COMPATIBILITY_STELLARIUM = Compatibility(
         name = "Stellarium",
         packageName = "com.noctuasoftware.stellarium_free",
