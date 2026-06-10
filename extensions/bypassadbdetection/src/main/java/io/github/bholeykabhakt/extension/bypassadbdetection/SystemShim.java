@@ -10,14 +10,15 @@ import android.provider.Settings;
  * completeness.
  */
 public final class SystemShim {
-    private SystemShim() {}
-
     private static final String SENTINEL = "_morphe_adb_bypass_dummy_";
+
+    private SystemShim() {
+    }
 
     private static boolean neutralize(String name) {
         return "adb_enabled".equals(name)
-            || "adb_wifi_enabled".equals(name)
-            || "development_settings_enabled".equals(name);
+                || "adb_wifi_enabled".equals(name)
+                || "development_settings_enabled".equals(name);
     }
 
     public static int getInt(ContentResolver cr, String name) throws Settings.SettingNotFoundException {

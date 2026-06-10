@@ -10,14 +10,15 @@ import android.provider.Settings;
  * call these as a fallback or as a paranoia layer; we cover them identically.
  */
 public final class SecureShim {
-    private SecureShim() {}
-
     private static final String SENTINEL = "_morphe_adb_bypass_dummy_";
+
+    private SecureShim() {
+    }
 
     private static boolean neutralize(String name) {
         return "adb_enabled".equals(name)
-            || "adb_wifi_enabled".equals(name)
-            || "development_settings_enabled".equals(name);
+                || "adb_wifi_enabled".equals(name)
+                || "development_settings_enabled".equals(name);
     }
 
     public static int getInt(ContentResolver cr, String name) throws Settings.SettingNotFoundException {

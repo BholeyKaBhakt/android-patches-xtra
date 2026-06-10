@@ -11,21 +11,22 @@ import android.provider.Settings;
  * it names ADB or Developer-Options state, we return a neutral "off" value;
  * otherwise we delegate to the real framework call so unrelated settings behave
  * identically.
- *
+ * <p>
  * Signatures (return types and parameters) mirror Settings$Global exactly so the
  * invoke-static reference swap requires no register or stack adjustments.
  */
 public final class GlobalShim {
-    private GlobalShim() {}
-
     // Non-existent setting key. content://settings/global/<this> yields zero rows,
     // so observers never fire and ContentResolver.query reads behave like "unset".
     private static final String SENTINEL = "_morphe_adb_bypass_dummy_";
 
+    private GlobalShim() {
+    }
+
     private static boolean neutralize(String name) {
         return "adb_enabled".equals(name)
-            || "adb_wifi_enabled".equals(name)
-            || "development_settings_enabled".equals(name);
+                || "adb_wifi_enabled".equals(name)
+                || "development_settings_enabled".equals(name);
     }
 
     public static int getInt(ContentResolver cr, String name) throws Settings.SettingNotFoundException {
