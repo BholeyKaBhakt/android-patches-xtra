@@ -1,3 +1,11 @@
+# [2.5.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.4.0...v2.5.0) (2026-06-10)
+
+
+### Features
+
+* **stellarium:** install extended deep-sky catalog offline via Play Core shim ([2ba0b09](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/2ba0b09b93d5c09b7296c876294b411a8befb0de))
+* **stellarium:** unlock plus tier ([7233cc3](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/7233cc3ca7f749e629e43c25a2b4f07b239e62bc))
+
 # [2.5.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.4.0...v2.5.0-dev.1) (2026-06-10)
 
 
