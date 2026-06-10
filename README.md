@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.4.0](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.4.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;10 patches total
+> **[v2.5.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.5.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;12 patches total
 <details close>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -50,6 +50,22 @@ This repo contains some Android app patches.
 |----------|----------------|-----------|
 | Disable In-App Telemetry |  |  |
 | Unlock Premium |  |  |
+
+</details>
+
+<details close>
+<summary><b>📦 Stellarium</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 🧪&nbsp;1.16.0 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Install Extended (Deep Sky) Catalog |  |  |
+| Unlock Plus |  |  |
 
 </details>
 

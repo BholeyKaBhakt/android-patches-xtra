@@ -1,5 +1,5 @@
 {
-  "version": "2.4.0",
+  "version": "2.5.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -126,6 +126,33 @@
       "options": []
     },
     {
+      "name": "Install Extended (Deep Sky) Catalog",
+      "description": null,
+      "default": true,
+      "dependencies": [
+        "BytecodePatch"
+      ],
+      "compatiblePackages": [
+        {
+          "packageName": "com.noctuasoftware.stellarium_free",
+          "name": "Stellarium",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "1.16.0",
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Purchase All Items",
       "description": null,
       "default": true,
@@ -170,6 +197,31 @@
             {
               "version": "1.48.0",
               "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Plus",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.noctuasoftware.stellarium_free",
+          "name": "Stellarium",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "1.16.0",
+              "isExperimental": true,
               "minSdk": null,
               "description": null
             }
