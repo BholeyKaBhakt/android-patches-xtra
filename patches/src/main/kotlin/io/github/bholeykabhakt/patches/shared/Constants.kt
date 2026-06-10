@@ -51,4 +51,12 @@ object Constants {
             AppTarget(version = "2.5.0"),
         ),
     )
+
+    val COMPATIBILITY_STELLARIUM = Compatibility(
+        name = "Stellarium",
+        packageName = "com.noctuasoftware.stellarium_free",
+        targets = listOf(
+            AppTarget(version = "1.16.0", isExperimental = true),
+        ),
+    )
 }

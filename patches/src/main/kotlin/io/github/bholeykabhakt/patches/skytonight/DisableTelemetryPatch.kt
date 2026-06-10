@@ -49,7 +49,7 @@ val disableTelemetryPatch = rawResourcePatch(
         val version = packageMetadata.versionName
         val offset = INIT_FIREBASE_ANALYTICS_OFFSETS[version] ?: throw PatchException(
             "Sky Tonight version $version is not supported. " +
-                "Supported: ${INIT_FIREBASE_ANALYTICS_OFFSETS.keys.joinToString()}.",
+                    "Supported: ${INIT_FIREBASE_ANALYTICS_OFFSETS.keys.joinToString()}.",
         )
 
         val so = get(LIBIL2CPP_PATH)
@@ -67,9 +67,9 @@ val disableTelemetryPatch = rawResourcePatch(
         if (first != STP_X30_X21_PRE || second != STP_X20_X19) {
             throw PatchException(
                 "InitFirebaseAnalytics() @ 0x${offset.toString(16).uppercase()} — " +
-                    "expected STP X30,X21 ; STP X20,X19 prologue, got " +
-                    "0x${first.toUInt().toString(16)} 0x${second.toUInt().toString(16)}; " +
-                    "v$version offset table is stale",
+                        "expected STP X30,X21 ; STP X20,X19 prologue, got " +
+                        "0x${first.toUInt().toString(16)} 0x${second.toUInt().toString(16)}; " +
+                        "v$version offset table is stale",
             )
         }
 
