@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.3.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.3.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;8 patches total
+> **[v2.4.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.4.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;10 patches total
 <details close>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -34,6 +34,22 @@ This repo contains some Android app patches.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Bypass Blocks Limit |  |  |
+
+</details>
+
+<details close>
+<summary><b>📦 Sky Tonight</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 2.5.0 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Disable In-App Telemetry |  |  |
+| Unlock Premium |  |  |
 
 </details>
 
@@ -68,27 +84,13 @@ This repo contains some Android app patches.
 </details>
 
 <details close>
-<summary><b>📦 Sky Tonight</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
-<br>
-
-**🎯 Supported versions:**
-
-| 2.5.0 |
-| :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| Unlock Premium |  |  |
-
-</details>
-
-<details close>
-<summary><b>🌐 Universal</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<summary><b>🌐 Universal</b>&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Bypass ADB/Developer Options Detection |  |  |
+| Disable Facebook SDK Tracking |  |  |
 | Disable Firebase(Google) Analytics |  |  |
 
 </details>

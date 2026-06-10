@@ -1,5 +1,5 @@
 {
-  "version": "2.3.1",
+  "version": "2.4.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -60,11 +60,44 @@
       "options": []
     },
     {
+      "name": "Disable Facebook SDK Tracking",
+      "description": null,
+      "default": false,
+      "dependencies": [],
+      "compatiblePackages": null,
+      "options": []
+    },
+    {
       "name": "Disable Firebase(Google) Analytics",
       "description": null,
       "default": false,
       "dependencies": [],
       "compatiblePackages": null,
+      "options": []
+    },
+    {
+      "name": "Disable In-App Telemetry",
+      "description": null,
+      "default": false,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.vitotechnology.sky.tonight.map.star.walk",
+          "name": "Sky Tonight",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "2.5.0",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
       "options": []
     },
     {
