@@ -1,3 +1,12 @@
+# [2.4.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.3.1...v2.4.0) (2026-06-10)
+
+
+### Features
+
+* **sky-tonight:** disable in-app telemetry by NOP-ing Vito InitFirebaseAnalytics ([ccbc6af](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/ccbc6af03bc2e3c59846ec2798a54788ff72660b))
+* **universal:** disable Facebook SDK auto-logging and advertiser ID collection ([4d1ae1d](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/4d1ae1dde882b092eed616f2b84c7db2d31877f0))
+* **universal:** insert Firebase/Google Analytics opt-out keys when missing ([fdd3e17](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/fdd3e17fc5d78226f8cd19b463720deb9d9ad49f))
+
 # [2.4.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.3.1...v2.4.0-dev.1) (2026-06-09)
 
 
