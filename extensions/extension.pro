@@ -14,6 +14,12 @@
   *;
 }
 
+# Shim AssetPackLocation lives in the Play Core package (to reach the
+# package-private super ctor) and is only referenced by patch-added bytecode.
+-keep class com.google.android.play.core.assetpacks.ShimAssetPackLocation {
+  *;
+}
+
 # R8 has been observed stripping Kotlin intrinsics used by some extension code.
 # Unclear why, but keeping them is cheap insurance — matches upstream practice.
 -keep class kotlin.jvm.internal.Intrinsics {
