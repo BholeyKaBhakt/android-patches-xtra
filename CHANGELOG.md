@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.5.0...v2.6.0) (2026-06-11)
+
+
+### Features
+
+* **atm-fee-saver:** unlock premium and hide location popups ([744f73b](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/744f73b5df845062e747f79d0e0c66dc50f6c27d))
+
 # [2.6.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.5.0...v2.6.0-dev.1) (2026-06-11)
 
 
