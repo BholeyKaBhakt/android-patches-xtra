@@ -1,5 +1,5 @@
 {
-  "version": "2.5.0",
+  "version": "2.6.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -126,6 +126,31 @@
       "options": []
     },
     {
+      "name": "Hide Location Permission Popup",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.atmfee",
+          "name": "ATM Fee Saver",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "3.7.9",
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Install Extended (Deep Sky) Catalog",
       "description": null,
       "default": true,
@@ -221,6 +246,31 @@
           "targets": [
             {
               "version": "1.16.0",
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Premium",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.atmfee",
+          "name": "ATM Fee Saver",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "3.7.9",
               "isExperimental": true,
               "minSdk": null,
               "description": null
