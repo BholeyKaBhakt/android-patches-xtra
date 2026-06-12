@@ -102,18 +102,18 @@ private data class Targets(
 )
 
 private val PATCHES_BY_VERSION = mapOf(
-    "1.16.0" to Targets(
-        qvariantBoolCtorPltAddr = 0x8A0DA0,
+    "1.16.2" to Targets(
+        qvariantBoolCtorPltAddr = 0x8AB690,
         wordPatches = listOf(
             // getAppVariant: `cbz w9, <free>` → nop ⇒ always falls through to "plus".
-            WordPatch("getAppVariant() force plus", 0x72DD00, 0x34000089, NOP),
+            WordPatch("getAppVariant() force plus", 0x736F98, 0x34000089, NOP),
         ),
         sites = listOf(
             // getHasFeaturePLUS opens with a big stack frame (160 B + 12 callee saves)
             // because the stock body walks a QList<QString>.
             Site(
                 label = "StelAPI::getHasFeaturePLUS()",
-                offset = 0x725520,
+                offset = 0x72FB00,
                 expectedFirstWords = intArrayOf(
                     0xD10283FF.toInt(),  // SUB SP, SP, #0xA0
                     0xA9047BFD.toInt(),  // STP X29, X30, [SP, #0x40]
@@ -124,7 +124,7 @@ private val PATCHES_BY_VERSION = mapOf(
             // tail-calls. Patching the entry collapses the whole decision tree.
             Site(
                 label = "StelAPI::hasValidLicense()",
-                offset = 0x72E8EC,
+                offset = 0x737B84,
                 expectedFirstWords = intArrayOf(
                     0xB9401809.toInt(),  // LDR W9, [X0, #0x18]
                     0x7100053F,          // CMP W9, #0x1

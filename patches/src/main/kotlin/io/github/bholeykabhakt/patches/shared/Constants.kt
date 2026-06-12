@@ -64,7 +64,7 @@ object Constants {
         name = "Stellarium",
         packageName = "com.noctuasoftware.stellarium_free",
         targets = listOf(
-            AppTarget(version = "1.16.0", isExperimental = true),
+            AppTarget(version = "1.16.2", isExperimental = true),
         ),
     )
 }
