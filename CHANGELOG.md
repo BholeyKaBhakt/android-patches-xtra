@@ -1,3 +1,11 @@
+## [2.6.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.6.0...v2.6.1-dev.1) (2026-06-12)
+
+
+### Bug Fixes
+
+* improve asset downloader code ([cc40037](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/cc400378446904fd6e2b4290adbc34e40a74a44f))
+* **stellarium:** bump the version to v1.16.2 ([1d35389](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/1d35389397bb24033ea5ad7597f85c308514bb42))
+
 # [2.6.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.5.0...v2.6.0) (2026-06-11)
 
 
