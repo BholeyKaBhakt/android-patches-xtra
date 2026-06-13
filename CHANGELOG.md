@@ -1,3 +1,11 @@
+# [2.7.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.6.1...v2.7.0) (2026-06-13)
+
+
+### Features
+
+* **inshorts:** remove all ads patch ([fbe0b05](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/fbe0b0564852d7906823b0807d2958cc6648be21))
+* **inshorts:** skip login screen patch ([1474f2e](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/1474f2e1f2b77de650b317f7f03b3e81b766fa6e))
+
 # [2.7.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.6.1...v2.7.0-dev.1) (2026-06-13)
 
 
