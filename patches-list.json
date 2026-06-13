@@ -1,5 +1,5 @@
 {
-  "version": "2.6.1",
+  "version": "2.7.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -197,6 +197,56 @@
             {
               "version": "7.5.10",
               "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Remove Ads",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.nis.app",
+          "name": "Inshorts",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "6.12.15",
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Skip Login",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.nis.app",
+          "name": "Inshorts",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "6.12.15",
+              "isExperimental": true,
               "minSdk": null,
               "description": null
             }

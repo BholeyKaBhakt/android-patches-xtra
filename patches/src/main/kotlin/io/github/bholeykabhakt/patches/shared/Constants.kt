@@ -60,6 +60,14 @@ object Constants {
         ),
     )
 
+    val COMPATIBILITY_INSHORTS = Compatibility(
+        name = "Inshorts",
+        packageName = "com.nis.app",
+        targets = listOf(
+            AppTarget(version = "6.12.15", isExperimental = true),
+        ),
+    )
+
     val COMPATIBILITY_STELLARIUM = Compatibility(
         name = "Stellarium",
         packageName = "com.noctuasoftware.stellarium_free",
