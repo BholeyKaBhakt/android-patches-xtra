@@ -1,3 +1,10 @@
+## [2.8.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.8.0...v2.8.1) (2026-06-14)
+
+
+### Bug Fixes
+
+* remove pinned version from patches that are relatively future-proof ([9620508](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/9620508ca57a9fd334e19b346893200a5fd052aa))
+
 ## [2.8.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.8.0...v2.8.1-dev.1) (2026-06-14)
 
 
