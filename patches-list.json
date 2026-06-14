@@ -1,5 +1,5 @@
 {
-  "version": "2.8.1",
+  "version": "2.8.2-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -17,6 +17,12 @@
           "targets": [
             {
               "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "7.0.4",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -50,6 +56,12 @@
           "targets": [
             {
               "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "1.51.1",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -116,6 +128,12 @@
           "targets": [
             {
               "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "7.0.4",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -140,8 +158,14 @@
           "signatures": null,
           "targets": [
             {
-              "version": "3.7.9",
+              "version": null,
               "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "3.7.9",
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             }
@@ -168,7 +192,7 @@
           "targets": [
             {
               "version": "1.16.2",
-              "isExperimental": true,
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             }
@@ -196,6 +220,12 @@
           "targets": [
             {
               "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "7.5.10",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -220,8 +250,14 @@
           "signatures": null,
           "targets": [
             {
-              "version": "6.12.15",
+              "version": null,
               "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "6.12.15",
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             }
@@ -245,8 +281,14 @@
           "signatures": null,
           "targets": [
             {
-              "version": "6.12.15",
+              "version": null,
               "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "6.12.15",
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             }
@@ -271,6 +313,12 @@
           "targets": [
             {
               "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "1.48.0",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -296,7 +344,7 @@
           "targets": [
             {
               "version": "1.16.2",
-              "isExperimental": true,
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             }
@@ -320,8 +368,14 @@
           "signatures": null,
           "targets": [
             {
-              "version": "3.7.9",
+              "version": null,
               "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "3.7.9",
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             }
@@ -374,7 +428,7 @@
           "targets": [
             {
               "version": "2.2.9",
-              "isExperimental": true,
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             }

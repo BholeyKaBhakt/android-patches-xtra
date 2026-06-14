@@ -5,10 +5,15 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.8.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.8.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;17 patches total
+> **[v2.8.2-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.8.2-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;17 patches total
 <details close>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
+
+**🎯 Supported versions:**
+
+| 7.0.4 |
+| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -20,6 +25,11 @@ This repo contains some Android app patches.
 <details close>
 <summary><b>📦 Automate</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
+
+**🎯 Supported versions:**
+
+| 1.51.1 |
+| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -49,7 +59,7 @@ This repo contains some Android app patches.
 
 **🎯 Supported versions:**
 
-| 🧪&nbsp;3.7.9 |
+| 3.7.9 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
@@ -65,7 +75,7 @@ This repo contains some Android app patches.
 
 **🎯 Supported versions:**
 
-| 🧪&nbsp;1.16.2 |
+| 1.16.2 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
@@ -79,6 +89,11 @@ This repo contains some Android app patches.
 <summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
+**🎯 Supported versions:**
+
+| 7.5.10 |
+| :---: |
+
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Purchase All Items |  |  |
@@ -91,7 +106,7 @@ This repo contains some Android app patches.
 
 **🎯 Supported versions:**
 
-| 🧪&nbsp;6.12.15 |
+| 6.12.15 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
@@ -105,6 +120,11 @@ This repo contains some Android app patches.
 <summary><b>📦 PROTO - circuit simulator</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
+**🎯 Supported versions:**
+
+| 1.48.0 |
+| :---: |
+
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Unlock All Features |  |  |
@@ -117,7 +137,7 @@ This repo contains some Android app patches.
 
 **🎯 Supported versions:**
 
-| 🧪&nbsp;2.2.9 |
+| 2.2.9 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
