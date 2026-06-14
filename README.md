@@ -5,15 +5,10 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.8.0](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.8.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;17 patches total
+> **[v2.8.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.8.1-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;17 patches total
 <details close>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
-
-**🎯 Supported versions:**
-
-| 7.0.3 |
-| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -25,11 +20,6 @@ This repo contains some Android app patches.
 <details close>
 <summary><b>📦 Automate</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
-
-**🎯 Supported versions:**
-
-| 1.51.1 |
-| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -89,11 +79,6 @@ This repo contains some Android app patches.
 <summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
-**🎯 Supported versions:**
-
-| 7.5.10 |
-| :---: |
-
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Purchase All Items |  |  |
@@ -119,11 +104,6 @@ This repo contains some Android app patches.
 <details close>
 <summary><b>📦 PROTO - circuit simulator</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
-
-**🎯 Supported versions:**
-
-| 1.48.0 |
-| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|

@@ -15,33 +15,21 @@ object Constants {
     val COMPATIBILITY_SPEEDTEST = Compatibility(
         name = "Speedtest",
         packageName = "org.zwanoo.android.speedtest",
-        targets = listOf(
-            AppTarget(version = "7.0.3"),
-        ),
     )
 
     val COMPATIBILITY_AUTOMATE = Compatibility(
         name = "Automate",
         packageName = "com.llamalab.automate",
-        targets = listOf(
-            AppTarget(version = "1.51.1"),
-        ),
     )
 
     val COMPATIBILITY_AUTOSYNC = Compatibility(
         name = "Autosync",
         packageName = "com.ttxapps.autosync",
-        targets = listOf(
-            AppTarget(version = "7.5.10"),
-        ),
     )
 
     val COMPATIBILITY_CIRCUIT_SIMULATOR = Compatibility(
         name = "PROTO - circuit simulator",
         packageName = "com.proto.circuitsimulator",
-        targets = listOf(
-            AppTarget(version = "1.48.0"),
-        ),
     )
 
     val COMPATIBILITY_SKY_TONIGHT = Compatibility(
