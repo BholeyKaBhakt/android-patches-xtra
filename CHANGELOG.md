@@ -1,3 +1,10 @@
+# [2.8.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.7.0...v2.8.0-dev.1) (2026-06-14)
+
+
+### Features
+
+* **vpnify:** unlock premium patch ([8b225c6](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/8b225c61fd68e02a21ce0bd74fbafe63a5924e22))
+
 # [2.7.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.6.1...v2.7.0) (2026-06-13)
 
 
