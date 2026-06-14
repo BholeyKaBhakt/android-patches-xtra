@@ -15,21 +15,37 @@ object Constants {
     val COMPATIBILITY_SPEEDTEST = Compatibility(
         name = "Speedtest",
         packageName = "org.zwanoo.android.speedtest",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "7.0.4"),
+        ),
     )
 
     val COMPATIBILITY_AUTOMATE = Compatibility(
         name = "Automate",
         packageName = "com.llamalab.automate",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "1.51.1"),
+        ),
     )
 
     val COMPATIBILITY_AUTOSYNC = Compatibility(
         name = "Autosync",
         packageName = "com.ttxapps.autosync",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "7.5.10"),
+        ),
     )
 
     val COMPATIBILITY_CIRCUIT_SIMULATOR = Compatibility(
         name = "PROTO - circuit simulator",
         packageName = "com.proto.circuitsimulator",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "1.48.0"),
+        ),
     )
 
     val COMPATIBILITY_SKY_TONIGHT = Compatibility(
@@ -44,7 +60,8 @@ object Constants {
         name = "ATM Fee Saver",
         packageName = "com.atmfee",
         targets = listOf(
-            AppTarget(version = "3.7.9", isExperimental = true),
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "3.7.9"),
         ),
     )
 
@@ -52,7 +69,8 @@ object Constants {
         name = "Inshorts",
         packageName = "com.nis.app",
         targets = listOf(
-            AppTarget(version = "6.12.15", isExperimental = true),
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "6.12.15"),
         ),
     )
 
@@ -60,7 +78,7 @@ object Constants {
         name = "vpnify",
         packageName = "com.vpn.free.hotspot.secure.vpnify",
         targets = listOf(
-            AppTarget(version = "2.2.9", versionCode = 2290052, isExperimental = true),
+            AppTarget(version = "2.2.9", versionCode = 2290052),
         ),
     )
 
@@ -68,7 +86,7 @@ object Constants {
         name = "Stellarium",
         packageName = "com.noctuasoftware.stellarium_free",
         targets = listOf(
-            AppTarget(version = "1.16.2", isExperimental = true),
+            AppTarget(version = "1.16.2"),
         ),
     )
 }
