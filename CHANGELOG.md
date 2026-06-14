@@ -1,3 +1,10 @@
+## [2.8.2-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.8.1...v2.8.2-dev.1) (2026-06-14)
+
+
+### Bug Fixes
+
+* allow stable (dvm) patches to be applied on future app versions ([d06ab8c](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/d06ab8c209be63dc63fa221fc43355cd5bce8c2f))
+
 ## [2.8.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.8.0...v2.8.1) (2026-06-14)
 
 
