@@ -68,6 +68,14 @@ object Constants {
         ),
     )
 
+    val COMPATIBILITY_VPNIFY = Compatibility(
+        name = "vpnify",
+        packageName = "com.vpn.free.hotspot.secure.vpnify",
+        targets = listOf(
+            AppTarget(version = "2.2.9", versionCode = 2290052, isExperimental = true),
+        ),
+    )
+
     val COMPATIBILITY_STELLARIUM = Compatibility(
         name = "Stellarium",
         packageName = "com.noctuasoftware.stellarium_free",
