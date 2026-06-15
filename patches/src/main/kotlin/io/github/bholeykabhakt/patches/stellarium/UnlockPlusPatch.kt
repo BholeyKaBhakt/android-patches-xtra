@@ -76,6 +76,30 @@ private val PATCHES_BY_VERSION = mapOf(
             ),
         ),
     ),
+    "1.16.3" to Targets(
+        qvariantBoolCtorPltAddr = 0x8ACCE0,
+        wordPatches = listOf(
+            WordPatch("getAppVariant() force plus", 0x737BAC, 0x34000089, NOP),
+        ),
+        sites = listOf(
+            Site(
+                label = "StelAPI::getHasFeaturePLUS()",
+                offset = 0x73069C,
+                expectedFirstWords = intArrayOf(
+                    0xD10283FF.toInt(),  // SUB SP, SP, #0xA0
+                    0xA9047BFD.toInt(),  // STP X29, X30, [SP, #0x40]
+                ),
+            ),
+            Site(
+                label = "StelAPI::hasValidLicense()",
+                offset = 0x738798,
+                expectedFirstWords = intArrayOf(
+                    0xB9401809.toInt(),  // LDR W9, [X0, #0x18]
+                    0x7100053F,          // CMP W9, #0x1
+                ),
+            ),
+        ),
+    ),
 )
 
 @Suppress("unused")
