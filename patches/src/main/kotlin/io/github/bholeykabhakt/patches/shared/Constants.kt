@@ -56,6 +56,14 @@ object Constants {
         ),
     )
 
+    val COMPATIBILITY_STAR_WALK_2 = Compatibility(
+        name = "Star Walk 2",
+        packageName = "com.vitotechnology.StarWalk2Free",
+        targets = listOf(
+            AppTarget(version = "2.20.3", isExperimental = true),
+        ),
+    )
+
     val COMPATIBILITY_ATM_FEE_SAVER = Compatibility(
         name = "ATM Fee Saver",
         packageName = "com.atmfee",
