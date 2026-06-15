@@ -99,4 +99,13 @@ object Constants {
             AppTarget(version = "1.16.2"),
         ),
     )
+
+    val COMPATIBILITY_UFOVPN = Compatibility(
+        name = "UFO VPN",
+        packageName = "com.ufovpn.connect.velnet",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "2.5.5"),
+        ),
+    )
 }
