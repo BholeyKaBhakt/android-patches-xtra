@@ -1,5 +1,5 @@
 {
-  "version": "2.9.0-dev.1",
+  "version": "2.9.0-dev.2",
   "patches": [
     {
       "name": "AdFree Account",
@@ -216,6 +216,12 @@
           "signatures": null,
           "targets": [
             {
+              "version": "1.16.3",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
               "version": "1.16.2",
               "isExperimental": false,
               "minSdk": null,
@@ -367,6 +373,12 @@
           "appIconColor": null,
           "signatures": null,
           "targets": [
+            {
+              "version": "1.16.3",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
             {
               "version": "1.16.2",
               "isExperimental": false,

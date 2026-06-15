@@ -1,3 +1,10 @@
+# [2.9.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.9.0-dev.1...v2.9.0-dev.2) (2026-06-15)
+
+
+### Features
+
+* **stellarium:** bump version to 1.16.3 ([51b0a83](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/51b0a8328c52673ad287cd93579f65e92eca6eb2))
+
 # [2.9.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.8.2...v2.9.0-dev.1) (2026-06-15)
 
 
