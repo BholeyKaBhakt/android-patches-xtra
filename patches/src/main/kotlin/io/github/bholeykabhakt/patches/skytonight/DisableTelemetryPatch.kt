@@ -7,22 +7,9 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 /**
- * Stops Sky Tonight's in-app telemetry at the source by NOP-ing
- * `Vito.Metrics.Analytics.InitFirebaseAnalytics()` in `libil2cpp.so`.
- *
- * The Firebase Analytics SDK itself is already deactivated by the universal
- * [io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch]
- * (which sets the `firebase_analytics_collection_deactivated` manifest flag).
- * But Vito wraps Firebase in their own `FirebaseAnalyticsComponent` and the
- * app still calls `Analytics.LogEvent(...)` → `FirebaseAnalyticsComponent.LogEvent(...)`
- * at runtime — which logs noisy `parameter value is too long` warnings even
- * when the underlying SDK drops the call. This patch short-circuits the whole
- * pipeline by making `InitFirebaseAnalytics()` return immediately, so the
- * `FirebaseAnalyticsComponent` is never registered with the analytics manager
- * and downstream `LogEvent` calls become no-ops at the dispatcher layer.
- *
- * Patch: write `RET` (`0xD65F03C0`) at the function head — no callee-saved
- * registers were modified yet, no stack adjustment to unwind.
+ * Writes `RET` at the head of `Vito.Metrics.Analytics.InitFirebaseAnalytics()` in `libil2cpp.so`
+ * so the in-app analytics dispatcher is never initialised. Offset is per-version; the prologue
+ * is asserted.
  */
 
 private const val RET = 0xD65F03C0.toInt()

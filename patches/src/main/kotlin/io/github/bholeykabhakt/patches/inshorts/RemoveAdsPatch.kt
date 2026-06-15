@@ -8,18 +8,9 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_INSHORTS
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 /**
- * Removes every Inshorts ad surface (stack, full-page, top, bottom-bar — all Google
- * native/DFP). Two layers, since the app pulls ads from several places:
- *
- *  - **Producers → null:** the three managers that hand an ad to the card deck /
- *    top bar each return their no-ad value (`null`), so nothing is ever rendered.
- *    Callers already null-check (these methods return null in the normal "no ad" path).
- *  - **Config → empty:** the server ad-slot lists return empty and the bottom-bar DFP
- *    returns null, so the app never even schedules a load (and any surface that reads
- *    the config directly gets nothing).
- *
- * Method names are R8-obfuscated; the producers are matched by their (stable) class +
- * return/parameter types, the config getters by their kept Gson getter names.
+ * Removes every Inshorts ad surface. Two layers: the ad-producer methods are forced to return
+ * their no-ad value (null), and the server ad-slot config getters are forced to return empty,
+ * so nothing is ever scheduled or rendered.
  */
 @Suppress("unused")
 val removeAdsPatch = bytecodePatch(

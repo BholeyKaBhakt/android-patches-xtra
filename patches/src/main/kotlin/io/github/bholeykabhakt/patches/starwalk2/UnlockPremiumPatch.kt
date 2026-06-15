@@ -7,50 +7,12 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 /**
- * Star Walk 2 by Vito Technology — Unity / IL2CPP (same engine as Sky Tonight). Every store /
- * entitlement decision runs as native ARM64 in `lib/arm64-v8a/libil2cpp.so`; this single
- * [rawResourcePatch] overwrites four function heads to fully unlock the app.
- *
- * Four sites (offsets = the `dump.cs` `Offset:` column; bytes asserted so a wrong-version match
- * fails loudly instead of corrupting the binary):
- *
- *   1. `GooglePlay.InvalidLicense()` → `MOV W8,#1 ; STRB W8,[X0,#0x48] ; RET`
- *      Byte-identical to Sky Tonight (same Vito license runner). Returns "license handled"
- *      without firing the Play-Store paywall intent — required for a re-signed APK to run.
- *   2. `StorePanelManager.get_HasFullAccess()` → `MOV W0,#1 ; RET`
- *      OR-combines IsLifetimeBought / IsAnySubscribed / IsReviewerStore; every premium gate
- *      reads it. Unlocks Sky Live, Visible Tonight, Astronomy Calendar, ad removal, and the
- *      "Lifetime Premium Access" state.
- *   3. `StoreEntry.set_State`, the State==None branch sets the action button to Buy(1); we
- *      rewrite that one immediate to Download(4) so an un-owned add-on tile shows **"Install"**
- *      instead of "Buy". Tapping it runs PerformAction's native download handler, which fetches
- *      just that pack for free from the open CloudFront CDN — nothing auto-downloads. On
- *      completion the app calls `set_State(Installed)` (untouched branch), which shows
- *      **"Installed"** and persists it; see the persistence note below.
- *   4. `StoreProvider.ItemBought(string)` → `MOV W0,#1 ; RET`
- *      Surfaces the **"Add-On Content"** entry in the main menu (without it the menu shows the
- *      "Premium Access" section instead and the store is unreachable).
- *
- * The add-on **content packs** (Deep Sky Objects, Extended Solar System, Satellites, Planets
- * Upgrade) are NOT bundled — the app downloads them at runtime from
- * `d1j18p2reqyyr1.cloudfront.net/slw_storage/{inappID}/Android/{version}/…` (open, no auth) and
- * extracts to `files/Storage/{inappID}/`. "Installed" is derived from on-disk content, so a
- * downloaded pack stays unlocked.
- *
- * Persistence note: the Installed tile state is saved via Unity `PlayerPrefs`, which flushes to
- * disk on app pause/background (normal use). A hard `am force-stop` immediately after a download
- * skips that flush — the *content* stays on disk, but the tile may read "Install" until tapped
- * once (a no-op re-validate; it does not re-download).
- *
- * Deliberately NOT patched: `ItemInstalled`, `StoreEntry.PrevInstalled`, `get_ContentDownloaded`
- * — those reflect real on-disk state; forcing them true makes the app think content is already
- * present and skip the CDN fetch.
- *
- * Adding a new version: decompile, run Il2CppDumper (Vito apps need metadata-v39 →
- * `roytu/Il2CppDumper` `v39` branch, `dotnet publish -f net8.0`), grep `dump.cs` for the four
- * declarations, take the `Offset:` column, append to [PATCHES_BY_VERSION]. (For site 3, the
- * offset is the `MOV W8,#1` immediate in `set_State`'s State==None branch, just before the
- * `STR Wn,[Xn,#0x10c]` that stores the action-button state.)
+ * Star Walk 2 (Unity / IL2CPP). Four ARM64 rewrites in `lib/arm64-v8a/libil2cpp.so` unlock the
+ * premium tier and make the Add-On Content store usable: force the license check and
+ * `get_HasFullAccess`, surface the store entry via `ItemBought`, and flip an un-owned add-on's
+ * action button from "Buy" to "Install" so its pack downloads for free. Offsets are per-version;
+ * the original bytes at each site are asserted before writing, so a stale offset fails loudly
+ * instead of corrupting the .so.
  */
 
 // ARM64 instruction encodings (little-endian)

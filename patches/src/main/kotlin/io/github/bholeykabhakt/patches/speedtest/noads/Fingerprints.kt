@@ -4,15 +4,7 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.OpcodesFilter
 import com.android.tools.smali.dexlib2.Opcode
 
-/**
- * "Is this account ad-free?" check.
- *
- * Public package `com/ookla/speedtest/purchase/google/` is stable.
- * Method names rotate (v5 `BillingClientPurchaseManager.isAdFreeAccount`, v7 `D.b`),
- * but the body shape is invariant: load a data-store field, call a static utility,
- * then load the billing-client field, call a virtual on it. That's a 7-opcode prefix
- * unique to this method within the package.
- */
+/** The "is this account ad-free?" check, in `com/ookla/speedtest/purchase/google/`. */
 internal object IsAdFreeAccountFingerprint : Fingerprint(
     definingClass = "Lcom/ookla/speedtest/purchase/google/",
     returnType = "Z",

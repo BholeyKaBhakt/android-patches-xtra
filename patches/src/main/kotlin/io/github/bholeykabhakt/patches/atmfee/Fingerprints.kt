@@ -3,17 +3,7 @@ package io.github.bholeykabhakt.patches.atmfee
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.literal
 
-/**
- * ATM Fee Saver gates every premium feature through one Kotlin object,
- * `com.atmfee.utils.PremiumManager`. The app is unobfuscated (intact Kotlin
- * `@Metadata`), so the type and signatures below are stable.
- *
- * Premium is a single chokepoint: ~40 call sites read it via `isPremiumActive()`,
- * and the backing `isPremiumActive` field is private — nothing outside the class
- * touches it. So forcing the getter true unlocks everything. (A parallel
- * `premiumState` StateFlow exists, but its observers only react to premium turning
- * *on*; see [unlockPremiumPatch].)
- */
+/** Fingerprints for `com.atmfee.utils.PremiumManager` (the premium chokepoint). See [unlockPremiumPatch]. */
 
 /** `PremiumManager.isPremiumActive()` — the no-arg boolean getter (only one in the class). */
 internal object IsPremiumActiveFingerprint : Fingerprint(

@@ -10,16 +10,11 @@ import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_INSHORTS
 
 /**
- * Removes every Inshorts login screen so the app opens straight to the feed (the feed
- * is already readable — a device-registration token grants content; user login is only
- * for personalization). There are two login surfaces:
+ * Removes every Inshorts login screen so the app opens straight to the feed. Two surfaces:
  *
- *  - **The login card** (`OnboardingCard.Type.USP_LOGIN`, phone/email/Google providers,
- *    often no skip button) — the mandatory one. It is added by
- *    `HomeActivityCardDataManager.h()` for the config card named "LOGIN" when the user
- *    is not signed in. We can't force the "signed in" check true (it is dereferenced as
- *    `FirebaseAuth.getCurrentUser()` in ~25 places → NPEs), so instead we make `h()`
- *    early-return for the "LOGIN" card, so it is never added to the onboarding deck.
+ *  - **The login card** (`OnboardingCard.Type.USP_LOGIN`) — added by
+ *    `HomeActivityCardDataManager.h()` for the config card named "LOGIN"; we make `h()`
+ *    early-return for that card so it is never added to the onboarding deck.
  *
  *  - **The login dialog** (`OnboardingLoginDialogFragment`) shown by the time-spend /
  *    relevancy cards when `OnboardingCardData.getLoginEnabled()` is true — forcing that

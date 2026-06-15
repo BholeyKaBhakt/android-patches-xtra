@@ -2,12 +2,7 @@ package io.github.bholeykabhakt.patches.vpnify
 
 import app.morphe.patcher.Fingerprint
 
-/**
- * Premium getters on the (R8-obfuscated) subscription manager `vf.d`. R8 names shift across
- * builds, so we anchor on the **stable `SharedPreferences` key strings** — each key occurs in
- * exactly one no-arg `()Z` getter (the matching setters return `V`), so `returnType = Z` + the
- * string identifies it uniquely. See [unlockPremiumPatch].
- */
+/** Fingerprints for the premium getters / signature-hash getter. See [unlockPremiumPatch]. */
 
 /** `vf.d.f()` — "is subscription active"; the premium chokepoint (~32 callers). */
 internal object SubscriptionActiveFingerprint : Fingerprint(

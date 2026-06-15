@@ -8,25 +8,10 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 private const val STOCK_SIGNATURE_TOKEN = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
 
 /**
- * Two surgical patches that together neutralise every tamper / trial / lock path:
- *
- *   1. Force the signer-hash computer to return the stock token.
- *      → local pattern check in `SyncService.j` always passes
- *      → `jl7.h` never set true
- *      → `rl7.b()` (trial downgrade — PIN/Pro caps + folder list trimmed) never runs
- *      → 18 h periodic re-check in `hk7.a` always passes
- *      → sync-flow short-circuit in `rk7.k` never fires
- *      → StatusFragment warning dialog never shows
- *
- *   2. Null both getters on the remote-config DTO (`badApkSig`, `badUnlockCode`).
- *      → server blacklist comparison in `SyncService.j` short-circuits on the
- *        `if-eqz` immediately before `ug7.F0(...)` — `vl7.a` never set true
- *      → 18 h folder-pair wipe in `rk7.k` never fires
- *      → `PREF_UNLOCK_CODE` revocation in `SyncService.j` never matches
- *      → MainActivity warning dialog never shows
- *
- * Nameless: runs only as a dependency of `purchaseAllItemsPatch` so users can't
- * accidentally skip it. The IAB bypass is meaningless without these short-circuits.
+ * Neutralises autosync's tamper / trial / lock paths: forces the signer-hash computer to return
+ * the stock token, and nulls the two remote-config blacklist getters (`badApkSig`,
+ * `badUnlockCode`). Nameless — runs only as a dependency of `purchaseAllItemsPatch` (the IAB
+ * bypass is meaningless without these short-circuits).
  */
 val forceIntegrityStatePatch = bytecodePatch {
     compatibleWith(COMPATIBILITY_AUTOSYNC)

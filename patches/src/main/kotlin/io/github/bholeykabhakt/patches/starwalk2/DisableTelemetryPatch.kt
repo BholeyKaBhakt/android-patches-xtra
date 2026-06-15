@@ -7,14 +7,8 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 /**
- * NOPs `Vito.Metrics.Analytics.InitFirebaseAnalytics()` so the analytics
- * dispatcher never registers Vito's `FirebaseAnalyticsComponent`. Downstream
- * `LogEvent` / `LogScreen` / `LogError` calls then hit a wrapper with no
- * components attached and become no-ops.
- *
- * Star Walk 2 shares `Vito.Metrics.Analytics` with Sky Tonight (same dev,
- * same framework); the prologue (`STP X30,X21 ; STP X20,X19`) is identical
- * across both apps' libil2cpp builds, only the offset shifts.
+ * Writes `RET` at the head of `Vito.Metrics.Analytics.InitFirebaseAnalytics()` so the in-app
+ * analytics dispatcher is never initialised. Offset is per-version; the prologue is asserted.
  */
 
 private const val RET = 0xD65F03C0.toInt()
