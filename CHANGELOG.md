@@ -1,3 +1,11 @@
+# [2.9.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.8.2...v2.9.0) (2026-06-15)
+
+
+### Features
+
+* **star-walk2:** unlock premium and no telemetry ([fd7a14d](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/fd7a14d19799fe83812a1fda979ec499e102961e))
+* **stellarium:** bump version to 1.16.3 ([51b0a83](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/51b0a8328c52673ad287cd93579f65e92eca6eb2))
+
 # [2.9.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.9.0-dev.1...v2.9.0-dev.2) (2026-06-15)
 
 
