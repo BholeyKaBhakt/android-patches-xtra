@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.8.2](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.8.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;17 patches total
+> **[v2.9.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.9.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;19 patches total
 <details close>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -54,6 +54,22 @@ This repo contains some Android app patches.
 </details>
 
 <details close>
+<summary><b>📦 Star Walk 2</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 🧪&nbsp;2.20.3 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Disable In-App Telemetry |  |  |
+| Unlock Premium |  |  |
+
+</details>
+
+<details close>
 <summary><b>📦 ATM Fee Saver</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
@@ -75,8 +91,8 @@ This repo contains some Android app patches.
 
 **🎯 Supported versions:**
 
-| 1.16.2 |
-| :---: |
+| 1.16.3 | 1.16.2 |
+| :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|

@@ -13,31 +13,10 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 private const val HOME_ACTIVITY = "Lcom/atmfee/ui/home_activity/HomeActivity;"
 
 /**
- * Suppresses the two recurring location nags, and restores the country list they
- * were (surprisingly) responsible for loading.
- *
- * The nags:
- *  - "Location Permission Needed" (`enableCurrentLocationDialog()`), shown when the
- *    runtime location permission is denied.
- *  - "Phone GPS Feature Needed" (`checkGpsEnable()`), shown when device location
- *    services are off.
- *
- * Both fire from the tab/interaction handlers (guarded by `isLocationPermission` /
- * `isGPSEnabled`), so once the user declines they re-appear on every tab switch, even
- * after picking a country by hand. Forcing an early `return-void` removes them.
- *
- * The catch: for a not-logged-in / location-denied user, the country dropdown is
- * **only** populated by those dialogs' "Not now" handlers, which call `getCountryData()`
- * (`onRequestPermissionsResult`'s denial branch has no other loader). Simply no-op'ing
- * the dialogs leaves the country list empty. We can't move the load into the dialog
- * methods — they run on every tab switch and `getCountryData()` enqueues a fresh
- * network request with no dedup, so that would spam the endpoint.
- *
- * Instead we inject a single `getCountryData()` into `setuponCreateActivityContent()`
- * (the once-per-`onCreate` setup), placed right before its existing `initHome()` call —
- * after `countryViewModel` is constructed in that same method, mirroring the app's own
- * `getCountryData(); initHome()` happy-path sequence. The list then loads once at
- * startup for everyone, independent of login/permission.
+ * Suppresses the two recurring location nags (`enableCurrentLocationDialog()`,
+ * `checkGpsEnable()`) with an early `return-void`, and — since those dialogs were the only thing
+ * loading the country list for a location-denied user — injects a single `getCountryData()` into
+ * the once-per-`onCreate` setup so the list still loads.
  */
 @Suppress("unused")
 val hideLocationPopupPatch = bytecodePatch(

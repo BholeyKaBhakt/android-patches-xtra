@@ -1,5 +1,5 @@
 {
-  "version": "2.8.2",
+  "version": "2.9.0-dev.2",
   "patches": [
     {
       "name": "AdFree Account",
@@ -113,6 +113,31 @@
       "options": []
     },
     {
+      "name": "Disable In-App Telemetry",
+      "description": null,
+      "default": false,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.vitotechnology.StarWalk2Free",
+          "name": "Star Walk 2",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "2.20.3",
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Disable Logging(analytics)",
       "description": null,
       "default": true,
@@ -190,6 +215,12 @@
           "appIconColor": null,
           "signatures": null,
           "targets": [
+            {
+              "version": "1.16.3",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
             {
               "version": "1.16.2",
               "isExperimental": false,
@@ -343,6 +374,12 @@
           "signatures": null,
           "targets": [
             {
+              "version": "1.16.3",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
               "version": "1.16.2",
               "isExperimental": false,
               "minSdk": null,
@@ -401,6 +438,31 @@
             {
               "version": "2.5.0",
               "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Premium",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.vitotechnology.StarWalk2Free",
+          "name": "Star Walk 2",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "2.20.3",
+              "isExperimental": true,
               "minSdk": null,
               "description": null
             }

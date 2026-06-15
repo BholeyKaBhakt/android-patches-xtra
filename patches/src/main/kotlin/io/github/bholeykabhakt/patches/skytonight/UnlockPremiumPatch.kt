@@ -7,25 +7,14 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 /**
- * Sky Tonight is a Unity / IL2CPP app — Java is a thin JNI shim, every license
- * decision runs as native ARM64 in `libil2cpp.so`. We overwrite three function
- * heads via [rawResourcePatch] which hands us a writable [java.io.File] for the .so.
- *
- * Three sites, identical bytes across versions; only offsets shift:
+ * Sky Tonight (Unity / IL2CPP). Three ARM64 function-head rewrites in `libil2cpp.so` unlock
+ * premium:
  *
  *   1. `GooglePlay.InvalidLicense()` → `MOV W8,#1 ; STRB W8,[X0,#0x48] ; RET`
- *      (set `updateStopped=true`, return without firing the Play-Store paywall intent).
- *   2. `StoreInitializer.get_PremiumAccessEnabled()` → `MOV W0,#1 ; RET`.
- *   3. `StoreInitializer.get_LockedItemsCount()` → `MOV W0,#0`.
+ *   2. `StoreInitializer.get_PremiumAccessEnabled()` → `MOV W0,#1 ; RET`
+ *   3. `StoreInitializer.get_LockedItemsCount()` → `MOV W0,#0`
  *
- * Offsets are per-version. We key off `packageMetadata.versionName` and use a
- * lookup table; expected bytes are asserted at each site so a wrong-version match
- * fails loudly instead of corrupting the binary.
- *
- * Adding a new version: decompile, run Il2CppDumper (Sky Tonight v2.5.0+ needs
- * metadata-v39 support → use the `roytu/Il2CppDumper` `v39` branch built with
- * `dotnet publish -f net8.0`), grep `dump.cs` for the three function declarations,
- * append a new entry to [PATCHES_BY_VERSION].
+ * Offsets are per-version; expected bytes are asserted at each site before writing.
  */
 
 // ARM64 instruction encodings (little-endian)

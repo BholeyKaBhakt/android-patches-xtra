@@ -6,34 +6,12 @@ import app.morphe.patcher.patch.bytecodePatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STELLARIUM
 
 /**
- * Internal dependency of [installExtendedCatalogPatch] — **nameless**, so it is
- * not user-selectable on its own.
+ * Nameless internal dependency of [installExtendedCatalogPatch] (not user-selectable).
  *
- * Makes Stellarium load its extended deep catalog (mag 8–12 stars, deep DSO, DSS
- * imagery) from a local directory, with **no native binary edits**, by shimming
- * the Google Play Asset Delivery *Java* API.
- *
- * ### How
- * The native engine asks Play Core whether `asset_pack_extended` is installed:
- * `libstellarium…so` → `libplaycore.so` → JNI → `AssetPackManager.getPackLocation(String)`
- * → `AssetPackLocation` (null on a sideloaded install). When non-null, the native
- * code takes its "already downloaded" path and reads the catalog from the
- * location's `assetsPath()`.
- *
- * This patch short-circuits the concrete `getPackLocation("asset_pack_extended")`
- * to return a [ShimAssetPackLocation] pointing at
- * `/data/data/<pkg>/files/asset_pack_extended` whenever the pack is present there
- * (else null — identical to the unpatched not-installed result). libplaycore
- * calls `assetsPath()` / `packStorageMethod()` **virtually**, so the shim's values
- * win and the **unmodified** engine loads the catalog. A non-null location is all
- * the engine needs — no download-state notification has to be faked.
- *
- * ### Why the hook survives obfuscation
- * `libplaycore.so` resolves `AssetPackManager` / `getPackLocation` / `assetsPath`
- * / `packStorageMethod` by **string name** via JNI, so Play Core's consumer keep
- * rules stop R8 renaming them — the hook is version-independent (unlike `.so`
- * offsets). The shared extension is merged here via [extendWith]; the dependent
- * [installExtendedCatalogPatch] downloads the pack into that dir on first run.
+ * Shims the Play Asset Delivery Java API so Stellarium loads its extended deep catalog from a
+ * local directory: `AssetPackManager.getPackLocation("asset_pack_extended")` is short-circuited
+ * to return a [ShimAssetPackLocation] under the app's files dir when the pack is present there
+ * (else null, as stock). No native edits.
  */
 
 private const val ASSET_PACK_LOCATION =

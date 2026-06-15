@@ -12,18 +12,10 @@ import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 /**
- * Unlocks vpnify premium: all locations, no ads, no time limit, no paywall.
- *
- * Premium funnels through the subscription manager `vf.d`: ~32 callers gate on `vf.d.f()`
- * ("is subscription active"); `vf.d.e()` ("is auto-renewing") backs the manage-subscription UI.
- * Neither is virtualized, so `returnEarly(true)` on each suffices.
- *
- * Also suppresses the **"Subscription activated! Congratulations"** dialog: vpnify's
- * billing/purchase handler (`zf.c.e`) pops it whenever `vf.d.f()` is true. Since we force that
- * true, on a device with a Play-Store Google account — where the billing client actually connects
- * and re-queries purchases on resume — it re-appears on every navigation (it never fires on a
- * device with no account). We null the dialog callback at the show site so the app's own
- * null-check skips it; premium is otherwise unaffected.
+ * Unlocks vpnify premium (all locations, no ads, no time limit, no paywall) by forcing the two
+ * subscription getters on the `vf.d` manager (`f()`/`e()`) to return true, and suppresses the
+ * "Subscription activated" dialog by nulling its callback at the show site. Pulls in
+ * [disablePairipPatch] and [spoofSignatureHashPatch].
  */
 @Suppress("unused")
 val unlockPremiumPatch = bytecodePatch(

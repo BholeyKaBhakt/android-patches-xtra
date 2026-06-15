@@ -15,21 +15,10 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_CIRCUIT_SI
 import io.github.bholeykabhakt.patches.utils.logMatch
 
 /**
- * Unlocks every paid feature in Proto Circuit Simulator. Each feature gate
- * (component visibility, export, import, themes, scope configs, print, extras)
- * branches on the same shape:
- *
- *   sget-object vR, Lenum;->OK_FIELD:Lenum;
- *   if-ne <statusReg>, vR, :locked_label
- *
- * where the enum has a value named "OK" plus per-feature `MISSING_*` reasons.
- * We walk every method and, wherever this pair appears (with up to a few
- * intervening instructions), rewrite the `if-ne` to compare a register to
- * itself — vacuously false, never branches, unlocked path runs unconditionally.
- *
- * The per-addon "is-owned" boolean getter is deliberately left alone: every
- * feature gate uses the enum, not the boolean, and forcing the boolean true
- * makes the launcher hide owned addons from its buyable list.
+ * Unlocks every paid feature in Proto Circuit Simulator. Each gate compares a status register to
+ * the status-enum's "OK" field and branches to a locked path on mismatch; this patch finds those
+ * `if-ne` checks and rewrites each to compare a register to itself (never taken), so the unlocked
+ * path always runs.
  */
 @Suppress("unused")
 val unlockAllFeaturesPatch = bytecodePatch(

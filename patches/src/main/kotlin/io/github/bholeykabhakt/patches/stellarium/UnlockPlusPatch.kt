@@ -7,66 +7,16 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 /**
- * Stellarium Mobile is a Qt6 / C++ app. Java is a thin Qt-for-Android shim, all
- * the Plus-tier gating runs as native ARM64 in `libstellarium-mobile-plus_arm64-v8a.so`.
+ * Stellarium Mobile (Qt6 / C++). Unlocks the Plus tier via ARM64 rewrites in
+ * `lib/arm64-v8a/libstellarium-mobile-plus_arm64-v8a.so`:
  *
- * The Free and Plus SKUs ship the **same** binary; the runtime decides which
- * features to unlock by consulting two Q_PROPERTYs on the `StelAPI` singleton:
+ *  - the two `StelAPI` Plus getters (`getHasFeaturePLUS`, `hasValidLicense`) are rewritten to
+ *    `MOV X0,X8 ; MOV W1,#1 ; B QVariant::QVariant(bool)` — constructs `QVariant(true)` into the
+ *    caller's sret buffer (a bare `MOV W0,#1 ; RET` SIGSEGVs, since the caller reads the buffer
+ *    via `QVariant::isNull()`); the branch displacement is computed at patch time, and
+ *  - `getAppVariant()`'s flag branch is NOP-ed so it always reports "plus", removing the upsell.
  *
- *  - `hasFeaturePLUS` — has the user paid for Plus? Stock body walks
- *    `Billing::purchasesList` matching against the two product IDs
- *    `stellarium_plus_subscription` / `stellarium_plus_one_time_purchase`.
- *
- *  - `hasValidLicense` — has Google Play LVL signed off on this install?
- *    Stock body reads a license-status field set asynchronously by the JNI
- *    callback `Java_…_Stellarium_cbLicenceStatusChanged`. Returns `false`
- *    when the device has no signed-in Google account (reason `0xFAB2`) or
- *    when the install was sideloaded / resigned — which makes the Plus
- *    page show "this copy isn't genuine".
- *
- * Both accessors return a `QVariant` (not a bare `bool` — important — see
- * below) via the ARM64 sret convention. We replace each function entry with
- * the same 3-instruction tail-call that constructs `QVariant(true)` directly
- * into the caller-provided sret buffer:
- *
- *   MOV X0, X8        ; x0 = sret output pointer (caller put it in x8)
- *   MOV W1, #1        ; w1 = bool value (true)
- *   B   QVariant::QVariant(bool)@plt   ; tail-call → ctor RETs back to caller
- *
- * **Why not the simpler `MOV W0,#1 ; RET`?** That was the first attempt and
- * it segfaults the app on launch. The caller (`StelAPI::setAssetHook()`,
- * which runs from the constructor) sets `x8 = &local_QVariant` as the sret
- * output, calls the getter, then immediately calls `QVariant::isNull()` on
- * the buffer. A bare `RET` leaves the buffer holding uninitialized stack
- * garbage → `isNull()` follows a bad d-pointer → SIGSEGV deep inside
- * `libQt6Core`. The tail-call into `QVariant::QVariant(bool)` constructs a
- * proper `QVariant(true)` into `[x8]` and returns — same shape as the existing
- * `StelAPI::hasValidLicense()` "return QVariant(true)" path at
- * `0x72E930..0x72E938`.
- *
- * Catalog/data note: most star, DSO and survey content is **not** Plus-gated —
- * Stellarium uses the standard HiPS protocol with a public DigitalOcean Spaces
- * CDN (`stellarium.sfo2.cdn.digitaloceanspaces.com`) and progressively fetches
- * deeper HEALPix tiles as the user zooms. Setting `hasFeaturePLUS=true` unlocks
- * UI features (telescope control, advanced overlays, all skycultures, extra
- * landscapes) and the deep-survey tile fetches those features trigger; the
- * baseline mag-7 stars + DSO catalog ships bundled in `assets/data/`.
- *
- * Truly-Plus extra (see [Targets.wordPatches]): the main menu inserts a
- * "Stellarium PLUS" upsell item via QML JS, gated on `App.appVariant === "free"`.
- * `StelAPI::getAppVariant()` returns "plus"/"free" by a byte flag; NOP-ing its
- * `cbz` makes it always return "plus", so the QML skips the insert and the item
- * (and its icon) is never created. `appVariant` has exactly one consumer (that
- * menu check; its only native caller is `qt_metacall`), so this does not touch
- * feature gating — that is the separate `hasFeaturePLUS` above.
- *
- * Adding a new version: pull the new `libstellarium-mobile-plus_arm64-v8a.so`,
- * locate the getter via `nm -D <so> | c++filt | grep getHasFeaturePLUS`,
- * locate the QVariant(bool) PLT via
- * `nm -D <so> | c++filt | grep 'QVariant::QVariant(bool)@plt'` (or
- * `xcrun llvm-objdump -d <so> | grep -B 1 _ZN8QVariantC1Eb@plt`), and append
- * an entry to [PATCHES_BY_VERSION]. The branch displacement is recomputed
- * at patch time.
+ * Offsets are per-version; entry bytes are asserted before writing.
  */
 
 // ARM64 instruction encodings (little-endian)
@@ -91,13 +41,7 @@ private data class WordPatch(val label: String, val offset: Int, val expect: Int
 private data class Targets(
     val qvariantBoolCtorPltAddr: Int,
     val sites: List<Site>,
-    /**
-     * Makes it *truly* Plus: removes the "Stellarium PLUS" upsell menu item.
-     * The main menu QML inserts that item only when `App.appVariant === "free"`.
-     * `StelAPI::getAppVariant()` returns "plus"/"free" by a byte flag; NOP-ing the
-     * flag branch makes it always return "plus", so the item (and its icon) is
-     * never created — cleaner than blanking the label, which leaves an empty row.
-     */
+    /** NOP `getAppVariant()`'s flag branch so the QML "Stellarium PLUS" upsell item is never inserted. */
     val wordPatches: List<WordPatch>,
 )
 
@@ -125,6 +69,30 @@ private val PATCHES_BY_VERSION = mapOf(
             Site(
                 label = "StelAPI::hasValidLicense()",
                 offset = 0x737B84,
+                expectedFirstWords = intArrayOf(
+                    0xB9401809.toInt(),  // LDR W9, [X0, #0x18]
+                    0x7100053F,          // CMP W9, #0x1
+                ),
+            ),
+        ),
+    ),
+    "1.16.3" to Targets(
+        qvariantBoolCtorPltAddr = 0x8ACCE0,
+        wordPatches = listOf(
+            WordPatch("getAppVariant() force plus", 0x737BAC, 0x34000089, NOP),
+        ),
+        sites = listOf(
+            Site(
+                label = "StelAPI::getHasFeaturePLUS()",
+                offset = 0x73069C,
+                expectedFirstWords = intArrayOf(
+                    0xD10283FF.toInt(),  // SUB SP, SP, #0xA0
+                    0xA9047BFD.toInt(),  // STP X29, X30, [SP, #0x40]
+                ),
+            ),
+            Site(
+                label = "StelAPI::hasValidLicense()",
+                offset = 0x738798,
                 expectedFirstWords = intArrayOf(
                     0xB9401809.toInt(),  // LDR W9, [X0, #0x18]
                     0x7100053F,          // CMP W9, #0x1
