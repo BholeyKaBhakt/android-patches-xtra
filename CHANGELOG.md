@@ -1,3 +1,10 @@
+## [2.10.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.10.0...v2.10.1) (2026-06-16)
+
+
+### Bug Fixes
+
+* **ufo-vpn:** bump version to 2.5.8 ([544952d](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/544952de45c353d8dd99cf04bb0e9cedbbaa190b))
+
 ## [2.10.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.10.0...v2.10.1-dev.1) (2026-06-16)
 
 
