@@ -33,7 +33,7 @@ if "/" not in repo_full:
 owner, repo = repo_full.split("/", 1)
 
 
-with open(json_path) as f:
+with open(json_path, encoding="utf-8") as f:
     data = json.load(f)
 
 
@@ -132,7 +132,7 @@ def spoiler(label, count, targets, tbl, expanded=False):
     noun = "patch" if count == 1 else "patches"
     vtbl = versions_table(targets)
     versions_section = f"**🎯 Supported versions:**\n\n{vtbl}\n\n" if vtbl else ""
-    tag = "<details close>" if expanded else "<details>"
+    tag = "<details open>" if expanded else "<details>"
     return f"""{tag}
 <summary><b>{label}</b>&nbsp;&nbsp;•&nbsp;&nbsp;{count} {noun}</summary>
 <br>
@@ -161,7 +161,7 @@ def build_content(expanded=False):
     if universal:
         uni_patches = list(universal.values())
         noun = "patch" if len(uni_patches) == 1 else "patches"
-        tag  = "<details close>" if expanded else "<details>"
+        tag  = "<details open>" if expanded else "<details>"
         lines.append(f"""{tag}
 <summary><b>🌐 Universal</b>&nbsp;&nbsp;•&nbsp;&nbsp;{len(uni_patches)} {noun}</summary>
 <br>
@@ -200,7 +200,7 @@ if not marker_match or END_MARKER not in readme:
 actual_start = marker_match.group(0)
 
 # Auto-expand threshold
-AUTO_EXPAND_THRESHOLD = 20
+AUTO_EXPAND_THRESHOLD = 10
 
 # Spoilers are expanded if:
 # 1. Total patch count is small (≤ AUTO_EXPAND_THRESHOLD)
