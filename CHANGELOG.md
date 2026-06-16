@@ -1,3 +1,10 @@
+## [2.10.2-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.10.1...v2.10.2-dev.1) (2026-06-16)
+
+
+### Bug Fixes
+
+* **readme:** update readme generator ([4e72ec5](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/4e72ec5a835527c43e23942f05f00c01c08f9eef))
+
 ## [2.10.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.10.0...v2.10.1) (2026-06-16)
 
 
