@@ -107,6 +107,7 @@ object Constants {
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
             AppTarget(version = "2.5.5"),
+            AppTarget(version = "2.5.8"),
         ),
     )
 }
