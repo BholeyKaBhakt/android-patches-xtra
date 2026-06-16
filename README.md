@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v2.9.0](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.9.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;19 patches total
+> **[v2.10.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.10.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;20 patches total
 <details close>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -122,8 +122,8 @@ This repo contains some Android app patches.
 
 **🎯 Supported versions:**
 
-| 6.12.15 |
-| :---: |
+| 6.12.18 | 6.12.15 |
+| :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -138,12 +138,27 @@ This repo contains some Android app patches.
 
 **🎯 Supported versions:**
 
-| 1.48.0 |
-| :---: |
+| 1.49.0 | 1.48.0 |
+| :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Unlock All Features |  |  |
+
+</details>
+
+<details close>
+<summary><b>📦 UFO VPN</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 2.5.5 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Unlock Premium |  |  |
 
 </details>
 
