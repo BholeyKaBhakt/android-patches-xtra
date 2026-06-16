@@ -4,13 +4,13 @@ This repo contains some Android app patches.
 
 ## 🩹 Patches list
 
-<!-- PATCHES_START EXPANDED -->
-> **[v2.10.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.10.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;20 patches total
-<details open>
+<!-- PATCHES_START -->
+> **[v2.10.2-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.10.2-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;20 patches total
+<details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 7.0.4 |
 | :---: |
@@ -22,11 +22,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 Automate</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 1.51.1 |
 | :---: |
@@ -37,11 +37,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 Sky Tonight</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 2.5.0 |
 | :---: |
@@ -53,11 +53,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 Star Walk 2</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 🧪&nbsp;2.20.3 |
 | :---: |
@@ -69,11 +69,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 ATM Fee Saver</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 3.7.9 |
 | :---: |
@@ -85,11 +85,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 Stellarium</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 1.16.3 | 1.16.2 |
 | :---: | :---: |
@@ -101,11 +101,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 7.5.10 |
 | :---: |
@@ -116,11 +116,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 Inshorts</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 6.12.18 | 6.12.15 |
 | :---: | :---: |
@@ -132,11 +132,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 PROTO - circuit simulator</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 1.49.0 | 1.48.0 |
 | :---: | :---: |
@@ -147,11 +147,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 UFO VPN</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 2.5.5 | 2.5.8 |
 | :---: | :---: |
@@ -162,11 +162,11 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>📦 vpnify</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
 <br>
 
-**🎯 Supported versions:**
+> **🎯 Supported versions:**
 
 | 2.2.9 |
 | :---: |
@@ -177,7 +177,7 @@ This repo contains some Android app patches.
 
 </details>
 
-<details open>
+<details>
 <summary><b>🌐 Universal</b>&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
 

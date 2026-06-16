@@ -131,7 +131,7 @@ def spoiler(label, count, targets, tbl, expanded=False):
     """
     noun = "patch" if count == 1 else "patches"
     vtbl = versions_table(targets)
-    versions_section = f"**🎯 Supported versions:**\n\n{vtbl}\n\n" if vtbl else ""
+    versions_section = f"> **🎯 Supported versions:**\n\n{vtbl}\n\n" if vtbl else ""
     tag = "<details open>" if expanded else "<details>"
     return f"""{tag}
 <summary><b>{label}</b>&nbsp;&nbsp;•&nbsp;&nbsp;{count} {noun}</summary>
@@ -200,7 +200,7 @@ if not marker_match or END_MARKER not in readme:
 actual_start = marker_match.group(0)
 
 # Auto-expand threshold
-AUTO_EXPAND_THRESHOLD = 10
+AUTO_EXPAND_THRESHOLD = 0
 
 # Spoilers are expanded if:
 # 1. Total patch count is small (≤ AUTO_EXPAND_THRESHOLD)
