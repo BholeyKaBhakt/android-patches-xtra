@@ -1,5 +1,5 @@
 {
-  "version": "2.9.0",
+  "version": "2.10.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -287,6 +287,12 @@
               "description": null
             },
             {
+              "version": "6.12.18",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
               "version": "6.12.15",
               "isExperimental": false,
               "minSdk": null,
@@ -318,6 +324,12 @@
               "description": null
             },
             {
+              "version": "6.12.18",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
               "version": "6.12.15",
               "isExperimental": false,
               "minSdk": null,
@@ -345,6 +357,12 @@
             {
               "version": null,
               "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "1.49.0",
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             },
@@ -463,6 +481,39 @@
             {
               "version": "2.20.3",
               "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Premium",
+      "description": null,
+      "default": true,
+      "dependencies": [
+        "BytecodePatch"
+      ],
+      "compatiblePackages": [
+        {
+          "packageName": "com.ufovpn.connect.velnet",
+          "name": "UFO VPN",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "2.5.5",
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             }

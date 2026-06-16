@@ -1,3 +1,17 @@
+# [2.10.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.9.0...v2.10.0-dev.1) (2026-06-16)
+
+
+### Bug Fixes
+
+* **circuit-simulator:** bump version to 1.49.0 ([320c71b](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/320c71b82d1b04d4f105374d1201c7ef30f67313))
+* **inshorts:** bump version to v6.12.18 ([a38031a](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/a38031a3d5add4cc3ece1a2c428a9c0ccd6977ef))
+* **sky-tonight,star-walk2:** disable google ads consent popup ([7a4190e](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/7a4190e974d7c6968f92c330003594509efbfdff))
+
+
+### Features
+
+* **ufo-vpn:** unlock premium features ([f2d5496](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/f2d5496444a34d30e17f19ee1bbce17b3fe3caf9))
+
 # [2.9.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.8.2...v2.9.0) (2026-06-15)
 
 

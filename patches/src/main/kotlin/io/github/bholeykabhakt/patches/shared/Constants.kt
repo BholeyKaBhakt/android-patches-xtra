@@ -44,6 +44,7 @@ object Constants {
         packageName = "com.proto.circuitsimulator",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "1.49.0"),
             AppTarget(version = "1.48.0"),
         ),
     )
@@ -78,6 +79,7 @@ object Constants {
         packageName = "com.nis.app",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "6.12.18"),
             AppTarget(version = "6.12.15"),
         ),
     )
@@ -96,6 +98,15 @@ object Constants {
         targets = listOf(
             AppTarget(version = "1.16.3"),
             AppTarget(version = "1.16.2"),
+        ),
+    )
+
+    val COMPATIBILITY_UFOVPN = Compatibility(
+        name = "UFO VPN",
+        packageName = "com.ufovpn.connect.velnet",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "2.5.5"),
         ),
     )
 }
