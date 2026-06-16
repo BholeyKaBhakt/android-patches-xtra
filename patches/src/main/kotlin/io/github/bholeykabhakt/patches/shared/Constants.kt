@@ -79,6 +79,7 @@ object Constants {
         packageName = "com.nis.app",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "6.12.18"),
             AppTarget(version = "6.12.15"),
         ),
     )
