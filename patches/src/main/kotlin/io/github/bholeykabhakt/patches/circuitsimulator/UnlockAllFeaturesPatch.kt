@@ -11,6 +11,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
+import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_CIRCUIT_SIMULATOR
 import io.github.bholeykabhakt.patches.utils.logMatch
 
@@ -18,13 +19,15 @@ import io.github.bholeykabhakt.patches.utils.logMatch
  * Unlocks every paid feature in Proto Circuit Simulator. Each gate compares a status register to
  * the status-enum's "OK" field and branches to a locked path on mismatch; this patch finds those
  * `if-ne` checks and rewrites each to compare a register to itself (never taken), so the unlocked
- * path always runs.
+ * path always runs. Pulls in [disableAnalyticsPatch] to turn off Firebase Analytics / Crashlytics.
  */
 @Suppress("unused")
 val unlockAllFeaturesPatch = bytecodePatch(
     name = "Unlock All Features",
 ) {
     compatibleWith(COMPATIBILITY_CIRCUIT_SIMULATOR)
+
+    dependsOn(disableAnalyticsPatch)
 
     execute {
         val iapEnum = IapStatusEnumFingerprint.logMatch.classDef

@@ -2,6 +2,7 @@ package io.github.bholeykabhakt.patches.stellarium
 
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.rawResourcePatch
+import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STELLARIUM
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -107,6 +108,8 @@ val unlockPlusPatch = rawResourcePatch(
     name = "Unlock Plus",
 ) {
     compatibleWith(COMPATIBILITY_STELLARIUM)
+
+    dependsOn(disableAnalyticsPatch)
 
     execute {
         val version = packageMetadata.versionName
