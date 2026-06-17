@@ -1,3 +1,10 @@
+## [2.11.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.11.0...v2.11.1) (2026-06-17)
+
+
+### Bug Fixes
+
+* **solid-explorer:** update version to 3.5.7b ([611ae71](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/611ae71b3c80a0330cc150558e22a128509c8bf4))
+
 ## [2.11.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.11.0...v2.11.1-dev.1) (2026-06-17)
 
 
