@@ -44,8 +44,8 @@ object Constants {
         packageName = "com.proto.circuitsimulator",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
-            AppTarget(version = "1.49.0"),
             AppTarget(version = "1.48.0"),
+            AppTarget(version = "1.49.0"),
         ),
     )
 
@@ -79,8 +79,8 @@ object Constants {
         packageName = "com.nis.app",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
-            AppTarget(version = "6.12.18"),
             AppTarget(version = "6.12.15"),
+            AppTarget(version = "6.12.18"),
         ),
     )
 
@@ -96,8 +96,8 @@ object Constants {
         name = "Stellarium",
         packageName = "com.noctuasoftware.stellarium_free",
         targets = listOf(
-            AppTarget(version = "1.16.3"),
             AppTarget(version = "1.16.2"),
+            AppTarget(version = "1.16.3"),
         ),
     )
 
@@ -108,6 +108,23 @@ object Constants {
             AppTarget(version = null, isExperimental = true),
             AppTarget(version = "2.5.5"),
             AppTarget(version = "2.5.8"),
+        ),
+    )
+
+    val COMPATIBILITY_BACKDROPS = Compatibility(
+        name = "Backdrops",
+        packageName = "com.backdrops.wallpapers",
+        targets = listOf(
+            AppTarget(version = "6.1.2"),
+        ),
+    )
+
+    val COMPATIBILITY_SOLID_EXPLORER = Compatibility(
+        name = "Solid Explorer",
+        packageName = "pl.solidexplorer2",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "3.4.10"),
         ),
     )
 }

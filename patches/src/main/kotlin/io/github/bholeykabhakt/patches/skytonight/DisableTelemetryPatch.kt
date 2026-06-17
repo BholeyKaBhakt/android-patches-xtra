@@ -2,6 +2,7 @@ package io.github.bholeykabhakt.patches.skytonight
 
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.rawResourcePatch
+import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_SKY_TONIGHT
 import io.github.bholeykabhakt.patches.utils.RetSite
 import io.github.bholeykabhakt.patches.utils.writeRetHeads
@@ -10,6 +11,10 @@ import io.github.bholeykabhakt.patches.utils.writeRetHeads
  * NOP-RETs two `libil2cpp.so` inits so telemetry and ads never start: `InitFirebaseAnalytics()`
  * (the Vito analytics dispatcher) and `GoogleMobileAdsInitializer.Initialize()` (Google Mobile Ads
  * + UMP consent). A bare `RET` at each head is safe — see [writeRetHeads].
+ *
+ * The NOP-RET only stops the Unity dispatcher; the bundled Android Firebase SDK still auto-collects
+ * via `FirebaseInitProvider`, so this `dependsOn` [disableAnalyticsPatch] to disable collection via
+ * the manifest flags too.
  */
 
 private const val LIBIL2CPP_PATH = "lib/arm64-v8a/libil2cpp.so"
@@ -33,9 +38,10 @@ private val SITES_BY_VERSION = mapOf(
 @Suppress("unused")
 val disableTelemetryPatch = rawResourcePatch(
     name = "Disable In-App Telemetry",
-    default = false,
 ) {
     compatibleWith(COMPATIBILITY_SKY_TONIGHT)
+
+    dependsOn(disableAnalyticsPatch)
 
     execute {
         val version = packageMetadata.versionName

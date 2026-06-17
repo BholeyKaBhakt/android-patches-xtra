@@ -1,5 +1,5 @@
 {
-  "version": "2.10.2",
+  "version": "2.11.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -90,8 +90,10 @@
     {
       "name": "Disable In-App Telemetry",
       "description": null,
-      "default": false,
-      "dependencies": [],
+      "default": true,
+      "dependencies": [
+        "ResourcePatch"
+      ],
       "compatiblePackages": [
         {
           "packageName": "com.vitotechnology.sky.tonight.map.star.walk",
@@ -115,8 +117,10 @@
     {
       "name": "Disable In-App Telemetry",
       "description": null,
-      "default": false,
-      "dependencies": [],
+      "default": true,
+      "dependencies": [
+        "ResourcePatch"
+      ],
       "compatiblePackages": [
         {
           "packageName": "com.vitotechnology.StarWalk2Free",
@@ -159,6 +163,39 @@
             },
             {
               "version": "7.0.4",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable Telemetry",
+      "description": null,
+      "default": true,
+      "dependencies": [
+        "ResourcePatch"
+      ],
+      "compatiblePackages": [
+        {
+          "packageName": "pl.solidexplorer2",
+          "name": "Solid Explorer",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "3.4.10",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -216,13 +253,13 @@
           "signatures": null,
           "targets": [
             {
-              "version": "1.16.3",
+              "version": "1.16.2",
               "isExperimental": false,
               "minSdk": null,
               "description": null
             },
             {
-              "version": "1.16.2",
+              "version": "1.16.3",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -287,13 +324,13 @@
               "description": null
             },
             {
-              "version": "6.12.18",
+              "version": "6.12.15",
               "isExperimental": false,
               "minSdk": null,
               "description": null
             },
             {
-              "version": "6.12.15",
+              "version": "6.12.18",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -324,13 +361,13 @@
               "description": null
             },
             {
-              "version": "6.12.18",
+              "version": "6.12.15",
               "isExperimental": false,
               "minSdk": null,
               "description": null
             },
             {
-              "version": "6.12.15",
+              "version": "6.12.18",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -361,13 +398,13 @@
               "description": null
             },
             {
-              "version": "1.49.0",
+              "version": "1.48.0",
               "isExperimental": false,
               "minSdk": null,
               "description": null
             },
             {
-              "version": "1.48.0",
+              "version": "1.49.0",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -392,13 +429,13 @@
           "signatures": null,
           "targets": [
             {
-              "version": "1.16.3",
+              "version": "1.16.2",
               "isExperimental": false,
               "minSdk": null,
               "description": null
             },
             {
-              "version": "1.16.2",
+              "version": "1.16.3",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -430,6 +467,34 @@
             },
             {
               "version": "3.7.9",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Premium",
+      "description": null,
+      "default": true,
+      "dependencies": [
+        "BytecodePatch",
+        "ResourcePatch"
+      ],
+      "compatiblePackages": [
+        {
+          "packageName": "com.backdrops.wallpapers",
+          "name": "Backdrops",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": "6.1.2",
               "isExperimental": false,
               "minSdk": null,
               "description": null
@@ -547,6 +612,37 @@
           "targets": [
             {
               "version": "2.2.9",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Pro",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "pl.solidexplorer2",
+          "name": "Solid Explorer",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "3.4.10",
               "isExperimental": false,
               "minSdk": null,
               "description": null

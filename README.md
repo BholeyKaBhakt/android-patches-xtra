@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.10.2](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.10.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;20 patches total
+> **[v2.11.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.11.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;23 patches total
 <details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -70,6 +70,22 @@ This repo contains some Android app patches.
 </details>
 
 <details>
+<summary><b>📦 Solid Explorer</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 3.4.10 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Disable Telemetry |  |  |
+| Unlock Pro |  |  |
+
+</details>
+
+<details>
 <summary><b>📦 ATM Fee Saver</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
@@ -91,7 +107,7 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 1.16.3 | 1.16.2 |
+| 1.16.2 | 1.16.3 |
 | :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
@@ -122,7 +138,7 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 6.12.18 | 6.12.15 |
+| 6.12.15 | 6.12.18 |
 | :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
@@ -138,12 +154,27 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 1.49.0 | 1.48.0 |
+| 1.48.0 | 1.49.0 |
 | :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Unlock All Features |  |  |
+
+</details>
+
+<details>
+<summary><b>📦 Backdrops</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 6.1.2 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Unlock Premium |  |  |
 
 </details>
 
