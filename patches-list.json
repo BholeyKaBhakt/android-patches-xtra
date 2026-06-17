@@ -1,5 +1,5 @@
 {
-  "version": "2.11.1",
+  "version": "2.11.2-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -387,7 +387,9 @@
       "name": "Unlock All Features",
       "description": null,
       "default": true,
-      "dependencies": [],
+      "dependencies": [
+        "ResourcePatch"
+      ],
       "compatiblePackages": [
         {
           "packageName": "com.proto.circuitsimulator",
@@ -424,7 +426,9 @@
       "name": "Unlock Plus",
       "description": null,
       "default": true,
-      "dependencies": [],
+      "dependencies": [
+        "ResourcePatch"
+      ],
       "compatiblePackages": [
         {
           "packageName": "com.noctuasoftware.stellarium_free",
@@ -455,7 +459,9 @@
       "name": "Unlock Premium",
       "description": null,
       "default": true,
-      "dependencies": [],
+      "dependencies": [
+        "ResourcePatch"
+      ],
       "compatiblePackages": [
         {
           "packageName": "com.atmfee",
@@ -565,7 +571,8 @@
       "description": null,
       "default": true,
       "dependencies": [
-        "BytecodePatch"
+        "BytecodePatch",
+        "ResourcePatch"
       ],
       "compatiblePackages": [
         {
@@ -605,7 +612,8 @@
       "default": true,
       "dependencies": [
         "BytecodePatch",
-        "BytecodePatch"
+        "BytecodePatch",
+        "ResourcePatch"
       ],
       "compatiblePackages": [
         {
