@@ -1,3 +1,16 @@
+# [2.11.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.10.2...v2.11.0) (2026-06-17)
+
+
+### Bug Fixes
+
+* **vito:** cleanup remaining analytics ([11f897a](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/11f897a1f543ad9ee0b5c8c5bfce1d6ce5b21151))
+
+
+### Features
+
+* **backdrops:** unlock premium and disable telemetry ([c626751](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/c62675175a070f594ae6ed38fab4157f561aa628))
+* **solid-explorer:** unlock pro and disable telemetry ([80c810b](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/80c810bf7b128fe13ef52742d68873e4bccb66c8))
+
 # [2.11.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.10.2...v2.11.0-dev.1) (2026-06-17)
 
 
