@@ -6,6 +6,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
+import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_UFOVPN
 import io.github.bholeykabhakt.patches.utils.logMatchAll
 
@@ -19,7 +20,7 @@ val unlockPremiumPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_UFOVPN)
 
-    dependsOn(disablePairipPatch)
+    dependsOn(disablePairipPatch, disableAnalyticsPatch)
 
     execute {
         // the key string is read in many coroutines; the writer is the one that *stores* it (a

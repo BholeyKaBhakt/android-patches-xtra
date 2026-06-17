@@ -7,6 +7,7 @@ import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction11n
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
+import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_VPNIFY
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
@@ -15,7 +16,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
  * Unlocks vpnify premium (all locations, no ads, no time limit, no paywall) by forcing the two
  * subscription getters on the `vf.d` manager (`f()`/`e()`) to return true, and suppresses the
  * "Subscription activated" dialog by nulling its callback at the show site. Pulls in
- * [disablePairipPatch] and [spoofSignatureHashPatch].
+ * [disablePairipPatch], [spoofSignatureHashPatch] and [disableAnalyticsPatch].
  */
 @Suppress("unused")
 val unlockPremiumPatch = bytecodePatch(
@@ -23,7 +24,7 @@ val unlockPremiumPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_VPNIFY)
 
-    dependsOn(disablePairipPatch, spoofSignatureHashPatch)
+    dependsOn(disablePairipPatch, spoofSignatureHashPatch, disableAnalyticsPatch)
 
     execute {
         SubscriptionActiveFingerprint.logMatch.method.returnEarly(true)
