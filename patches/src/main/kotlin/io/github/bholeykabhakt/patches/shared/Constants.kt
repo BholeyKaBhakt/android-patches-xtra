@@ -110,4 +110,12 @@ object Constants {
             AppTarget(version = "2.5.8"),
         ),
     )
+
+    val COMPATIBILITY_BACKDROPS = Compatibility(
+        name = "Backdrops",
+        packageName = "com.backdrops.wallpapers",
+        targets = listOf(
+            AppTarget(version = "6.1.2"),
+        ),
+    )
 }
