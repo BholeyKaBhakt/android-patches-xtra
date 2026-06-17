@@ -1,3 +1,10 @@
+## [2.11.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.11.1...v2.11.2) (2026-06-17)
+
+
+### Bug Fixes
+
+* disable firebase analytics for few more apps ([c634261](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/c6342611f9c1e711001e3e70709fa5c534679184))
+
 ## [2.11.2-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.11.1...v2.11.2-dev.1) (2026-06-17)
 
 
