@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.11.2](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.11.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;23 patches total
+> **[v2.12.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.12.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
 <details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -170,6 +170,21 @@ This repo contains some Android app patches.
 > **🎯 Supported versions:**
 
 | 6.1.2 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Unlock Premium |  |  |
+
+</details>
+
+<details>
+<summary><b>📦 BlockerX</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 5.0.67 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
