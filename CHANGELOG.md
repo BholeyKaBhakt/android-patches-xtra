@@ -1,3 +1,10 @@
+# [2.12.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.11.2...v2.12.0) (2026-06-22)
+
+
+### Features
+
+* **blockx:** unlock premium ([e62542c](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/e62542c743fe9148da314ea8e4064260acb726d6))
+
 # [2.12.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.11.2...v2.12.0-dev.1) (2026-06-19)
 
 
