@@ -128,4 +128,13 @@ object Constants {
             AppTarget(version = "3.5.7b"),
         ),
     )
+
+    val COMPATIBILITY_BLOCKERX = Compatibility(
+        name = "BlockerX",
+        packageName = "io.funswitch.blocker",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "5.0.67"),
+        ),
+    )
 }
