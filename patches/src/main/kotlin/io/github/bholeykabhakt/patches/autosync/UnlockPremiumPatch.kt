@@ -5,11 +5,10 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_AUTOSYNC
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
-// Unlocks all Pro features by forcing the "is purchased" gate true. Depends on the de-PairIP
-// and the integrity short-circuits.
+// Forces the "is purchased" gate true.
 @Suppress("unused")
 val unlockPremiumPatch = patch(
-    name = "Unlock Premium (v7.6+)",
+    name = "Unlock Premium",
 ) {
     compatibleWith(COMPATIBILITY_AUTOSYNC)
 

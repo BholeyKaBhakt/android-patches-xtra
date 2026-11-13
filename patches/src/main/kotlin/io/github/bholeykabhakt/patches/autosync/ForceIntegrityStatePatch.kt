@@ -8,8 +8,8 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 // Base32(SHA1(the stock ttxapps signing cert)) — unchanged across versions.
 private const val STOCK_SIGNATURE_TOKEN = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
 
-// Forces the signer-hash computer to the stock token and nulls the remote tamper-blacklist getters,
-// so a re-signed build is never flagged (no trial downgrade / folder-pair wipe). Nameless dependency.
+// Reports the stock signer hash and empties the remote tamper blacklists, so a re-signed build
+// isn't flagged (trial downgrade / folder-pair wipe).
 val forceIntegrityStatePatch = patch {
     compatibleWith(COMPATIBILITY_AUTOSYNC)
 
