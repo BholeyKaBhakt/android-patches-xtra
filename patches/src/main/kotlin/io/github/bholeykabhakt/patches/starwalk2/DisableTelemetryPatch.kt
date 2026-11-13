@@ -9,16 +9,12 @@ import io.github.bholeykabhakt.patches.utils.patchNativeLibrary
 import io.github.bholeykabhakt.patches.utils.retHead
 
 /**
- * NOP-RETs two `libil2cpp.so` inits so telemetry and ads never start: `InitFirebaseAnalytics()`
- * (the Vito analytics dispatcher) and `GoogleMobileAdsInitializer.Initialize()` (Google Mobile Ads
- * + UMP consent). A bare `RET` at each head is safe — see [retHead].
- *
- * The NOP-RET only stops the Unity dispatcher; the bundled Android Firebase SDK still auto-collects
- * via `FirebaseInitProvider`, so this `dependsOn` [disableAnalyticsPatch] to disable collection via
- * the manifest flags too.
+ * RET at the heads of `InitFirebaseAnalytics()` (Vito analytics dispatcher) and
+ * `GoogleMobileAdsInitializer.Initialize()` (ads + UMP consent). The Android Firebase SDK still
+ * auto-collects via its init provider, hence the manifest analytics dependency.
  */
 
-// Sites: (name, dump.cs Offset, prologue words). Both offsets are exact.
+// (name, file offset, prologue words); the 2.22.0 ads head is dump offset + 4 (padding).
 internal val STAR_WALK_2_TELEMETRY_SITES = mapOf(
     "2.22.0" to listOf(
         retHead("InitFirebaseAnalytics", 0x25544BC, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),

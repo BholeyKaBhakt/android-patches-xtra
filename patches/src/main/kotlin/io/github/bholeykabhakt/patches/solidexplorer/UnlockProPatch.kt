@@ -15,9 +15,8 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 private const val LICENSE_STATE = "Lpl/solidexplorer/licensing/LicenseState;"
 
 /**
- * Unlocks Solid Explorer Pro: forces the cached `LicenseState` to `PREMIUM_PRO` at its only write
- * site (every license gate reads it back) and marks à-la-carte IAP products (color schemes / icon
- * sets) owned.
+ * Forces `LicenseState` to `PREMIUM_PRO` at its only write site (every license gate reads it back)
+ * and marks the à-la-carte IAP products (color schemes / icon sets) owned.
  */
 @Suppress("unused")
 val unlockProPatch = patch(

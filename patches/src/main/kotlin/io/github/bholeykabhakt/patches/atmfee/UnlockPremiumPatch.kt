@@ -6,11 +6,7 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_ATM_FEE_SA
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
-/**
- * Unlocks ATM Fee Saver premium (removes ads, paywalls, feature locks) by forcing the single
- * chokepoint getter `PremiumManager.isPremiumActive()` to return true. Pulls in
- * [disableAnalyticsPatch] to turn off Firebase Analytics / Crashlytics collection.
- */
+/** Forces `PremiumManager.isPremiumActive()` true. */
 @Suppress("unused")
 val unlockPremiumPatch = patch(
     name = "Unlock Premium",

@@ -13,11 +13,8 @@ import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 
 /**
- * Unlocks all Backdrops premium (Pro + every collection/mini-collection pack) by forcing the local
- * `Premium` SQLite ownership check to report "owned": emit `true` from `existPurchase`'s Rx lambda
- * ([ExistPurchaseLambdaFingerprint]) and return `TRUE` from `getPurchased` ([GetPurchasedFingerprint]).
- * Pulls in [disablePairipPatch] (survive PairIP) + [disableAnalyticsPatch] (ads are already gated on
- * `!isPro()`, so Pro drops them).
+ * Reports the local `Premium` purchases as owned (Pro + every pack) on both paths: the async
+ * `existPurchase` lambda and the sync `getPurchased`. Ads are gated on `!isPro()`, so they go too.
  */
 @Suppress("unused")
 val unlockPremiumPatch = patch(
@@ -28,9 +25,7 @@ val unlockPremiumPatch = patch(
     dependsOn(disablePairipPatch, disableAnalyticsPatch)
 
     execute {
-        // Make the lambda's own result TRUE (it starts as Boolean.FALSE and only flips when the
-        // Premium row exists) so every path emits "owned" through the app's own emitter call —
-        // the SingleEmitter API is R8-renamed per build.
+        // Flip the lambda's own result so it emits "owned" via the app's emitter call (its API is R8-renamed).
         val lambda = ExistPurchaseLambdaFingerprint.logMatch.method
         val falseLoads = lambda.implementation!!.instructions.withIndex().filter { (_, insn) ->
             insn.opcode == Opcode.SGET_OBJECT &&

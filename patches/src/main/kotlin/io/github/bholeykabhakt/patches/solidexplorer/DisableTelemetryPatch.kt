@@ -7,9 +7,8 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_SOLID_EXPL
 import io.github.bholeykabhakt.patches.utils.logMatch
 
 /**
- * Disables Solid Explorer's Firebase Analytics ("Send usage statistics") and Crashlytics. The
- * manifest dependency hard-deactivates Analytics; forcing the runtime switch
- * `SEApp.setAnalyticsEnabled(false)` is what also stops Crashlytics collection.
+ * Turns off Firebase Analytics and Crashlytics: the manifest dependency deactivates Analytics, and
+ * `SEApp.setAnalyticsEnabled(false)` is what also stops Crashlytics.
  */
 @Suppress("unused")
 val disableTelemetryPatch = patch(

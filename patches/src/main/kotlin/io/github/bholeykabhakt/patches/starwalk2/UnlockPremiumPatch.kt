@@ -9,12 +9,12 @@ import io.github.bholeykabhakt.patches.utils.forVersion
 import io.github.bholeykabhakt.patches.utils.patchNativeLibrary
 
 /**
- * Star Walk 2 (Unity / IL2CPP). Four ARM64 rewrites in `lib/arm64-v8a/libil2cpp.so` unlock the
- * premium tier and make the Add-On Content store usable: force the license check and
- * `get_HasFullAccess`, surface the store entry via `ItemBought`, and flip an un-owned add-on's
- * action button from "Buy" to "Install" so its pack downloads for free. Offsets are per-version;
- * the original bytes at each site are asserted before writing, so a stale offset fails loudly
- * instead of corrupting the .so.
+ * `libil2cpp.so` rewrites:
+ *   - `GooglePlay.InvalidLicense()` → set `updateStopped` and return: no paywall / self-exit
+ *   - `StorePanelManager.get_HasFullAccess()` → true (premium tier)
+ *   - `StoreProvider.ItemBought()` → true (surfaces the Add-On Content menu)
+ *   - `StoreEntry.set_State` None branch: Buy → Download, so tiles show "Install"; the app's own
+ *     downloader then fetches the pack (content on disk == installed)
  */
 
 internal const val LIBIL2CPP_PATH = "lib/arm64-v8a/libil2cpp.so"

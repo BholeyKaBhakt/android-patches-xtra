@@ -22,10 +22,8 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_CIRCUIT_SI
 import io.github.bholeykabhakt.patches.utils.logMatch
 
 /**
- * Unlocks every paid feature in Proto Circuit Simulator. Each gate compares a status register to
- * the status-enum's "OK" field and branches to a locked path on mismatch; this patch finds those
- * `if-ne` checks and rewrites each to compare a register to itself (never taken), so the unlocked
- * path always runs. Pulls in [disableAnalyticsPatch] to turn off Firebase Analytics / Crashlytics.
+ * Every paid feature compares an IAP-status enum to `OK` and branches to the locked path on
+ * mismatch; each such `if-ne` is rewritten to compare a register to itself (never taken).
  */
 @Suppress("unused")
 val unlockAllFeaturesPatch = patch(
@@ -124,11 +122,7 @@ private fun okGates(impl: MutableMethodImplementation, isOkLoad: (Instruction) -
     }
 }
 
-/**
- * Scan `<clinit>` for the `sput-object` that follows `const-string "OK"` — the
- * enum field holding the "unlocked" entry. The field letter (`D` in v1.48) can
- * shift between releases, so we discover it instead of hard-coding.
- */
+/** Name of the enum field assigned right after `const-string "OK"` in `<clinit>` (obfuscated, shifts per release). */
 private fun findOkEnumFieldName(enumClass: ClassDef): String? {
     val insns = enumClass.directMethods.firstOrNull { it.name == "<clinit>" }
         ?.implementation?.instructions ?: return null

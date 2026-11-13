@@ -9,14 +9,10 @@ import io.github.bholeykabhakt.patches.utils.forVersion
 import io.github.bholeykabhakt.patches.utils.patchNativeLibrary
 
 /**
- * Sky Tonight (Unity / IL2CPP). Three ARM64 function-head rewrites in `libil2cpp.so` unlock
- * premium:
- *
- *   1. `GooglePlay.InvalidLicense()` → `MOV W8,#1 ; STRB W8,[X0,#0x48] ; RET`
- *   2. `StoreInitializer.get_PremiumAccessEnabled()` → `MOV W0,#1 ; RET`
- *   3. `StoreInitializer.get_LockedItemsCount()` → `MOV W0,#0`
- *
- * Offsets are per-version; expected bytes are asserted at each site before writing.
+ * `libil2cpp.so` rewrites:
+ *   - `GooglePlay.InvalidLicense()` → set `updateStopped` (+0x48) and return: no paywall / self-exit
+ *   - `StoreInitializer.get_PremiumAccessEnabled()` → true
+ *   - `StoreInitializer.get_LockedItemsCount()` → 0 (no lock badges)
  */
 
 internal const val LIBIL2CPP_PATH = "lib/arm64-v8a/libil2cpp.so"
