@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.12.0](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.12.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
+> **[v2.13.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.13.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
 <details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -43,8 +43,8 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 2.5.0 |
-| :---: |
+| 2.5.3 | 2.5.0 |
+| :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -59,8 +59,8 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 🧪&nbsp;2.20.3 |
-| :---: |
+| 2.22.0 | 🧪&nbsp;2.20.3 |
+| :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -114,21 +114,6 @@ This repo contains some Android app patches.
 |----------|----------------|-----------|
 | Install Extended (Deep Sky) Catalog |  |  |
 | Unlock Plus |  |  |
-
-</details>
-
-<details>
-<summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
-<br>
-
-> **🎯 Supported versions:**
-
-| 7.5.10 |
-| :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| Purchase All Items |  |  |
 
 </details>
 
@@ -220,6 +205,21 @@ This repo contains some Android app patches.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Unlock Premium |  |  |
+
+</details>
+
+<details>
+<summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 🧪&nbsp;7.8.3 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Unlock Premium (v7.6+) |  |  |
 
 </details>
 

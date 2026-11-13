@@ -1,3 +1,17 @@
+# [2.13.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.12.0...v2.13.0-dev.1) (2026-11-13)
+
+
+### Bug Fixes
+
+* **generator:** use the newest bundle for patches-list.json ([60e97d9](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/60e97d93ec6548e10423b89f9ca7017f4a50ac2a))
+
+
+### Features
+
+* **autosync:** add support for v7.8.3 ([9a8bc01](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/9a8bc01626069a139a52bdd7ea4f517ce457f32a))
+* **sky-tonight:** add support for v2.5.3 ([f4443ff](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/f4443ff8c82ac89eae9b3358741fb9a56a8e4766))
+* **star-walk2:** add support for v2.22.0 ([59c44c3](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/59c44c3d269cfef4c56ace51787ec058eed779ef))
+
 # [2.12.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.11.2...v2.12.0) (2026-06-22)
 
 
