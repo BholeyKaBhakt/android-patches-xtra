@@ -3,32 +3,20 @@ package io.github.bholeykabhakt.patches.speedtest.analytics
 import app.morphe.patcher.Fingerprint
 import com.android.tools.smali.dexlib2.AccessFlags
 
-/** The varargs sinks of the Ookla DevMetrics dispatcher in `com/ookla/tools/logging/`. */
+private val publicStaticFinal = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC, AccessFlags.FINAL)
 
-private val publicStaticVarargs = listOf(
-    AccessFlags.PUBLIC,
-    AccessFlags.STATIC,
-    AccessFlags.FINAL,
-    AccessFlags.VARARGS,
+/** Logger registration of the DevMetrics bus (`com/ookla/tools/logging/`): `?(O2DevMetricsLogger)V`. */
+internal object RegisterDevMetricsLoggerFingerprint : Fingerprint(
+    definingClass = "Lcom/ookla/tools/logging/",
+    accessFlags = publicStaticFinal,
+    returnType = "V",
+    parameters = listOf("Lcom/ookla/tools/logging/O2DevMetricsLogger;"),
 )
 
-/** Matches `info(String,String,String,[String])V` AND `watch(String,String,String,[String])V`. */
-internal object LoggingStringVarargsFingerprint : Fingerprint(
+/** Logger registration of the event bus: `?(O2EventLogger)V` (Firebase Analytics events go here). */
+internal object RegisterEventLoggerFingerprint : Fingerprint(
     definingClass = "Lcom/ookla/tools/logging/",
-    accessFlags = publicStaticVarargs,
+    accessFlags = publicStaticFinal,
     returnType = "V",
-    parameters = listOf(
-        "Ljava/lang/String;",
-        "Ljava/lang/String;",
-        "Ljava/lang/String;",
-        "[Ljava/lang/String;",
-    ),
-)
-
-/** Matches `alarm(Throwable,[String])V`. */
-internal object LoggingAlarmFingerprint : Fingerprint(
-    definingClass = "Lcom/ookla/tools/logging/",
-    accessFlags = publicStaticVarargs,
-    returnType = "V",
-    parameters = listOf("Ljava/lang/Throwable;", "[Ljava/lang/String;"),
+    parameters = listOf("Lcom/ookla/tools/logging/O2EventLogger;"),
 )
