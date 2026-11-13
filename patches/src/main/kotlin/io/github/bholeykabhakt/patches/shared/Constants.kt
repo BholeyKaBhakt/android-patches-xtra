@@ -34,8 +34,7 @@ object Constants {
         name = "Autosync",
         packageName = "com.ttxapps.autosync",
         targets = listOf(
-            AppTarget(version = null, isExperimental = true),
-            AppTarget(version = "7.5.10"),
+            AppTarget(version = "7.8.3", isExperimental = true),
         ),
     )
 
