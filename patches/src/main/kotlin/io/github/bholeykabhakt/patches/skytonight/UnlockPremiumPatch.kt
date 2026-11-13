@@ -11,8 +11,9 @@ import io.github.bholeykabhakt.patches.utils.patchNativeLibrary
 /**
  * `libil2cpp.so` rewrites:
  *   - `GooglePlay.InvalidLicense()` → set `updateStopped` (+0x48) and return: no paywall / self-exit
- *   - `StoreInitializer.get_PremiumAccessEnabled()` → true
- *   - `StoreInitializer.get_LockedItemsCount()` → 0 (no lock badges)
+ *   - `StoreInitializer.get_PremiumAccessEnabled()` → true (lock, ads and calendar gates all read it)
+ *   - pre-2.5.3 only: `StoreInitializer.get_LockedItemsCount()` → 0. On 2.5.3 every reader checks
+ *     premium first, so the count is never read; not re-proven on older builds, so kept there.
  */
 
 internal const val LIBIL2CPP_PATH = "lib/arm64-v8a/libil2cpp.so"
@@ -47,7 +48,6 @@ internal val SKY_TONIGHT_PREMIUM_PATCHES = mapOf(
     "2.5.3" to listOf(
         invalidLicense(0x4BC9BB8),
         premiumAccess(0x4DC01E4),
-        lockedItems(0x4DC0758),
     ),
     "2.5.0" to listOf(
         invalidLicense(0x4B45FA8),

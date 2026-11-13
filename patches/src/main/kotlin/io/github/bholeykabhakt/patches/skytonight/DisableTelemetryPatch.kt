@@ -10,20 +10,22 @@ import io.github.bholeykabhakt.patches.utils.retHead
 
 /**
  * RET at the heads of `InitFirebaseAnalytics()` (Vito analytics dispatcher) and
- * `GoogleMobileAdsInitializer.Initialize()` (ads + UMP consent). The Android Firebase SDK still
- * auto-collects via its init provider, hence the manifest analytics dependency.
+ * `Vito.Service.Ads.AdsInitializer.Initialize()` (the UMP consent + ad-network chain; its only caller
+ * is the store's ads init). The Android Firebase SDK still auto-collects via its init provider, hence
+ * the manifest analytics dependency.
  */
 
-// (name, file offset, prologue words); the ads head is dump offset + 4 (padding).
+// (name, file offset, prologue words). InitFirebaseAnalytics / AdsInitializer heads:
+// STP X30,X21,[SP,#-0x20]! ; STP X20,X19,[SP,#0x10]
 internal val SKY_TONIGHT_TELEMETRY_SITES = mapOf(
     "2.5.3" to listOf(
         retHead("InitFirebaseAnalytics", 0x2B812F8, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-        retHead("GoogleMobileAdsInitializer.Initialize", 0x2BC4008, 0xA9BD5FFE.toInt(), 0xA90157F6.toInt()),
+        retHead("AdsInitializer.Initialize", 0x2BC14B8, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
     ),
     "2.5.0" to listOf(
-        // STP X30,X21,[SP,#-0x20]! ; STP X20,X19,[SP,#0x10]
         retHead("InitFirebaseAnalytics", 0x2B27208, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-        // STP X30,X23,[SP,#-0x30]! ; STP X22,X21,[SP,#0x10]
+        retHead("AdsInitializer.Initialize", 0x2B66BF8, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
+        // Pre-2.5.3 site, kept (not proven dead on this build): GoogleMobileAdsInitializer.Initialize
         retHead("GoogleMobileAdsInitializer.Initialize", 0x2B69878, 0xA9BD5FFE.toInt(), 0xA90157F6.toInt()),
     ),
 )
