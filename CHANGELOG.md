@@ -1,3 +1,10 @@
+# [2.13.0-dev.3](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.13.0-dev.2...v2.13.0-dev.3) (2026-11-13)
+
+
+### Features
+
+* **inshorts:** add support for v6.13.04 ([6c0a41d](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/6c0a41d487cd386d0b73d9cfb19cb017171c520c))
+
 # [2.13.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.13.0-dev.1...v2.13.0-dev.2) (2026-11-13)
 
 

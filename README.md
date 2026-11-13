@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.13.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.13.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
+> **[v2.13.0-dev.3](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.13.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
 <details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -59,7 +59,7 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 2.22.0 | 🧪&nbsp;2.20.3 |
+| 2.22.0 | 2.20.3 |
 | :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
@@ -123,8 +123,8 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 6.12.15 | 6.12.18 |
-| :---: | :---: |
+| 6.12.15 | 6.12.18 | 6.13.04 |
+| :---: | :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -145,6 +145,21 @@ This repo contains some Android app patches.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Unlock All Features |  |  |
+
+</details>
+
+<details>
+<summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 7.8.3 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Unlock Premium |  |  |
 
 </details>
 
@@ -205,21 +220,6 @@ This repo contains some Android app patches.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Unlock Premium |  |  |
-
-</details>
-
-<details>
-<summary><b>📦 Autosync</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
-<br>
-
-> **🎯 Supported versions:**
-
-| 🧪&nbsp;7.8.3 |
-| :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| Unlock Premium (v7.6+) |  |  |
 
 </details>
 
