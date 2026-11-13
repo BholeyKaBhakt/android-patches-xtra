@@ -86,11 +86,12 @@ val noLoginPatch = patch(
 
 private const val CARD_VIEWS = "Lcom/nis/app/ui/customView/cardView/"
 private const val LOGIN_SAVE_BUTTON = "buttonLoginSaveRelevancy"
+// "Is signed in": the only static ()Z on FirebaseUserUtils (its name is obfuscated).
 private const val SIGNED_IN = "Lcom/nis/app/utils/FirebaseUserUtils;"
 
 private fun Instruction.isSignedInCall() = opcode == Opcode.INVOKE_STATIC &&
     ((this as ReferenceInstruction).reference as MethodReference).let {
-        it.definingClass == SIGNED_IN && it.name == "c" && it.returnType == "Z" && it.parameterTypes.isEmpty()
+        it.definingClass == SIGNED_IN && it.returnType == "Z" && it.parameterTypes.isEmpty()
     }
 
 private fun Method.callsSignedIn() = implementation?.instructions?.any { it.isSignedInCall() } == true

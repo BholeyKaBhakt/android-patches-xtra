@@ -10,8 +10,8 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 
 /**
  * Removes every Inshorts ad surface. Two layers: the ad-producer methods are forced to return
- * their no-ad value (null), and the server ad-slot config getters are forced to return empty,
- * so nothing is ever scheduled or rendered.
+ * their no-ad value (null), and the server ad-slot config getters (app config + per-deck config)
+ * are forced to return empty, so nothing is ever scheduled or rendered.
  */
 @Suppress("unused")
 val removeAdsPatch = patch(
@@ -47,5 +47,10 @@ val removeAdsPatch = patch(
         find(config) { it.name == "getAdSlots" }.addInstructions(0, emptyList)
         find(config) { it.name == "getDfpAdSlots" }.addInstructions(0, emptyList)
         find(config) { it.name == "getBottomBarDfp" }.returnEarly()
+
+        // Decks (stories) carry their own ad slots; keep the rest of DeckAdConfig (cover images).
+        val deckConfig = "Lcom/nis/app/network/models/deck/DeckAdConfig;"
+        find(deckConfig) { it.name == "getDfpAdSlots" }.addInstructions(0, emptyList)
+        find(deckConfig) { it.name == "getBottomBarDfp" }.returnEarly()
     }
 }
