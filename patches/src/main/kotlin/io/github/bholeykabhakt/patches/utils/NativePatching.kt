@@ -28,6 +28,44 @@ object Arm64 {
         }
         return B_OPCODE or (wordOffset and 0x03FFFFFF)
     }
+
+    fun isAdrp(insn: Int) = insn and 0x9F000000.toInt() == 0x90000000.toInt()
+
+    fun adrpTarget(pc: Long, insn: Int): Long {
+        val imm = ((insn ushr 29) and 0x3) or (((insn ushr 5) and 0x7FFFF) shl 2)
+        val signed = (imm shl 11) shr 11 // sign-extend 21 bits
+        return (pc and 0xFFFL.inv()) + (signed.toLong() shl 12)
+    }
+
+    /** `ADD Xd, Xn, #imm12` (64-bit, no shift). */
+    fun isAddImmX(insn: Int) = insn and 0xFFC00000.toInt() == 0x91000000.toInt()
+
+    fun addImm(insn: Int) = ((insn ushr 10) and 0xFFF).toLong()
+
+    /** `LDR Xt, [Xn, #imm]` (64-bit, unsigned offset). */
+    fun isLdrX64(insn: Int) = insn and 0xFFC00000.toInt() == 0xF9400000.toInt()
+
+    fun ldrX64Offset(insn: Int) = ((insn ushr 10) and 0xFFF).toLong() * 8
+
+    /** `B` / `BL` target, or null for any other instruction. */
+    fun branchTarget(pc: Long, insn: Int): Long? {
+        if (insn and 0x7C000000 != 0x14000000) return null
+        val imm = (insn shl 6) shr 6 // sign-extend 26 bits
+        return pc + imm.toLong() * 4
+    }
+
+    /** `CBZ Wt, label` (32-bit). */
+    fun isCbzW(insn: Int) = insn and 0xFF000000.toInt() == 0x34000000
+
+    fun cbTarget(pc: Long, insn: Int): Long {
+        val imm = (insn shl 8) shr 13 // sign-extend imm19 at [23:5]
+        return pc + imm.toLong() * 4
+    }
+
+    /** `LDRB Wt, [Xn, #imm]` (unsigned offset). */
+    fun isLdrbW(insn: Int) = insn and 0xFFC00000.toInt() == 0x39400000
+
+    fun rt(insn: Int) = insn and 0x1F
 }
 
 /** Replace the words at [offset] with [replacement] if [expected] is there (lengths may differ). */

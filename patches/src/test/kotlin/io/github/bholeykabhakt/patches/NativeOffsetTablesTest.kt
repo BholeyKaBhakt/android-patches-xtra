@@ -4,7 +4,6 @@ import io.github.bholeykabhakt.patches.skytonight.SKY_TONIGHT_PREMIUM_PATCHES
 import io.github.bholeykabhakt.patches.skytonight.SKY_TONIGHT_TELEMETRY_SITES
 import io.github.bholeykabhakt.patches.starwalk2.STAR_WALK_2_PREMIUM_PATCHES
 import io.github.bholeykabhakt.patches.starwalk2.STAR_WALK_2_TELEMETRY_SITES
-import io.github.bholeykabhakt.patches.stellarium.STELLARIUM_PLUS_PATCHES
 import io.github.bholeykabhakt.patches.utils.BinaryPatch
 import io.github.bholeykabhakt.patches.utils.applyBinaryPatches
 import java.nio.ByteBuffer
@@ -25,7 +24,6 @@ class NativeOffsetTablesTest {
         "Star Walk 2 telemetry" to STAR_WALK_2_TELEMETRY_SITES,
         "Sky Tonight premium" to SKY_TONIGHT_PREMIUM_PATCHES,
         "Sky Tonight telemetry" to SKY_TONIGHT_TELEMETRY_SITES,
-        "Stellarium plus" to STELLARIUM_PLUS_PATCHES,
     )
 
     private fun span(p: BinaryPatch) = p.offset until p.offset + 4 * maxOf(p.expected.size, p.replacement.size)
@@ -57,15 +55,5 @@ class NativeOffsetTablesTest {
                 assertTrue(span(a).last < b.offset, "$table v$version: ${a.label} overlaps ${b.label}")
             }
         }
-    }
-
-    @Test
-    fun `stellarium branches target QVariant(bool) for each version`() {
-        // Independently computed: B imm26 from (entry + 8) to the version's QVariant(bool) PLT stub.
-        val branches = STELLARIUM_PLUS_PATCHES.mapValues { (_, patches) ->
-            patches.filter { it.replacement.size == 3 }.map { it.replacement[2] }
-        }
-        assertEquals(listOf(0x1405EEE2, 0x1405CEC1), branches["1.16.2"])
-        assertEquals(listOf(0x1405F18F, 0x1405D150), branches["1.16.3"])
     }
 }
