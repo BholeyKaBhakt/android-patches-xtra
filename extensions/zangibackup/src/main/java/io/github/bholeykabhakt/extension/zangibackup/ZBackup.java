@@ -73,6 +73,7 @@ public final class ZBackup {
     static final String ACCOUNT_PREFS = "com.beint.zangi.core.c.b";
     static final String KEY_USER = "IDENTITY_USERNAME.com.beint.zangi.core.c.b";
     static final String INDEX_FILE = "zb_media_index";
+    static final String PENDING_SUFFIX = ".pending";
     static final String MIME = "application/octet-stream";
 
     static final long AUTO_MIN_INTERVAL_MS = 15L * 60 * 1000;
@@ -198,7 +199,9 @@ public final class ZBackup {
                 }
             }
             deleteTree(pend);
-            new File(base.getNoBackupFilesDir(), INDEX_FILE).delete();
+            File index = new File(base.getNoBackupFilesDir(), INDEX_FILE);
+            File seeded = new File(base.getNoBackupFilesDir(), INDEX_FILE + PENDING_SUFFIX);
+            if (!seeded.exists() || !seeded.renameTo(index)) index.delete();
             base.getSharedPreferences(OWN_PREFS, 0).edit()
                     .putLong("restored_at", System.currentTimeMillis()).remove("last_sig").commit();
             Log.i(TAG, "pending restore applied");
@@ -262,6 +265,7 @@ public final class ZBackup {
             int mirrored = mirrorMedia(ctx, tree, root, pr);
             prefs(ctx).edit()
                     .putLong("last_backup", System.currentTimeMillis())
+                    .putLong("last_auto_try", System.currentTimeMillis())   // no auto run right after a manual one
                     .putString("last_name", name)
                     .putLong("last_size", size)
                     .putString("last_sig", sig)
@@ -444,6 +448,7 @@ public final class ZBackup {
         File pend = new File(dataDir(ctx), PENDING_DIR);
         try {
             deleteTree(pend);
+            new File(ctx.getNoBackupFilesDir(), INDEX_FILE + PENDING_SUFFIX).delete();
             if (!pend.mkdirs()) throw new IOException("Cannot create the staging folder");
             File ext = ctx.getExternalFilesDir(null);
             InputStream in = ctx.getContentResolver().openInputStream(uri);
@@ -517,15 +522,20 @@ public final class ZBackup {
         for (String[] c : listChildren(cr, tree, DocumentsContract.getTreeDocumentId(tree)))
             if (c[1].equals(MEDIA_DIR) && DocumentsContract.Document.MIME_TYPE_DIR.equals(c[2])) mediaId = c[0];
         int[] count = {0, 0};
-        if (mediaId != null && ext != null) restoreMedia(cr, tree, mediaId, ext, pw, pr, count);
+        Map<String, String> index = new HashMap<>();
+        if (mediaId != null && ext != null) restoreMedia(cr, tree, mediaId, ext, ext, pw, pr, count, index);
+        // The folder already holds these files: seed the mirror index so the next backup doesn't
+        // re-encrypt them all (applied together with the restore).
+        writeIndex(new File(ctx.getNoBackupFilesDir(), INDEX_FILE + PENDING_SUFFIX), tree.toString(), index);
         try { meta.put("media_restored", count[0]); meta.put("media_failed", count[1]); } catch (JSONException ignored) {}
         return meta;
     }
 
-    static void restoreMedia(ContentResolver cr, Uri tree, String dirId, File dest, char[] pw, Progress pr, int[] count) {
+    static void restoreMedia(ContentResolver cr, Uri tree, String dirId, File dest, File extRoot, char[] pw,
+                             Progress pr, int[] count, Map<String, String> index) {
         for (String[] c : listChildren(cr, tree, dirId)) {
             if (DocumentsContract.Document.MIME_TYPE_DIR.equals(c[2])) {
-                restoreMedia(cr, tree, c[0], new File(dest, c[1]), pw, pr, count);
+                restoreMedia(cr, tree, c[0], new File(dest, c[1]), extRoot, pw, pr, count, index);
                 continue;
             }
             if (!c[1].endsWith(EXT)) continue;
@@ -534,6 +544,7 @@ public final class ZBackup {
             try (InputStream in = cr.openInputStream(DocumentsContract.buildDocumentUriUsingTree(tree, c[0]))) {
                 if (in == null) continue;
                 writeAtomically(ZCrypto.decrypt(new BufferedInputStream(in, 1 << 16), pw), d);
+                index.put(extRoot.toURI().relativize(d.toURI()).getPath(), d.length() + ":" + d.lastModified());
                 count[0]++;
             } catch (Exception e) {
                 count[1]++;
