@@ -19,9 +19,22 @@ val patchListGeneratorClasspath = configurations.create("patchListGeneratorClass
 dependencies {
     compileOnly(libs.gson)
     patchListGeneratorClasspath(libs.gson)
+
+    // Unit tests for patch helpers/tables; the patcher is only provided at patch time otherwise.
+    testImplementation(kotlin("test"))
+    testImplementation(libs.morphe.patcher)
 }
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
+
+    // CI builds with buildAndroid, which would otherwise skip the tests.
+    named("buildAndroid") {
+        dependsOn(test)
+    }
+
     register<JavaExec>("generatePatchesList") {
         description = "Build patch with patch list"
 
