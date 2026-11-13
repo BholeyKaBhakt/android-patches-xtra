@@ -21,6 +21,10 @@ import io.github.bholeykabhakt.patches.utils.retHead
 // Sites: (name, dump.cs Offset, prologue words).
 // Ads offset is +4 from the dumped 0x2B69874 — that word is alignment padding (a stray RET).
 internal val SKY_TONIGHT_TELEMETRY_SITES = mapOf(
+    "2.5.3" to listOf(
+        retHead("InitFirebaseAnalytics", 0x2B812F8, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
+        retHead("GoogleMobileAdsInitializer.Initialize", 0x2BC4008, 0xA9BD5FFE.toInt(), 0xA90157F6.toInt()),
+    ),
     "2.5.0" to listOf(
         // STP X30,X21,[SP,#-0x20]! ; STP X20,X19,[SP,#0x10]
         retHead("InitFirebaseAnalytics", 0x2B27208, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
