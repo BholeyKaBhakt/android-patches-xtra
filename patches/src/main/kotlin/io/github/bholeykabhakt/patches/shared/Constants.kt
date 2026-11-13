@@ -35,7 +35,7 @@ object Constants {
         name = "Autosync",
         packageName = "com.ttxapps.autosync",
         targets = listOf(
-            AppTarget(version = "7.8.3", isExperimental = true),
+            AppTarget(version = "7.8.3"),
         ),
     )
 
@@ -64,7 +64,7 @@ object Constants {
         packageName = "com.vitotechnology.StarWalk2Free",
         targets = listOf(
             AppTarget(version = "2.22.0"),
-            AppTarget(version = "2.20.3", isExperimental = true),
+            AppTarget(version = "2.20.3"),
         ),
     )
 
