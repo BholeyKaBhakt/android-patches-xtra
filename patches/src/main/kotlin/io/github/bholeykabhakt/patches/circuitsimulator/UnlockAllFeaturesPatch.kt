@@ -2,6 +2,7 @@ package io.github.bholeykabhakt.patches.circuitsimulator
 
 import app.morphe.patcher.patch.classDefForEach
 import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
@@ -12,6 +13,7 @@ import com.android.tools.smali.dexlib2.builder.BuilderSwitchPayload
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction22t
 import com.android.tools.smali.dexlib2.iface.ClassDef
+import com.android.tools.smali.dexlib2.iface.Method as MethodLike
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
@@ -21,9 +23,13 @@ import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatc
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_CIRCUIT_SIMULATOR
 import io.github.bholeykabhakt.patches.utils.logMatch
 
+private const val FIRESTORE = "Lcom/google/firebase/firestore/FirebaseFirestore;"
+
 /**
  * Every paid feature compares an IAP-status enum to `OK` and branches to the locked path on
  * mismatch; each such `if-ne` is rewritten to compare a register to itself (never taken).
+ * Where present (1.53+), the pack-ownership query the status producers call is also forced true,
+ * so they emit a genuine `OK`. That covers gates that test `== OK` without an `if-ne`.
  */
 @Suppress("unused")
 val unlockAllFeaturesPatch = patch(
@@ -64,7 +70,35 @@ val unlockAllFeaturesPatch = patch(
         }
 
         if (rewrites == 0) throw PatchException("No `if-ne` gates against ${iapEnum.type} found")
+
+        forcePackOwnership()
     }
+}
+
+/**
+ * `(packEnum, Continuation) → Object` on the Firestore-backed purchase store: the suspend
+ * "is this pack owned" query behind every status producer. Skipped unless exactly one matches.
+ */
+private fun forcePackOwnership() {
+    val packEnum = AddonPackEnumFingerprint.matchOrNull()?.classDef?.type ?: return
+    fun MethodLike.isOwnershipQuery() = returnType == "Ljava/lang/Object;" &&
+        parameterTypes.size == 2 && parameterTypes[0].toString() == packEnum
+    val owners = mutableListOf<String>()
+    classDefForEach { classDef ->
+        if (classDef.fields.any { it.type == FIRESTORE } && classDef.methods.any { it.isOwnershipQuery() }) {
+            owners += classDef.type
+        }
+    }
+    if (owners.size != 1) return
+    val queries = mutableClassDefBy(owners.single()).methods.filter { it.isOwnershipQuery() }
+    if (queries.size != 1) return
+    queries.single().addInstructions(
+        0,
+        """
+            sget-object v0, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
+            return-object v0
+        """,
+    )
 }
 
 /**
