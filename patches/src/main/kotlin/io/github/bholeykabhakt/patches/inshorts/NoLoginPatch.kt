@@ -1,12 +1,18 @@
 package io.github.bholeykabhakt.patches.inshorts
 
+import app.morphe.patcher.patch.classDefForEach
 import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.Method
+import com.android.tools.smali.dexlib2.iface.instruction.Instruction
+import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
+import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_INSHORTS
 
@@ -67,5 +73,38 @@ val noLoginPatch = patch(
             0,
             "sget-object v0, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;\nreturn-object v0",
         )
+
+        // 3) Relevancy cards (6.13+): a "Login & Save My Preferences" button is shown unless
+        //    FirebaseUserUtils.c() (signed in). In the method that sets up the card's buttons, take
+        //    the signed-in UI branch so only the plain submit button remains.
+        classDefForEach { classDef ->
+            if (!classDef.type.startsWith(CARD_VIEWS)) return@classDefForEach
+            if (classDef.methods.none { it.hasString(LOGIN_SAVE_BUTTON) && it.callsSignedIn() }) return@classDefForEach
+            mutableClassDefBy(classDef.type).methods
+                .filter { it.hasString(LOGIN_SAVE_BUTTON) && it.callsSignedIn() }
+                .forEach { method ->
+                    val insns = method.implementation!!.instructions
+                    insns.indices.filter { insns[it].isSignedInCall() }.reversed().forEach { i ->
+                        val result = insns[i + 1] as OneRegisterInstruction // move-result
+                        method.addInstructions(i + 2, "const/4 v${result.registerA}, 0x1")
+                    }
+                }
+        }
     }
 }
+
+private const val CARD_VIEWS = "Lcom/nis/app/ui/customView/cardView/"
+private const val LOGIN_SAVE_BUTTON = "buttonLoginSaveRelevancy"
+private const val SIGNED_IN = "Lcom/nis/app/utils/FirebaseUserUtils;"
+
+private fun Instruction.isSignedInCall() = opcode == Opcode.INVOKE_STATIC &&
+    ((this as ReferenceInstruction).reference as MethodReference).let {
+        it.definingClass == SIGNED_IN && it.name == "c" && it.returnType == "Z" && it.parameterTypes.isEmpty()
+    }
+
+private fun Method.callsSignedIn() = implementation?.instructions?.any { it.isSignedInCall() } == true
+
+private fun Method.hasString(value: String) = implementation?.instructions?.any {
+    (it.opcode == Opcode.CONST_STRING || it.opcode == Opcode.CONST_STRING_JUMBO) &&
+        ((it as ReferenceInstruction).reference as StringReference).string == value
+} == true

@@ -85,6 +85,7 @@ object Constants {
             AppTarget(version = null, isExperimental = true),
             AppTarget(version = "6.12.15"),
             AppTarget(version = "6.12.18"),
+            AppTarget(version = "6.13.04"),
         ),
     )
 
