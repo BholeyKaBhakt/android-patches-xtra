@@ -26,7 +26,7 @@ internal object SignerHashComputerFingerprint : Fingerprint(
     strings = listOf("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
 )
 
-/** `com.ttxapps.autosync.app.e.c()` — getter for the remote `badApkSig` blacklist (Gson field). */
+/** Remote-config DTO getter for the `badApkSig` blacklist (Gson field; the class name is obfuscated). */
 internal object BadApkSigGetterFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.FINAL),
     returnType = "Ljava/lang/String;",
@@ -40,7 +40,7 @@ internal object BadApkSigGetterFingerprint : Fingerprint(
     ),
 )
 
-/** `com.ttxapps.autosync.app.e.d()` — getter for the remote `badUnlockCode` revocation (Gson field). */
+/** Remote-config DTO getter for the `badUnlockCode` revocation (Gson field). */
 internal object BadUnlockCodeGetterFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.FINAL),
     returnType = "Ljava/lang/String;",
