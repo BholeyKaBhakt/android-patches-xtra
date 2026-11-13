@@ -17,6 +17,7 @@ object Constants {
         packageName = "org.zwanoo.android.speedtest",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "7.1.4"),
             AppTarget(version = "7.0.4"),
         ),
     )
