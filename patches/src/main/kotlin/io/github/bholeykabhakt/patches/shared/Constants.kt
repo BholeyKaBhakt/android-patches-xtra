@@ -143,4 +143,12 @@ object Constants {
             AppTarget(version = "5.0.67"),
         ),
     )
+
+    val COMPATIBILITY_ZANGI = Compatibility(
+        name = "Zangi",
+        packageName = "com.beint.zangi",
+        targets = listOf(
+            AppTarget(version = "6.6.4"),
+        ),
+    )
 }
