@@ -73,6 +73,7 @@ object Constants {
         packageName = "com.atmfee",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "3.8"),
             AppTarget(version = "3.7.9"),
         ),
     )

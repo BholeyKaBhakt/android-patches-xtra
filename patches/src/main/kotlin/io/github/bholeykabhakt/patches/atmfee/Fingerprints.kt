@@ -1,7 +1,8 @@
 package io.github.bholeykabhakt.patches.atmfee
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.literal
+import app.morphe.patcher.resource.ResourceType
+import app.morphe.patcher.resourceLiteral
 
 /** Fingerprints for `com.atmfee.utils.PremiumManager` (the premium chokepoint). See [unlockPremiumPatch]. */
 
@@ -15,7 +16,7 @@ internal object IsPremiumActiveFingerprint : Fingerprint(
 /**
  * `HomeActivity.enableCurrentLocationDialog()` — builds and shows the recurring
  * "Location Permission Needed" nag. Anchored on the one resource it inflates,
- * `R.layout.custom_current_location_enable` (id `0x7f0c0037` in v3.7.9); it is the
+ * `R.layout.custom_current_location_enable`; it is the
  * only `HomeActivity` method that references that layout. See [hideLocationPopupPatch].
  */
 internal object EnableCurrentLocationDialogFingerprint : Fingerprint(
@@ -23,14 +24,14 @@ internal object EnableCurrentLocationDialogFingerprint : Fingerprint(
     returnType = "V",
     parameters = emptyList(),
     filters = listOf(
-        literal(0x7f0c0037), // R.layout.custom_current_location_enable
+        resourceLiteral(ResourceType.LAYOUT, "custom_current_location_enable"),
     ),
 )
 
 /**
  * `HomeActivity.checkGpsEnable()` — shows the "Phone GPS Feature Needed" nag whenever
  * device location services are off. Same recurring trigger as the permission dialog.
- * Anchored on `R.layout.custom_enable_gps_location_enable` (id `0x7f0c003b` in v3.7.9),
+ * Anchored on `R.layout.custom_enable_gps_location_enable`,
  * the only `HomeActivity` method referencing it. See [hideLocationPopupPatch].
  */
 internal object CheckGpsEnableFingerprint : Fingerprint(
@@ -38,7 +39,7 @@ internal object CheckGpsEnableFingerprint : Fingerprint(
     returnType = "V",
     parameters = emptyList(),
     filters = listOf(
-        literal(0x7f0c003b), // R.layout.custom_enable_gps_location_enable
+        resourceLiteral(ResourceType.LAYOUT, "custom_enable_gps_location_enable"),
     ),
 )
 
