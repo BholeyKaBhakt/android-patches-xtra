@@ -119,7 +119,7 @@ object Constants {
         name = "Backdrops",
         packageName = "com.backdrops.wallpapers",
         targets = listOf(
-            AppTarget(version = "6.1.2"),
+            AppTarget(version = "6.6"),
         ),
     )
 
