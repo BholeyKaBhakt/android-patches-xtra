@@ -1,6 +1,8 @@
 package io.github.bholeykabhakt.patches.utils
 
+import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.patch.mutableClassDefByOrNull
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
@@ -9,25 +11,33 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethodImplementation
 import java.util.Base64
 
-// Shared "heavy" PairIP de-VM helpers. PairIP's native VM (libpairipcore.so) SIGSEGVs on a
-// re-signed APK and, at launch, bulk-populates Java static holder tables the app's stubs read;
-// gutting the VM leaves those null (→ crashes). The fix is the same for any PairIP-protected app —
-// gut the VM, then bake the VM-populated tables back from a per-build harvest — so it lives here
-// once. Each patch supplies its own bundled harvest resources + de-virtualized `.mpe` dex.
+// Static de-PairIP: gut the native VM, then bake back the holder tables it would have populated
+// from a per-build harvest (resources under /<app>/ + extensions/<app>depairip.mpe).
 
 private const val SIGNATURE_CHECK = "Lcom/pairip/SignatureCheck;"
 private const val VM_RUNNER = "Lcom/pairip/VMRunner;"
 private const val STARTUP_LAUNCHER = "Lcom/pairip/StartupLauncher;"
 
+/** The license-check entry that force-finishes a re-signed install; pass to [pairIpVmPatch] when present. */
+const val PAIRIP_LICENSE_CHECK = "Lcom/pairip/licensecheck/LicenseClient;"
+
+/** Nameless dependency that de-PairIPs [compatibility]'s app from its bundled `/<app>/` harvest. */
+fun pairIpVmPatch(compatibility: Compatibility, app: String, vararg extraNoOps: Pair<String, String>) = patch {
+    compatibleWith(compatibility)
+    extendWith("extensions/${app}depairip.mpe")
+    execute {
+        gutPairIpVm(*extraNoOps)
+        restorePairIpHolders(app)
+    }
+}
+
 /**
- * Neutralise PairIP's native VM + re-sign integrity check:
- *   - `SignatureCheck.verifyIntegrity` → no-op (the SHA re-sign check)
- *   - `VMRunner.<clinit>` → no-op (skips `loadLibrary("pairipcore")`, so the VM never loads)
- *   - `VMRunner.invoke` → null (the dispatch into the native VM)
- *   - `StartupLauncher.launch` → no-op (the startup VM program that populated the tables)
- *
- * [extraNoOps] are app-specific `classDescriptor to methodName` pairs to also force-return early
- * (e.g. a `licensecheck.LicenseClient.checkLicense` Play-license boot blocker, when present).
+ * Neutralise the VM and its re-sign check:
+ *   - `SignatureCheck.verifyIntegrity` → no-op (re-sign check)
+ *   - `VMRunner.<clinit>` → no-op (never loads `libpairipcore`)
+ *   - `VMRunner.invoke` → null (dispatch into the VM)
+ *   - `StartupLauncher.launch` → no-op (the startup program that fills the holder tables)
+ * plus any app-specific [extraNoOps] (`class to method`).
  */
 fun gutPairIpVm(vararg extraNoOps: Pair<String, String>) {
     mutableClassDefBy(SIGNATURE_CHECK).methods.first { it.name == "verifyIntegrity" }.returnEarly()
@@ -44,18 +54,11 @@ fun gutPairIpVm(vararg extraNoOps: Pair<String, String>) {
 }
 
 /**
- * Restore the holder tables the gutted VM would have populated, from the bundled per-build harvest
- * resources under `/<resourceDir>/` (the app's resource bundle name):
- *   - `depairip_strings.tsv` — `@<holder>` group headers then `field<TAB>value`; each holder gets a
- *     synthesised `<clinit>` of `const-string`/`sput-object` (the stock holders have none — the VM
- *     set them at runtime).
- *   - `depairip_methods.tsv` — `<holder><TAB><registerCount><TAB>base64(<clinit> body)`; the decoded
- *     reflect-`Method` `<clinit>` (`getDeclaredMethod` into the de-virtualized `$c` classes) is
- *     injected verbatim.
- *
- * Fail-loud on version drift: errors if a holder is missing or already has a `<clinit>` (either
- * means the harvest no longer matches the APK → regenerate). The de-virtualized `$c` body classes
- * are merged separately by each patch via `extendWith("extensions/<app>depairip.mpe")`.
+ * Bake back the tables the gutted VM would have filled:
+ *   - `depairip_strings.tsv`: `@<holder>` then `field<TAB>value` → a `const-string`/`sput-object` `<clinit>`
+ *   - `depairip_methods.tsv`: `<holder><TAB><registers><TAB>base64(<clinit>)` → injected verbatim
+ *     (reflect `Method`s into the de-virtualized `$c` classes from the `.mpe`)
+ * Fails if a holder is missing or already has a `<clinit>` (the harvest is for another build).
  */
 fun restorePairIpHolders(resourceDir: String) {
     fun resource(name: String) =
