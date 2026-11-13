@@ -4,6 +4,7 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.resource.ResourceType
 import app.morphe.patcher.resourceLiteral
 
+internal const val HOME_ACTIVITY = "Lcom/atmfee/ui/home_activity/HomeActivity;"
 
 /** `PremiumManager.isPremiumActive()` — the no-arg boolean getter (only one in the class). */
 internal object IsPremiumActiveFingerprint : Fingerprint(

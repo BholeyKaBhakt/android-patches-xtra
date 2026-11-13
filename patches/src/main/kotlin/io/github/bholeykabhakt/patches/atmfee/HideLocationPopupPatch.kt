@@ -10,8 +10,6 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_ATM_FEE_SA
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
-private const val HOME_ACTIVITY = "Lcom/atmfee/ui/home_activity/HomeActivity;"
-
 /** No-ops the location/GPS nags and loads the country list once at startup instead. */
 @Suppress("unused")
 val hideLocationPopupPatch = patch(
