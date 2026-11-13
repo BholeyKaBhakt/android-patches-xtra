@@ -7,8 +7,12 @@ import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.builder.BuilderOffsetInstruction
+import com.android.tools.smali.dexlib2.builder.BuilderSwitchPayload
+import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction22t
 import com.android.tools.smali.dexlib2.iface.ClassDef
+import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
@@ -36,44 +40,87 @@ val unlockAllFeaturesPatch = patch(
         val okField = findOkEnumFieldName(iapEnum)
             ?: throw PatchException("No \"OK\" entry in ${iapEnum.type} <clinit>")
 
+        val isOkLoad = { insn: Instruction ->
+            insn.opcode == Opcode.SGET_OBJECT &&
+                ((insn as ReferenceInstruction).reference as? FieldReference)
+                    .let { it?.definingClass == iapEnum.type && it.name == okField }
+        }
+
         var rewrites = 0
         classDefForEach { classDef ->
+            if (classDef.methods.none { m -> m.implementation?.instructions?.any(isOkLoad) == true }) {
+                return@classDefForEach
+            }
             mutableClassDefBy(classDef.type).methods.forEach methodLoop@{ method ->
                 val impl = method.implementation ?: return@methodLoop
-                val n = impl.instructions.size
-
-                for (i in 0 until n - 1) {
-                    val sget = impl.getInstruction(i)
-                    if (sget.opcode != Opcode.SGET_OBJECT) continue
-                    val fref =
-                        (sget as ReferenceInstruction).reference as? FieldReference ?: continue
-                    if (fref.definingClass != iapEnum.type || fref.name != okField) continue
-                    val okReg = (sget as OneRegisterInstruction).registerA
-
-                    // Tolerate small drift (e.g. an intervening `const/4`) between the
-                    // OK load and the if-ne consuming it.
-                    for (j in (i + 1)..minOf(i + 4, n - 1)) {
-                        val ifNe = impl.getInstruction(j) as? BuilderInstruction22t ?: continue
-                        if (ifNe.opcode != Opcode.IF_NE) continue
-                        if (ifNe.registerA != okReg && ifNe.registerB != okReg) continue
-
-                        method.replaceInstruction(
-                            j,
-                            BuilderInstruction22t(
-                                Opcode.IF_NE,
-                                ifNe.registerA,
-                                ifNe.registerA,
-                                ifNe.target,
-                            ),
-                        )
-                        rewrites++
-                        break
-                    }
+                if (impl.instructions.none(isOkLoad)) return@methodLoop
+                for (j in okGates(impl, isOkLoad)) {
+                    val ifNe = impl.getInstruction(j) as BuilderInstruction22t
+                    method.replaceInstruction(
+                        j,
+                        BuilderInstruction22t(Opcode.IF_NE, ifNe.registerA, ifNe.registerA, ifNe.target),
+                    )
+                    rewrites++
                 }
             }
         }
 
         if (rewrites == 0) throw PatchException("No `if-ne` gates against ${iapEnum.type} found")
+    }
+}
+
+/**
+ * Indices of `if-ne` instructions where one operand holds the OK entry on every path reaching it
+ * (forward must-dataflow over branches, gotos and switches). The OK load is often hoisted to the
+ * top of a coroutine and shared by several switch cases, so a straight-line scan isn't enough.
+ */
+private fun okGates(impl: MutableMethodImplementation, isOkLoad: (Instruction) -> Boolean): List<Int> {
+    val insns = impl.instructions
+    val n = insns.size
+
+    fun successors(i: Int): List<Int> {
+        val insn = insns[i]
+        val out = mutableListOf<Int>()
+        if (insn.opcode.canContinue() && i + 1 < n) out += i + 1
+        if (insn is BuilderOffsetInstruction) {
+            val target = insn.target.location.index
+            val payload = insns.getOrNull(target)
+            if (payload is BuilderSwitchPayload) {
+                payload.switchElements.forEach { out += it.target.location.index }
+            } else {
+                out += target
+            }
+        }
+        return out
+    }
+
+    val inOk = arrayOfNulls<Set<Int>>(n) // null = not reached yet
+    inOk[0] = emptySet()
+    val work = ArrayDeque(listOf(0))
+    while (work.isNotEmpty()) {
+        val i = work.removeFirst()
+        val insn = insns[i]
+        var out = inOk[i]!!
+        if (isOkLoad(insn)) {
+            out = out + (insn as OneRegisterInstruction).registerA
+        } else if (insn.opcode.setsRegister() && insn is OneRegisterInstruction) {
+            val dst = insn.registerA
+            out = out - dst - (if (insn.opcode.setsWideRegister()) dst + 1 else dst)
+        }
+        for (s in successors(i)) {
+            val merged = inOk[s]?.intersect(out) ?: out
+            if (merged != inOk[s]) {
+                inOk[s] = merged
+                work += s
+            }
+        }
+    }
+
+    return insns.indices.filter { j ->
+        val insn = insns[j]
+        val ok = inOk[j] ?: return@filter false
+        insn.opcode == Opcode.IF_NE && insn is BuilderInstruction22t &&
+            (insn.registerA in ok || insn.registerB in ok)
     }
 }
 
