@@ -1,3 +1,18 @@
+# [2.13.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.13.0-dev.1...v2.13.0-dev.2) (2026-11-13)
+
+
+### Bug Fixes
+
+* **circuit-simulator:** unlock export and print on v1.53.0 ([8da853a](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/8da853a1f47a99d453f3bc2716369dc6e15a2d94))
+
+
+### Features
+
+* **atm-fee-saver:** add support for v3.8 ([4b65d3d](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/4b65d3d77a84eb1bc73046289170118d766f4cb9))
+* **backdrops:** add support for v6.6 ([a5470a6](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/a5470a6da21cc5da3fe67ce5bbea1371c2a5550b))
+* **solid-explorer:** add support for v3.6.4 ([616a219](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/616a219f1e00ebcb1180f9558ba010353316116d))
+* **speedtest:** add support for v7.1.4 ([d60bbd6](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/d60bbd6c8c8867c84d5eb7759e4600a596ce2a85))
+
 # [2.13.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.12.0...v2.13.0-dev.1) (2026-11-13)
 
 

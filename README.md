@@ -5,15 +5,15 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.13.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.13.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
+> **[v2.13.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.13.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
 <details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
 > **🎯 Supported versions:**
 
-| 7.0.4 |
-| :---: |
+| 7.1.4 | 7.0.4 |
+| :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -75,8 +75,8 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 3.4.10 | 3.5.7b |
-| :---: | :---: |
+| 3.4.10 | 3.5.7b | 3.6.4 |
+| :---: | :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -91,8 +91,8 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 3.7.9 |
-| :---: |
+| 3.8 | 3.7.9 |
+| :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -139,8 +139,8 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 1.48.0 | 1.49.0 |
-| :---: | :---: |
+| 1.48.0 | 1.49.0 | 1.53.0 |
+| :---: | :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -154,7 +154,7 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 6.1.2 |
+| 6.6 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
