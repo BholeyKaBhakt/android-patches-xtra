@@ -7,15 +7,14 @@ import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STELLARIUM
 
 /**
- * Adds a first-run prompt to download + install Stellarium's extended deep catalog (deep-sky
- * objects, mag 8–12 stars, DSS imagery). Injects `CatalogDownloader.maybePrompt(this)` at the
- * top of the main activity's `onResume()`; the downloader (in the `stellariumassetpack`
- * extension) fetches the archive and extracts it under the app's files dir. Loading is handled
- * by the nameless dependency [loadExtendedCatalogShimPatch]. Marked experimental (pulls a large
- * external file at runtime).
+ * Adds a dialog to download, import (.zip) or remove Stellarium's extended deep catalog (deep-sky
+ * objects, mag 8–12 stars, DSS imagery), shown on first run and from a launcher long-press
+ * shortcut. Hooks the main activity's `onResume()` and Qt's `onNewIntent()` (the shortcut on a
+ * running app). Loading is handled by the nameless dependency [loadExtendedCatalogShimPatch].
  */
 
 private const val MAIN_ACTIVITY = "Lcom/stellariumlabs/stellarium/mobile/StellariumFree;"
+private const val QT_ACTIVITY_BASE = "Lorg/qtproject/qt/android/QtActivityBase;"
 private const val DOWNLOADER =
     "Lio/github/bholeykabhakt/extension/stellariumassetpack/CatalogDownloader;"
 
@@ -35,6 +34,14 @@ val installExtendedCatalogPatch = patch(
         onResume.addInstructions(
             0,
             "invoke-static { p0 }, $DOWNLOADER->maybePrompt(Landroid/app/Activity;)V",
+        )
+
+        val onNewIntent = mutableClassDefBy(QT_ACTIVITY_BASE).methods.firstOrNull {
+            it.name == "onNewIntent" && it.parameterTypes.singleOrNull()?.toString() == "Landroid/content/Intent;"
+        } ?: throw PatchException("$QT_ACTIVITY_BASE.onNewIntent(Intent) not found")
+        onNewIntent.addInstructions(
+            0,
+            "invoke-static { p0, p1 }, $DOWNLOADER->onNewIntent(Landroid/app/Activity;Landroid/content/Intent;)V",
         )
     }
 }
