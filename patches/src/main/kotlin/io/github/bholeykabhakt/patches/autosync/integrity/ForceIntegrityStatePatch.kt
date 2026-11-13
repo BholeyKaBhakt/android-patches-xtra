@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.autosync.integrity
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_AUTOSYNC
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
@@ -13,7 +13,7 @@ private const val STOCK_SIGNATURE_TOKEN = "5BEWTYHAZIWM7QOCWWMDM2AZOASAU6GL"
  * `badUnlockCode`). Nameless — runs only as a dependency of `purchaseAllItemsPatch` (the IAB
  * bypass is meaningless without these short-circuits).
  */
-val forceIntegrityStatePatch = bytecodePatch {
+val forceIntegrityStatePatch = patch {
     compatibleWith(COMPATIBILITY_AUTOSYNC)
 
     execute {

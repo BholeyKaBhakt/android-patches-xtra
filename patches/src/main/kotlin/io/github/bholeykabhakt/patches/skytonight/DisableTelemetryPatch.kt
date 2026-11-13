@@ -1,7 +1,9 @@
 package io.github.bholeykabhakt.patches.skytonight
 
+import app.morphe.patcher.patch.packageMetadata
+import app.morphe.patcher.patch.resourceFile
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.rawResourcePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_SKY_TONIGHT
 import io.github.bholeykabhakt.patches.utils.RetSite
@@ -36,7 +38,7 @@ private val SITES_BY_VERSION = mapOf(
 )
 
 @Suppress("unused")
-val disableTelemetryPatch = rawResourcePatch(
+val disableTelemetryPatch = patch(
     name = "Disable In-App Telemetry",
 ) {
     compatibleWith(COMPATIBILITY_SKY_TONIGHT)
@@ -49,6 +51,6 @@ val disableTelemetryPatch = rawResourcePatch(
             "Sky Tonight version $version is not supported. " +
                     "Supported: ${SITES_BY_VERSION.keys.joinToString()}.",
         )
-        get(LIBIL2CPP_PATH).writeRetHeads("Sky Tonight", version, sites)
+        resourceFile(LIBIL2CPP_PATH).writeRetHeads("Sky Tonight", version, sites)
     }
 }

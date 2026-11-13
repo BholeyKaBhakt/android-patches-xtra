@@ -1,7 +1,8 @@
 package io.github.bholeykabhakt.patches.utils
 
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.mutableClassDefByOrNull
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
@@ -28,7 +29,7 @@ private const val STARTUP_LAUNCHER = "Lcom/pairip/StartupLauncher;"
  * [extraNoOps] are app-specific `classDescriptor to methodName` pairs to also force-return early
  * (e.g. a `licensecheck.LicenseClient.checkLicense` Play-license boot blocker, when present).
  */
-fun BytecodePatchContext.gutPairIpVm(vararg extraNoOps: Pair<String, String>) {
+fun gutPairIpVm(vararg extraNoOps: Pair<String, String>) {
     mutableClassDefBy(SIGNATURE_CHECK).methods.first { it.name == "verifyIntegrity" }.returnEarly()
 
     val vmRunner = mutableClassDefBy(VM_RUNNER)
@@ -56,7 +57,7 @@ fun BytecodePatchContext.gutPairIpVm(vararg extraNoOps: Pair<String, String>) {
  * means the harvest no longer matches the APK → regenerate). The de-virtualized `$c` body classes
  * are merged separately by each patch via `extendWith("extensions/<app>depairip.mpe")`.
  */
-fun BytecodePatchContext.restorePairIpHolders(resourceDir: String) {
+fun restorePairIpHolders(resourceDir: String) {
     fun resource(name: String) =
         object {}.javaClass.getResourceAsStream("/$resourceDir/$name")?.bufferedReader()?.readText()
             ?: error("de-PairIP resource missing: /$resourceDir/$name")

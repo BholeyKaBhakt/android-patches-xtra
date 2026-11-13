@@ -1,6 +1,7 @@
 package io.github.bholeykabhakt.patches.all.disableanalytics
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import org.w3c.dom.Element
 
 // Manifest meta-data keys consumed by Firebase Analytics, Firebase Crashlytics and
@@ -35,7 +36,7 @@ private fun forcedOffValueFor(name: String): String? {
 }
 
 @Suppress("unused")
-val disableAnalyticsPatch = resourcePatch(
+val disableAnalyticsPatch = patch(
     name = "Disable Firebase(Google) Analytics",
     default = false,
 ) {

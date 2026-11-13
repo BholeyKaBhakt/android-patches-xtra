@@ -2,7 +2,7 @@ package io.github.bholeykabhakt.patches.atmfee
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -19,7 +19,7 @@ private const val HOME_ACTIVITY = "Lcom/atmfee/ui/home_activity/HomeActivity;"
  * the once-per-`onCreate` setup so the list still loads.
  */
 @Suppress("unused")
-val hideLocationPopupPatch = bytecodePatch(
+val hideLocationPopupPatch = patch(
     name = "Hide Location Permission Popup",
 ) {
     compatibleWith(COMPATIBILITY_ATM_FEE_SAVER)

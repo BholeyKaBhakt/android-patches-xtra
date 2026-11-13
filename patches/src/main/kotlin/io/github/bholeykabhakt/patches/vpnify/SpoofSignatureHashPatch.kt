@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.vpnify
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_VPNIFY
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
@@ -12,7 +12,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
  * key.
  */
 @Suppress("unused")
-val spoofSignatureHashPatch = bytecodePatch {
+val spoofSignatureHashPatch = patch {
     compatibleWith(COMPATIBILITY_VPNIFY)
 
     execute {

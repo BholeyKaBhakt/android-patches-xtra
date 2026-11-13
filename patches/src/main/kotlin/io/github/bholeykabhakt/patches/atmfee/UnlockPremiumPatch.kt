@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.atmfee
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_ATM_FEE_SAVER
 import io.github.bholeykabhakt.patches.utils.logMatch
@@ -12,7 +12,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
  * [disableAnalyticsPatch] to turn off Firebase Analytics / Crashlytics collection.
  */
 @Suppress("unused")
-val unlockPremiumPatch = bytecodePatch(
+val unlockPremiumPatch = patch(
     name = "Unlock Premium",
 ) {
     compatibleWith(COMPATIBILITY_ATM_FEE_SAVER)

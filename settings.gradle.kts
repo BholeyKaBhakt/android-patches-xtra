@@ -17,7 +17,7 @@ pluginManagement {
 }
 
 plugins {
-    id("app.morphe.patches") version "1.3.2"
+    id("app.morphe.patches") version "2.1.0"
 }
 
 // Shared R8 rules across all extensions. We need R8 to strip the kotlin-stdlib

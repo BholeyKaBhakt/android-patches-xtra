@@ -1,8 +1,9 @@
 package io.github.bholeykabhakt.patches.stellarium
 
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STELLARIUM
 
 /**
@@ -19,7 +20,7 @@ private const val DOWNLOADER =
     "Lio/github/bholeykabhakt/extension/stellariumassetpack/CatalogDownloader;"
 
 @Suppress("unused")
-val installExtendedCatalogPatch = bytecodePatch(
+val installExtendedCatalogPatch = patch(
     name = "Install Extended (Deep Sky) Catalog",
 ) {
     compatibleWith(COMPATIBILITY_STELLARIUM)

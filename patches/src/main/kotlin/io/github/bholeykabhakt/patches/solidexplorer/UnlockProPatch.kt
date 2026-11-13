@@ -3,7 +3,7 @@ package io.github.bholeykabhakt.patches.solidexplorer
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
@@ -20,7 +20,7 @@ private const val LICENSE_STATE = "Lpl/solidexplorer/licensing/LicenseState;"
  * sets) owned.
  */
 @Suppress("unused")
-val unlockProPatch = bytecodePatch(
+val unlockProPatch = patch(
     name = "Unlock Pro",
 ) {
     compatibleWith(COMPATIBILITY_SOLID_EXPLORER)

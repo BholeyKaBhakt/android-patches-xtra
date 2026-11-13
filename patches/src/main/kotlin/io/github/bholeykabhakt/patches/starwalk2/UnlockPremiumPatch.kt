@@ -1,7 +1,9 @@
 package io.github.bholeykabhakt.patches.starwalk2
 
+import app.morphe.patcher.patch.packageMetadata
+import app.morphe.patcher.patch.resourceFile
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.rawResourcePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STAR_WALK_2
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -74,7 +76,7 @@ private val PATCHES_BY_VERSION = mapOf(
 )
 
 @Suppress("unused")
-val unlockPremiumPatch = rawResourcePatch(
+val unlockPremiumPatch = patch(
     name = "Unlock Premium",
 ) {
     compatibleWith(COMPATIBILITY_STAR_WALK_2)
@@ -86,7 +88,7 @@ val unlockPremiumPatch = rawResourcePatch(
                     "Supported: ${PATCHES_BY_VERSION.keys.joinToString()}. Add offsets via Il2CppDumper.",
         )
 
-        val so = get(LIBIL2CPP_PATH)
+        val so = resourceFile(LIBIL2CPP_PATH)
         if (!so.exists()) throw PatchException("$LIBIL2CPP_PATH not found in APK")
 
         val bytes = so.readBytes()

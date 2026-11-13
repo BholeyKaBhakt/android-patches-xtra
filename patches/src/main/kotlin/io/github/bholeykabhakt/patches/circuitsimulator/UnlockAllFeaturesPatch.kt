@@ -1,9 +1,11 @@
 package io.github.bholeykabhakt.patches.circuitsimulator
 
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction22t
 import com.android.tools.smali.dexlib2.iface.ClassDef
@@ -22,7 +24,7 @@ import io.github.bholeykabhakt.patches.utils.logMatch
  * path always runs. Pulls in [disableAnalyticsPatch] to turn off Firebase Analytics / Crashlytics.
  */
 @Suppress("unused")
-val unlockAllFeaturesPatch = bytecodePatch(
+val unlockAllFeaturesPatch = patch(
     name = "Unlock All Features",
 ) {
     compatibleWith(COMPATIBILITY_CIRCUIT_SIMULATOR)

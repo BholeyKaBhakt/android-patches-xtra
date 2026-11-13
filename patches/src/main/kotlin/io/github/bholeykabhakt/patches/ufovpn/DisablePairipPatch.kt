@@ -1,12 +1,13 @@
 package io.github.bholeykabhakt.patches.ufovpn
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_UFOVPN
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 /** Neuters PairIP's licensecheck boot gate so a re-signed build runs (no native VM in this app). */
 @Suppress("unused")
-val disablePairipPatch = bytecodePatch {
+val disablePairipPatch = patch {
     compatibleWith(COMPATIBILITY_UFOVPN)
 
     execute {

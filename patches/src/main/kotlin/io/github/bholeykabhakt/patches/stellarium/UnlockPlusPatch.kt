@@ -1,7 +1,9 @@
 package io.github.bholeykabhakt.patches.stellarium
 
+import app.morphe.patcher.patch.packageMetadata
+import app.morphe.patcher.patch.resourceFile
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.rawResourcePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STELLARIUM
 import java.nio.ByteBuffer
@@ -104,7 +106,7 @@ private val PATCHES_BY_VERSION = mapOf(
 )
 
 @Suppress("unused")
-val unlockPlusPatch = rawResourcePatch(
+val unlockPlusPatch = patch(
     name = "Unlock Plus",
 ) {
     compatibleWith(COMPATIBILITY_STELLARIUM)
@@ -119,7 +121,7 @@ val unlockPlusPatch = rawResourcePatch(
                     "Add offsets via `nm -D <so> | c++filt` (see KDoc).",
         )
 
-        val so = get(LIB_PATH)
+        val so = resourceFile(LIB_PATH)
         if (!so.exists()) throw PatchException("$LIB_PATH not found in APK")
 
         val bytes = so.readBytes()

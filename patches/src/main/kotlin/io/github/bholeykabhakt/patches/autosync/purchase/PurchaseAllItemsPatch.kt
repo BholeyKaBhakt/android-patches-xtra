@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.autosync.purchase
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.autosync.integrity.forceIntegrityStatePatch
 import io.github.bholeykabhakt.patches.autosync.pairip.disablePairIpPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_AUTOSYNC
@@ -8,7 +8,7 @@ import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 @Suppress("unused")
-val purchaseAllItemsPatch = bytecodePatch(
+val purchaseAllItemsPatch = patch(
     name = "Purchase All Items",
 ) {
     compatibleWith(COMPATIBILITY_AUTOSYNC)

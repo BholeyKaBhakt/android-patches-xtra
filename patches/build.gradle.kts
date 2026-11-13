@@ -12,15 +12,9 @@ patches {
     }
 }
 
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.add("-Xcontext-parameters")
-    }
-}
-
 // Separate configuration so gson is available at runtime for the
 // generatePatchesList task but never bundled into the APK.
-val patchListGeneratorClasspath: Configuration by configurations.creating
+val patchListGeneratorClasspath = configurations.create("patchListGeneratorClasspath")
 
 dependencies {
     compileOnly(libs.gson)

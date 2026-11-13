@@ -1,8 +1,9 @@
 package io.github.bholeykabhakt.patches.inshorts
 
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_INSHORTS
 import io.github.bholeykabhakt.patches.utils.returnEarly
@@ -13,7 +14,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
  * so nothing is ever scheduled or rendered.
  */
 @Suppress("unused")
-val removeAdsPatch = bytecodePatch(
+val removeAdsPatch = patch(
     name = "Remove Ads",
 ) {
     compatibleWith(COMPATIBILITY_INSHORTS)

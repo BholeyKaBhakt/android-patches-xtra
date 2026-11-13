@@ -1,9 +1,10 @@
 package io.github.bholeykabhakt.patches.inshorts
 
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
@@ -21,7 +22,7 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_INSHORTS
  *    getter to `false` makes those cards take their existing "skip without login" branch.
  */
 @Suppress("unused")
-val noLoginPatch = bytecodePatch(
+val noLoginPatch = patch(
     name = "Skip Login",
 ) {
     compatibleWith(COMPATIBILITY_INSHORTS)

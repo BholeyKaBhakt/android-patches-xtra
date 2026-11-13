@@ -1,6 +1,6 @@
 package io.github.bholeykabhakt.patches.backdrops
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_BACKDROPS
 import io.github.bholeykabhakt.patches.utils.gutPairIpVm
 import io.github.bholeykabhakt.patches.utils.restorePairIpHolders
@@ -13,7 +13,7 @@ import io.github.bholeykabhakt.patches.utils.restorePairIpHolders
  * [extendWith]). Nameless dep of [unlockPremiumPatch]; regenerate the resources on a version bump.
  */
 @Suppress("unused")
-val disablePairipPatch = bytecodePatch {
+val disablePairipPatch = patch {
     compatibleWith(COMPATIBILITY_BACKDROPS)
 
     extendWith("extensions/backdropsdepairip.mpe")
