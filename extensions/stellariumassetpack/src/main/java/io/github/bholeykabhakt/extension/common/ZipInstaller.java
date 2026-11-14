@@ -1,10 +1,18 @@
 package io.github.bholeykabhakt.extension.common;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.provider.OpenableColumns;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -26,21 +34,33 @@ import java.util.zip.ZipInputStream;
  * so the disk peak is the extracted size), then swaps it into place. Entries are re-rooted at
  * the first path segment named in {@code roots}, so a zip with an extra top folder (e.g. a Play
  * dump's {@code assets/}) installs the same; anything outside it is skipped. Optional SHA-256 is
- * computed while streaming and checked before the swap. Work runs on a background thread; the
- * {@link Callback} fires on the UI thread.
+ * computed while streaming and checked before the swap. Work runs on a background thread behind
+ * a cancellable progress dialog; the {@link Callback} fires on the UI thread.
  */
-@SuppressWarnings("deprecation") // ProgressDialog: the framework's only percent + size bar.
 public final class ZipInstaller {
 
     public interface Callback {
         void onSuccess();
 
+        /** {@code error} is null when the user cancelled. */
         void onFailure(String error);
     }
 
     /** Checks the staged tree before it replaces the current one; return an error or null. */
     public interface Validator {
         String check(File staged);
+    }
+
+    /**
+     * Optional one-line label at the archive root (e.g. the pack version). Shown in the dialog as
+     * soon as it is unpacked, so pack it first; {@link #label(File)} reads it back after install.
+     */
+    public static final String LABEL_FILE = "VERSION";
+
+    /** Dark device-default dialogs, shared with the caller's own dialogs so they all match. */
+    public static final int THEME = android.R.style.Theme_DeviceDefault_Dialog_Alert;
+
+    private static final class Cancelled extends IOException {
     }
 
     private ZipInstaller() {
@@ -59,14 +79,8 @@ public final class ZipInstaller {
     private static void start(final Activity activity, final Uri uri, final String url, final String sha256,
                               final File dest, final String[] roots, final Validator validator,
                               final String title, final Callback cb) {
-        final ProgressDialog pd = new ProgressDialog(activity);
-        pd.setTitle(title);
-        pd.setMessage("Please keep the app open…");
-        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd.setMax(100);
-        pd.setProgressNumberFormat("");
-        pd.setCancelable(false);
-        pd.show();
+        final Ui ui = new Ui(activity, title, uri == null ? "Connecting…" : "Opening file…");
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         new Thread(new Runnable() {
             @Override
@@ -81,39 +95,45 @@ public final class ZipInstaller {
                     long total;
                     if (uri != null) {
                         raw = activity.getContentResolver().openInputStream(uri);
-                        if (raw == null) throw new IOException("cannot open file");
+                        if (raw == null) throw new IOException("cannot open the file");
                         total = sizeOf(activity, uri);
                     } else {
-                        conn = open(url);
+                        conn = open(url, ui);
                         raw = conn.getInputStream();
                         total = conn.getContentLengthLong();
                     }
+                    ui.base = uri == null ? "Downloading and unpacking" : "Unpacking";
+                    ui.phase(ui.base);
                     MessageDigest md = wantsSha(sha256) ? MessageDigest.getInstance("SHA-256") : null;
-                    InputStream in = new Progress(new BufferedInputStream(raw, 1 << 16), total, activity, pd);
+                    InputStream in = new Progress(new BufferedInputStream(raw, 1 << 16), total, ui);
                     if (md != null) in = new DigestInputStream(in, md);
                     try {
-                        extract(in, stage, roots);
+                        extract(in, stage, roots, ui);
                         drain(in); // central directory, so the digest covers the whole file
                     } finally {
                         in.close();
                     }
+                    ui.phase("Checking files");
+                    ui.finishing();
                     if (md != null && !hex(md.digest()).equalsIgnoreCase(sha256.trim())) {
-                        throw new IOException("checksum mismatch");
+                        throw new IOException("checksum mismatch, the file is damaged or not the expected one");
                     }
                     String bad = validator == null ? null : validator.check(stage);
                     if (bad != null) throw new IOException(bad);
+                    ui.check();
 
-                    if (dest.exists() && !dest.renameTo(old)) throw new IOException("cannot replace current files");
+                    if (dest.exists() && !dest.renameTo(old)) throw new IOException("cannot replace the current files");
                     if (!stage.renameTo(dest)) {
                         old.renameTo(dest);
-                        throw new IOException("cannot move files into place");
+                        throw new IOException("cannot move the files into place");
                     }
                     deleteRecursive(old);
-                    finish(activity, pd, cb, null);
+                    finish(activity, ui, cb, null, false);
                 } catch (Exception e) {
                     deleteRecursive(stage);
+                    boolean cancelled = e instanceof Cancelled || ui.cancelled;
                     String msg = e.getMessage();
-                    finish(activity, pd, cb, msg == null ? e.getClass().getSimpleName() : msg);
+                    finish(activity, ui, cb, msg == null ? e.getClass().getSimpleName() : msg, cancelled);
                 } finally {
                     if (conn != null) conn.disconnect();
                 }
@@ -121,13 +141,15 @@ public final class ZipInstaller {
         }, "zip-install").start();
     }
 
-    private static HttpURLConnection open(String url) throws IOException {
+    private static HttpURLConnection open(String url, Ui ui) throws IOException {
         String current = url;
         for (int redirects = 0; redirects < 6; redirects++) {
+            ui.check();
             HttpURLConnection c = (HttpURLConnection) new URL(current).openConnection();
             c.setInstanceFollowRedirects(false);
             c.setConnectTimeout(30000);
             c.setReadTimeout(60000);
+            ui.conn = c;
             int code = c.getResponseCode();
             if (code >= 300 && code < 400) {
                 String loc = c.getHeaderField("Location");
@@ -138,14 +160,14 @@ public final class ZipInstaller {
             }
             if (code != 200) {
                 c.disconnect();
-                throw new IOException("HTTP " + code);
+                throw new IOException(code == 404 ? "the file is not on the server (HTTP 404)" : "server replied HTTP " + code);
             }
             return c;
         }
         throw new IOException("too many redirects");
     }
 
-    private static void extract(InputStream in, File stage, String[] roots) throws IOException {
+    private static void extract(InputStream in, File stage, String[] roots, Ui ui) throws IOException {
         if (!stage.mkdirs()) throw new IOException("cannot create " + stage.getName());
         String canon = stage.getCanonicalPath() + File.separator;
         ZipInputStream zin = new ZipInputStream(in);
@@ -157,7 +179,8 @@ public final class ZipInstaller {
             String name = e.getName().replace('\\', '/');
             if (prefix == null) prefix = prefixOf(name, roots);
             if (prefix == null || !name.startsWith(prefix) || name.length() == prefix.length()) continue;
-            File out = new File(stage, name.substring(prefix.length()));
+            String rel = name.substring(prefix.length());
+            File out = new File(stage, rel);
             if (!out.getCanonicalPath().startsWith(canon)) throw new IOException("bad entry " + name);
             if (e.isDirectory()) {
                 out.mkdirs();
@@ -172,7 +195,11 @@ public final class ZipInstaller {
             } finally {
                 fo.close();
             }
-            files++;
+            ui.files = ++files;
+            if (rel.equals(LABEL_FILE)) {
+                String v = label(stage);
+                if (v != null) ui.phase(ui.base + " · " + v);
+            }
         }
         if (files == 0) throw new IOException("not a catalog archive");
     }
@@ -220,52 +247,213 @@ public final class ZipInstaller {
         f.delete();
     }
 
+    /** First line of {@link #LABEL_FILE} in {@code dir}, or null. */
+    public static String label(File dir) {
+        File f = new File(dir, LABEL_FILE);
+        if (!f.isFile() || f.length() > 4096) return null;
+        try (java.io.BufferedReader r = new java.io.BufferedReader(new java.io.FileReader(f))) {
+            String line = r.readLine();
+            return line == null || line.trim().isEmpty() ? null : line.trim();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    /** Total size of the files under {@code f}. */
+    public static long sizeOnDisk(File f) {
+        if (f == null || !f.exists()) return 0;
+        if (f.isFile()) return f.length();
+        long sum = 0;
+        File[] kids = f.listFiles();
+        if (kids != null) for (File k : kids) sum += sizeOnDisk(k);
+        return sum;
+    }
+
     /** Decimal units, like download hosts report sizes. */
     public static String human(long bytes) {
         if (bytes < 0) return "?";
         double mb = bytes / 1_000_000.0;
         if (mb >= 1000.0) return String.format(Locale.US, "%.2f GB", mb / 1000.0);
+        if (mb >= 100.0) return String.format(Locale.US, "%.0f MB", mb);
         return String.format(Locale.US, "%.1f MB", mb);
     }
 
-    private static void finish(final Activity activity, final ProgressDialog pd, final Callback cb, final String err) {
+    private static String eta(long seconds) {
+        if (seconds < 60) return "under a minute left";
+        long min = (seconds + 30) / 60;
+        if (min < 60) return min + " min left";
+        return String.format(Locale.US, "%d h %02d min left", min / 60, min % 60);
+    }
+
+    public static int dp(Context ctx, int dp) {
+        return Math.round(dp * ctx.getResources().getDisplayMetrics().density);
+    }
+
+    private static void finish(final Activity activity, final Ui ui, final Callback cb, final String err,
+                               final boolean cancelled) {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    pd.dismiss();
-                } catch (Throwable ignored) {
-                }
-                if (err == null) cb.onSuccess();
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                ui.dismiss();
+                if (activity.isFinishing() || activity.isDestroyed()) return;
+                if (cancelled) cb.onFailure(null);
+                else if (err == null) cb.onSuccess();
                 else cb.onFailure(err);
             }
         });
     }
 
-    /** Counts bytes read and drives the bar: percent left, read / total right. */
-    private static final class Progress extends FilterInputStream {
-        private final long total;
-        private final Activity activity;
-        private final ProgressDialog pd;
-        private long done;
-        private int lastPct = -1;
+    /** Progress dialog: phase line, bar, "x of y · speed · eta" line and a Cancel button. */
+    private static final class Ui {
+        final Activity activity;
+        final AlertDialog dialog;
+        final TextView phase;
+        final ProgressBar bar;
+        final TextView detail;
+        volatile boolean cancelled;
+        volatile HttpURLConnection conn;
+        volatile int files;
+        volatile String base = "";
 
-        Progress(InputStream in, final long total, Activity activity, final ProgressDialog pd) {
-            super(in);
-            this.total = total;
+        Ui(Activity activity, String title, String firstPhase) {
             this.activity = activity;
-            this.pd = pd;
-            activity.runOnUiThread(new Runnable() {
+            Context ctx = new android.view.ContextThemeWrapper(activity, THEME);
+            LinearLayout box = new LinearLayout(ctx);
+            box.setOrientation(LinearLayout.VERTICAL);
+            int pad = dp(ctx, 24);
+            box.setPadding(pad, dp(ctx, 8), pad, dp(ctx, 4));
+
+            phase = new TextView(ctx);
+            phase.setTextAppearance(android.R.style.TextAppearance_DeviceDefault_Medium);
+            phase.setTextSize(15);
+            phase.setText(firstPhase);
+            box.addView(phase);
+
+            bar = new ProgressBar(ctx, null, android.R.attr.progressBarStyleHorizontal);
+            bar.setIndeterminate(true);
+            bar.setMax(1000);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.topMargin = dp(ctx, 12);
+            lp.bottomMargin = dp(ctx, 6);
+            box.addView(bar, lp);
+
+            detail = new TextView(ctx);
+            detail.setTextAppearance(android.R.style.TextAppearance_DeviceDefault_Small);
+            detail.setAlpha(0.7f);
+            detail.setText("Keep the app open until this finishes.");
+            box.addView(detail);
+
+            dialog = new AlertDialog.Builder(activity, THEME)
+                    .setTitle(title)
+                    .setView(box)
+                    .setCancelable(false)
+                    .setNegativeButton("Cancel", null)
+                    .create();
+            dialog.show();
+            final Button cancel = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void run() {
-                    pd.setIndeterminate(total <= 0);
-                    if (total > 0) pd.setProgressNumberFormat(human(0) + " / " + human(total));
+                public void onClick(View v) {
+                    cancelled = true;
+                    cancel.setEnabled(false);
+                    cancel.setText("Cancelling…");
+                    final HttpURLConnection c = conn;
+                    if (c != null) {
+                        // Unblocks a stalled read; off the UI thread since it touches the socket.
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                c.disconnect();
+                            }
+                        }, "zip-cancel").start();
+                    }
                 }
             });
         }
 
+        void check() throws Cancelled {
+            if (cancelled) throw new Cancelled();
+        }
+
+        void phase(final String text) {
+            ui(new Runnable() {
+                @Override
+                public void run() {
+                    phase.setText(text);
+                }
+            });
+        }
+
+        /** Past the point of no return: the swap is quick, so Cancel goes away. */
+        void finishing() {
+            ui(new Runnable() {
+                @Override
+                public void run() {
+                    bar.setIndeterminate(true);
+                    detail.setText(files + " files");
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setVisibility(View.GONE);
+                }
+            });
+        }
+
+        void progress(final long done, final long total, final double bytesPerSec) {
+            ui(new Runnable() {
+                @Override
+                public void run() {
+                    StringBuilder s = new StringBuilder();
+                    if (total > 0) {
+                        bar.setIndeterminate(false);
+                        bar.setProgress((int) Math.min(1000, done * 1000 / total));
+                        s.append(human(done)).append(" of ").append(human(total));
+                    } else {
+                        s.append(human(done));
+                    }
+                    if (bytesPerSec > 0) {
+                        s.append(" · ").append(human((long) bytesPerSec)).append("/s");
+                        if (total > done) s.append(" · ").append(eta((long) ((total - done) / bytesPerSec)));
+                    }
+                    detail.setText(s);
+                }
+            });
+        }
+
+        void dismiss() {
+            try {
+                dialog.dismiss();
+            } catch (Throwable ignored) {
+                // window already gone
+            }
+        }
+
+        private void ui(Runnable r) {
+            if (!cancelled) activity.runOnUiThread(r);
+        }
+    }
+
+    /** Counts bytes read, honours Cancel, and refreshes the dialog a few times a second. */
+    private static final class Progress extends FilterInputStream {
+        private static final long TICK_MS = 300;
+        private final long total;
+        private final Ui ui;
+        private final long started = SystemClock.elapsedRealtime();
+        private long done;
+        private long lastTick;
+        private long windowStart = started;
+        private long windowBytes;
+        private double rate;
+
+        Progress(InputStream in, long total, Ui ui) {
+            super(in);
+            this.total = total;
+            this.ui = ui;
+            ui.progress(0, total, 0);
+        }
+
         @Override
         public int read() throws IOException {
+            ui.check();
             int b = super.read();
             if (b >= 0) count(1);
             return b;
@@ -273,6 +461,7 @@ public final class ZipInstaller {
 
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
+            ui.check();
             int n = super.read(b, off, len);
             if (n > 0) count(n);
             return n;
@@ -280,18 +469,19 @@ public final class ZipInstaller {
 
         private void count(int n) {
             done += n;
-            if (total <= 0) return;
-            final int pct = (int) Math.min(100, done * 100 / total);
-            if (pct == lastPct) return;
-            lastPct = pct;
-            final long d = done;
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pd.setProgress(pct);
-                    pd.setProgressNumberFormat(human(d) + " / " + human(total));
-                }
-            });
+            windowBytes += n;
+            long now = SystemClock.elapsedRealtime();
+            if (now - lastTick < TICK_MS) return;
+            lastTick = now;
+            long span = now - windowStart;
+            if (span >= 2000) {
+                // Smoothed rate over ~2 s windows; the first window seeds it.
+                double r = windowBytes * 1000.0 / span;
+                rate = rate == 0 ? r : rate * 0.6 + r * 0.4;
+                windowStart = now;
+                windowBytes = 0;
+            }
+            ui.progress(done, total, now - started >= 2000 ? rate : 0);
         }
     }
 }

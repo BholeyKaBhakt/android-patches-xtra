@@ -10,15 +10,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.Typeface;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.util.Collections;
+import java.util.Date;
 
 import io.github.bholeykabhakt.extension.common.ZipInstaller;
 
@@ -36,7 +44,9 @@ public final class CatalogDownloader {
     private static final String PREFS = "stellarium_catalog";
     private static final String PREF_PROMPTED = "prompted";
     private static final String PICKER_TAG = "catalog_picker";
-    private static final String[] ROOTS = {"dso", "stars", "surveys", "README"};
+    private static final String[] ROOTS = {"dso", "stars", "surveys", "README", ZipInstaller.LABEL_FILE};
+    private static final String DOWNLOAD_SIZE = "258 MB";
+    private static final String INSTALLED_SIZE = "293 MB";
 
     private static volatile boolean resumedOnce = false;
 
@@ -111,75 +121,186 @@ public final class CatalogDownloader {
         if (activity.isFinishing() || activity.isDestroyed()) return;
         final boolean installed = AssetShim.isPackPresent();
         final String url = configUrl();
-        AlertDialog.Builder b = new AlertDialog.Builder(activity)
+        final Context ctx = new ContextThemeWrapper(activity, ZipInstaller.THEME);
+
+        LinearLayout box = new LinearLayout(ctx);
+        box.setOrientation(LinearLayout.VERTICAL);
+        box.setPadding(0, ZipInstaller.dp(ctx, 4), 0, 0);
+
+        final TextView status = text(ctx, installed ? "Installed" : "Not installed", 14, 1f);
+        status.setTypeface(Typeface.DEFAULT_BOLD);
+        status.setTextColor(installed ? 0xFF81C995 : 0xFFFDD663);
+        pad(ctx, status, 4);
+        box.addView(status);
+        TextView about = text(ctx, "Adds stars down to magnitude 12, deep-sky objects and nebula imagery. "
+                + "Everything is stored on the device and works offline.", 14, 0.75f);
+        pad(ctx, about, 12);
+        box.addView(about);
+
+        final AlertDialog dialog = new AlertDialog.Builder(activity, ZipInstaller.THEME)
                 .setTitle("Deep sky catalog")
-                .setMessage(installed
-                        ? "Installed. Deep stars, deep-sky objects and nebula imagery load offline."
-                        : "Adds deep stars (mag 8–12), deep-sky objects and nebula imagery, used offline "
-                        + "(~293 MB on this device). Download it, or import a catalog .zip you already have.")
-                .setNeutralButton("Import .zip", new DialogInterface.OnClickListener() {
+                .setView(box)
+                .setNegativeButton(installed ? "Close" : "Not now", null)
+                .create();
+
+        if (url != null && !url.isEmpty()) {
+            box.addView(action(ctx, dialog, installed ? "Download again" : "Download",
+                    installed ? "Replace it with the latest release" : DOWNLOAD_SIZE + " download, about "
+                            + INSTALLED_SIZE + " once unpacked",
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            download(activity, url);
+                        }
+                    }));
+        }
+        box.addView(action(ctx, dialog, "Import from a file", "Pick a catalog .zip already on this device",
+                new Runnable() {
                     @Override
-                    public void onClick(DialogInterface d, int w) {
+                    public void run() {
                         pick(activity);
                     }
-                });
-        if (url != null && !url.isEmpty()) {
-            b.setPositiveButton(installed ? "Download again" : "Download (~258 MB)", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface d, int w) {
-                    download(activity, url);
-                }
-            });
-        }
+                }));
         if (installed) {
-            b.setNegativeButton("Remove", new DialogInterface.OnClickListener() {
+            box.addView(action(ctx, dialog, "Remove", "Free up the space it uses", new Runnable() {
                 @Override
-                public void onClick(DialogInterface d, int w) {
+                public void run() {
                     confirmRemove(activity);
                 }
-            });
-        } else {
-            b.setNegativeButton("Not now", null);
+            }));
         }
-        b.show();
+        dialog.show();
+
+        if (installed) {
+            // Size and date need a walk over ~7k files; fill them in when ready.
+            final File dir = packDir(activity);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final long bytes = ZipInstaller.sizeOnDisk(dir);
+                    final String version = ZipInstaller.label(dir);
+                    final long when = new File(dir, AssetShim.SENTINEL).lastModified();
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String date = when > 0 ? " · added " + DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date(when)) : "";
+                            status.setText("Installed" + (version == null ? "" : " · " + version)
+                                    + " · " + ZipInstaller.human(bytes) + date);
+                        }
+                    });
+                }
+            }, "catalog-size").start();
+        }
+    }
+
+    private static TextView text(Context ctx, String s, int sp, float alpha) {
+        TextView t = new TextView(ctx);
+        t.setTextAppearance(android.R.style.TextAppearance_DeviceDefault);
+        t.setTextSize(sp);
+        t.setAlpha(alpha);
+        t.setText(s);
+        return t;
+    }
+
+    private static void pad(Context ctx, View v, int bottomDp) {
+        int side = ZipInstaller.dp(ctx, 24);
+        v.setPadding(side, 0, side, ZipInstaller.dp(ctx, bottomDp));
+    }
+
+    /** A tappable two-line row: what it does and what it costs. */
+    private static View action(Context ctx, final AlertDialog dialog, String title, String hint, final Runnable run) {
+        LinearLayout row = new LinearLayout(ctx);
+        row.setOrientation(LinearLayout.VERTICAL);
+        int side = ZipInstaller.dp(ctx, 24);
+        int vert = ZipInstaller.dp(ctx, 10);
+        row.setPadding(side, vert, side, vert);
+        row.setMinimumHeight(ZipInstaller.dp(ctx, 56));
+        TypedValue tv = new TypedValue();
+        if (ctx.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, tv, true)) {
+            row.setBackgroundResource(tv.resourceId);
+        }
+        row.setClickable(true);
+        TextView t = text(ctx, title, 16, 1f);
+        TypedValue accent = new TypedValue();
+        if (ctx.getTheme().resolveAttribute(android.R.attr.colorAccent, accent, true)) t.setTextColor(accent.data);
+        row.addView(t);
+        row.addView(text(ctx, hint, 13, 0.65f));
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                run.run();
+            }
+        });
+        return row;
     }
 
     private static File packDir(Activity activity) {
         return new File(activity.getFilesDir(), AssetShim.PACK_NAME);
     }
 
-    private static void download(Activity activity, String url) {
+    private static void download(final Activity activity, final String url) {
         ZipInstaller.fromUrl(activity, url, configSha(), packDir(activity), ROOTS, VALIDATOR,
-                "Downloading catalog", result(activity, "Download failed"));
+                "Downloading catalog", result(activity, "Download failed", new Runnable() {
+                    @Override
+                    public void run() {
+                        download(activity, url);
+                    }
+                }));
     }
 
-    static void importUri(Activity activity, Uri uri) {
+    static void importUri(final Activity activity, Uri uri) {
         ZipInstaller.fromUri(activity, uri, packDir(activity), ROOTS, VALIDATOR,
-                "Importing catalog", result(activity, "Import failed"));
+                "Importing catalog", result(activity, "Import failed", new Runnable() {
+                    @Override
+                    public void run() {
+                        pick(activity);
+                    }
+                }));
     }
 
     private static final ZipInstaller.Validator VALIDATOR = new ZipInstaller.Validator() {
         @Override
         public String check(File staged) {
             if (!new File(staged, AssetShim.SENTINEL).isFile() || !new File(staged, "stars").isDirectory()) {
-                return "not a Stellarium extended catalog";
+                return "this .zip is not a Stellarium deep sky catalog";
             }
             return null;
         }
     };
 
-    private static ZipInstaller.Callback result(final Activity activity, final String failure) {
+    private static ZipInstaller.Callback result(final Activity activity, final String failure, final Runnable retry) {
         return new ZipInstaller.Callback() {
             @Override
             public void onSuccess() {
-                offerRestart(activity, "Catalog installed", "The deep catalog is ready. Restart the app to load it.");
+                String version = ZipInstaller.label(packDir(activity));
+                offerRestart(activity, "Catalog installed", (version == null ? "The catalog" : "Catalog " + version)
+                        + " is ready. Restart Stellarium to load it.");
             }
 
             @Override
             public void onFailure(String error) {
-                Toast.makeText(activity, failure + ": " + error, Toast.LENGTH_LONG).show();
+                if (error == null) {
+                    Toast.makeText(activity, "Cancelled", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                new AlertDialog.Builder(activity, ZipInstaller.THEME)
+                        .setTitle(failure)
+                        .setMessage(capitalize(error) + ".\n\nThe installed catalog, if any, was not changed.")
+                        .setNegativeButton("Close", null)
+                        .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface d, int w) {
+                                retry.run();
+                            }
+                        })
+                        .show();
             }
         };
+    }
+
+    private static String capitalize(String s) {
+        return s.isEmpty() ? s : Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
 
     private static void pick(Activity activity) {
@@ -190,9 +311,10 @@ public final class CatalogDownloader {
     }
 
     private static void confirmRemove(final Activity activity) {
-        new AlertDialog.Builder(activity)
-                .setTitle("Remove the deep sky catalog?")
-                .setMessage("Frees ~293 MB. You can download or import it again later.")
+        new AlertDialog.Builder(activity, ZipInstaller.THEME)
+                .setTitle("Remove the catalog?")
+                .setMessage("Deep stars, deep-sky objects and nebula imagery go away until you download "
+                        + "or import it again.")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
                     @Override
@@ -218,12 +340,12 @@ public final class CatalogDownloader {
                 ZipInstaller.deleteRecursive(doomed);
             }
         }, "catalog-remove").start();
-        offerRestart(activity, "Catalog removed", "Restart the app to unload it.");
+        offerRestart(activity, "Catalog removed", "Restart Stellarium to finish removing it.");
     }
 
     private static void offerRestart(final Activity activity, String title, String message) {
         if (activity.isFinishing() || activity.isDestroyed()) return;
-        new AlertDialog.Builder(activity)
+        new AlertDialog.Builder(activity, ZipInstaller.THEME)
                 .setTitle(title)
                 .setMessage(message)
                 .setCancelable(false)
