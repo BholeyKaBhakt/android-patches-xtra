@@ -53,7 +53,7 @@ public final class CatalogDownloader {
     private CatalogDownloader() {
     }
 
-    // Empty URL hides Download; empty SHA skips the check (the release asset is replaced in place).
+    // Empty URL hides Download. Empty SHA: use <url>.sha256 from the release if it is there.
     public static String configUrl() {
         return "https://github.com/BholeyKaBhakt/strl-data-pack/releases/latest/download/st-xtra-data.zip";
     }

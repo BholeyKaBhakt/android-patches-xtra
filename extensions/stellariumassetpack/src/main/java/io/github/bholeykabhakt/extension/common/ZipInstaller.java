@@ -33,8 +33,9 @@ import java.util.zip.ZipInputStream;
  * Streams a .zip from a URL or a picked document straight into a staging dir (no temp archive,
  * so the disk peak is the extracted size), then swaps it into place. Entries are re-rooted at
  * the first path segment named in {@code roots}, so a zip with an extra top folder (e.g. a Play
- * dump's {@code assets/}) installs the same; anything outside it is skipped. Optional SHA-256 is
- * computed while streaming and checked before the swap. Work runs on a background thread behind
+ * dump's {@code assets/}) installs the same; anything outside it is skipped. SHA-256 is computed
+ * while streaming and checked before the swap: the given one, else a {@code <url>.sha256} published
+ * next to the download (skipped when that file does not exist). Work runs on a background thread behind
  * a cancellable progress dialog; the {@link Callback} fires on the UI thread.
  */
 public final class ZipInstaller {
@@ -104,7 +105,9 @@ public final class ZipInstaller {
                     }
                     ui.base = uri == null ? "Downloading and unpacking" : "Unpacking";
                     ui.phase(ui.base);
-                    MessageDigest md = wantsSha(sha256) ? MessageDigest.getInstance("SHA-256") : null;
+                    String expected = sha256;
+                    if (uri == null && !wantsSha(expected)) expected = sidecarSha(url + ".sha256");
+                    MessageDigest md = wantsSha(expected) ? MessageDigest.getInstance("SHA-256") : null;
                     InputStream in = new Progress(new BufferedInputStream(raw, 1 << 16), total, ui);
                     if (md != null) in = new DigestInputStream(in, md);
                     try {
@@ -115,7 +118,7 @@ public final class ZipInstaller {
                     }
                     ui.phase("Checking files");
                     ui.finishing();
-                    if (md != null && !hex(md.digest()).equalsIgnoreCase(sha256.trim())) {
+                    if (md != null && !hex(md.digest()).equalsIgnoreCase(expected.trim())) {
                         throw new IOException("checksum mismatch, the file is damaged or not the expected one");
                     }
                     String bad = validator == null ? null : validator.check(stage);
@@ -141,15 +144,37 @@ public final class ZipInstaller {
         }, "zip-install").start();
     }
 
+    /**
+     * The hash from a {@code sha256sum}-style file ({@code <hex>  <name>}), or null when it is
+     * absent (HTTP 404). Any other failure aborts, so a download is never silently unchecked.
+     */
+    private static String sidecarSha(String url) throws IOException {
+        HttpURLConnection c;
+        try {
+            c = open(url, null);
+        } catch (IOException e) {
+            if (e.getMessage() != null && e.getMessage().contains("404")) return null;
+            throw new IOException("cannot read the checksum file: " + e.getMessage());
+        }
+        try (java.io.BufferedReader r = new java.io.BufferedReader(new java.io.InputStreamReader(c.getInputStream()))) {
+            String line = r.readLine();
+            String hex = line == null ? "" : line.trim().split("\\s+")[0];
+            if (!hex.matches("[0-9a-fA-F]{64}")) throw new IOException("the checksum file is malformed");
+            return hex;
+        } finally {
+            c.disconnect();
+        }
+    }
+
     private static HttpURLConnection open(String url, Ui ui) throws IOException {
         String current = url;
         for (int redirects = 0; redirects < 6; redirects++) {
-            ui.check();
+            if (ui != null) ui.check();
             HttpURLConnection c = (HttpURLConnection) new URL(current).openConnection();
             c.setInstanceFollowRedirects(false);
             c.setConnectTimeout(30000);
             c.setReadTimeout(60000);
-            ui.conn = c;
+            if (ui != null) ui.conn = c;
             int code = c.getResponseCode();
             if (code >= 300 && code < 400) {
                 String loc = c.getHeaderField("Location");
