@@ -155,4 +155,22 @@ object Constants {
             AppTarget(version = "6.6.4"),
         ),
     )
+
+    val COMPATIBILITY_EVERYCIRCUIT = Compatibility(
+        name = "EveryCircuit",
+        packageName = "com.everycircuit.free",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "2.31"),
+        ),
+    )
+
+    val COMPATIBILITY_SIMURELAY = Compatibility(
+        name = "Simurelay",
+        packageName = "com.mordiastudio.simurelayfree",
+        targets = listOf(
+            AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "3.0.6"),
+        ),
+    )
 }
