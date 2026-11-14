@@ -19,6 +19,7 @@ class StellariumSymbolSitesTest {
     /** QVariant(bool)@plt → (getHasFeaturePLUS, hasValidLicense, getAppVariant cbz), found by hand. */
     private val known = mapOf(
         0x8ACCE0 to listOf(0x73069C, 0x738798, 0x737BAC), // 1.16.3
+        0x8B5DE0 to listOf(0x73954C, 0x741D84, 0x741198), // 1.16.8
         0x8B6BC0 to listOf(0x739938, 0x742164, 0x741578), // 1.16.9
         0x8B69F0 to listOf(0x739748, 0x741F74, 0x741388), // 1.16.10
     )
