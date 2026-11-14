@@ -21,6 +21,7 @@ private const val DOWNLOADER =
 @Suppress("unused")
 val installExtendedCatalogPatch = patch(
     name = "Install Extended (Deep Sky) Catalog",
+    description = "Download or import the deep sky catalog. Long-press the app icon to open it again.",
 ) {
     compatibleWith(COMPATIBILITY_STELLARIUM)
     dependsOn(loadExtendedCatalogShimPatch)
