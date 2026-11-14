@@ -1,8 +1,10 @@
 package io.github.bholeykabhakt.patches.stellarium
 
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STELLARIUM
 
 /**
@@ -19,7 +21,7 @@ private const val ASSET_PACK_LOCATION =
 private const val ASSET_SHIM = "Lio/github/bholeykabhakt/extension/stellariumassetpack/AssetShim;"
 
 @Suppress("unused")
-val loadExtendedCatalogShimPatch = bytecodePatch {
+val loadExtendedCatalogShimPatch = patch {
     compatibleWith(COMPATIBILITY_STELLARIUM)
     extendWith("extensions/stellariumassetpack.mpe")
 

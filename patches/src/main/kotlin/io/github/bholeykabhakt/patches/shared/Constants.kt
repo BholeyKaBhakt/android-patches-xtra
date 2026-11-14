@@ -17,6 +17,7 @@ object Constants {
         packageName = "org.zwanoo.android.speedtest",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "7.1.4"),
             AppTarget(version = "7.0.4"),
         ),
     )
@@ -34,8 +35,7 @@ object Constants {
         name = "Autosync",
         packageName = "com.ttxapps.autosync",
         targets = listOf(
-            AppTarget(version = null, isExperimental = true),
-            AppTarget(version = "7.5.10"),
+            AppTarget(version = "7.8.3"),
         ),
     )
 
@@ -46,6 +46,7 @@ object Constants {
             AppTarget(version = null, isExperimental = true),
             AppTarget(version = "1.48.0"),
             AppTarget(version = "1.49.0"),
+            AppTarget(version = "1.53.0"),
         ),
     )
 
@@ -53,6 +54,7 @@ object Constants {
         name = "Sky Tonight",
         packageName = "com.vitotechnology.sky.tonight.map.star.walk",
         targets = listOf(
+            AppTarget(version = "2.5.3"),
             AppTarget(version = "2.5.0"),
         ),
     )
@@ -61,7 +63,8 @@ object Constants {
         name = "Star Walk 2",
         packageName = "com.vitotechnology.StarWalk2Free",
         targets = listOf(
-            AppTarget(version = "2.20.3", isExperimental = true),
+            AppTarget(version = "2.22.0"),
+            AppTarget(version = "2.20.3"),
         ),
     )
 
@@ -70,6 +73,7 @@ object Constants {
         packageName = "com.atmfee",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "3.8"),
             AppTarget(version = "3.7.9"),
         ),
     )
@@ -81,6 +85,7 @@ object Constants {
             AppTarget(version = null, isExperimental = true),
             AppTarget(version = "6.12.15"),
             AppTarget(version = "6.12.18"),
+            AppTarget(version = "6.13.04"),
         ),
     )
 
@@ -96,8 +101,12 @@ object Constants {
         name = "Stellarium",
         packageName = "com.noctuasoftware.stellarium_free",
         targets = listOf(
+            AppTarget(version = null, isExperimental = true),
             AppTarget(version = "1.16.2"),
             AppTarget(version = "1.16.3"),
+            AppTarget(version = "1.16.8"),
+            AppTarget(version = "1.16.9"),
+            AppTarget(version = "1.16.10"),
         ),
     )
 
@@ -115,7 +124,7 @@ object Constants {
         name = "Backdrops",
         packageName = "com.backdrops.wallpapers",
         targets = listOf(
-            AppTarget(version = "6.1.2"),
+            AppTarget(version = "6.6"),
         ),
     )
 
@@ -126,6 +135,7 @@ object Constants {
             AppTarget(version = null, isExperimental = true),
             AppTarget(version = "3.4.10"),
             AppTarget(version = "3.5.7b"),
+            AppTarget(version = "3.6.4"),
         ),
     )
 
@@ -135,6 +145,14 @@ object Constants {
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
             AppTarget(version = "5.0.67"),
+        ),
+    )
+
+    val COMPATIBILITY_ZANGI = Compatibility(
+        name = "Zangi",
+        packageName = "com.beint.zangi",
+        targets = listOf(
+            AppTarget(version = "6.6.4"),
         ),
     )
 }

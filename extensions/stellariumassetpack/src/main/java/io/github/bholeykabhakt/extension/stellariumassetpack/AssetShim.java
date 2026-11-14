@@ -22,11 +22,11 @@ import java.io.File;
  */
 public final class AssetShim {
 
-    private static final String PACK_NAME = "asset_pack_extended";
+    static final String PACK_NAME = "asset_pack_extended";
     /**
      * Marker that the pack is fully present (the deep DSO index).
      */
-    private static final String SENTINEL = "dso/index.data";
+    static final String SENTINEL = "dso/index.data";
 
     private static volatile Context appContext;
 

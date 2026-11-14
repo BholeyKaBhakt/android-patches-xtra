@@ -3,7 +3,7 @@ package io.github.bholeykabhakt.patches.solidexplorer
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
@@ -15,12 +15,11 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
 private const val LICENSE_STATE = "Lpl/solidexplorer/licensing/LicenseState;"
 
 /**
- * Unlocks Solid Explorer Pro: forces the cached `LicenseState` to `PREMIUM_PRO` at its only write
- * site (every license gate reads it back) and marks à-la-carte IAP products (color schemes / icon
- * sets) owned.
+ * Forces `LicenseState` to `PREMIUM_PRO` at its only write site (every license gate reads it back)
+ * and marks the à-la-carte IAP products (color schemes / icon sets) owned.
  */
 @Suppress("unused")
-val unlockProPatch = bytecodePatch(
+val unlockProPatch = patch(
     name = "Unlock Pro",
 ) {
     compatibleWith(COMPATIBILITY_SOLID_EXPLORER)

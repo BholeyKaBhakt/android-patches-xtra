@@ -2,7 +2,7 @@ package io.github.bholeykabhakt.patches.atmfee
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -10,16 +10,9 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_ATM_FEE_SA
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
-private const val HOME_ACTIVITY = "Lcom/atmfee/ui/home_activity/HomeActivity;"
-
-/**
- * Suppresses the two recurring location nags (`enableCurrentLocationDialog()`,
- * `checkGpsEnable()`) with an early `return-void`, and — since those dialogs were the only thing
- * loading the country list for a location-denied user — injects a single `getCountryData()` into
- * the once-per-`onCreate` setup so the list still loads.
- */
+/** No-ops the location/GPS nags and loads the country list once at startup instead. */
 @Suppress("unused")
-val hideLocationPopupPatch = bytecodePatch(
+val hideLocationPopupPatch = patch(
     name = "Hide Location Permission Popup",
 ) {
     compatibleWith(COMPATIBILITY_ATM_FEE_SAVER)
@@ -28,8 +21,7 @@ val hideLocationPopupPatch = bytecodePatch(
         EnableCurrentLocationDialogFingerprint.logMatch.method.returnEarly()
         CheckGpsEnableFingerprint.logMatch.method.returnEarly()
 
-        // Compensate: load the country list once at startup, since the suppressed
-        // dialogs were the only trigger on the location-denied path.
+        // The suppressed dialogs were the only trigger for the country list.
         val setup = SetupContentFingerprint.logMatch.method
         val impl = setup.implementation
             ?: throw PatchException("setuponCreateActivityContent() has no implementation")

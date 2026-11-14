@@ -7,12 +7,10 @@ import com.android.tools.smali.dexlib2.Opcode
 /** Primary ctor of `LicenseDetails` — the only write of its `LicenseState` Pro-tier field. */
 internal object LicenseDetailsConstructorFingerprint : Fingerprint(
     definingClass = "Lpl/solidexplorer/licensing/LicenseDetails;",
+    name = "<init>",
     returnType = "V",
-    parameters = listOf(
-        "Lpl/solidexplorer/licensing/LicenseState;",
-        "Ljava/lang/String;",
-        "Ljava/lang/Long;",
-        "Ljava/lang/Long;",
+    filters = listOf(
+        fieldAccess(type = "Lpl/solidexplorer/licensing/LicenseState;", opcode = Opcode.IPUT_OBJECT),
     ),
 )
 

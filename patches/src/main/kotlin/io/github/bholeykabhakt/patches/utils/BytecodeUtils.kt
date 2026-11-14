@@ -3,7 +3,6 @@ package io.github.bholeykabhakt.patches.utils
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.Match
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import com.android.tools.smali.dexlib2.iface.Method
@@ -24,7 +23,6 @@ private fun isMatchLoggingEnabled() = System.getenv(MATCH_LOGGING_ENV_VAR).isEna
 
 private fun Fingerprint.displayName() = javaClass.simpleName.ifBlank { toString() }
 
-context(_: BytecodePatchContext)
 private fun Fingerprint.matchesAndLog(): List<Match> {
     val matches = matchAllOrNull() ?: throw patchException()
     if (isMatchLoggingEnabled()) {
@@ -37,7 +35,6 @@ private fun Fingerprint.matchesAndLog(): List<Match> {
 }
 
 /** The single match. Throws if 0 or 2+ matched (catches under-specified fingerprints). */
-context(_: BytecodePatchContext)
 val Fingerprint.logMatch: Match
     get() {
         val matches = matchesAndLog()
@@ -48,7 +45,6 @@ val Fingerprint.logMatch: Match
     }
 
 /** All matches (1 or more). Throws if 0 matched. Use when one fingerprint legitimately covers several methods. */
-context(_: BytecodePatchContext)
 val Fingerprint.logMatchAll: List<Match>
     get() = matchesAndLog()
 
@@ -64,6 +60,8 @@ val Fingerprint.logMatchAll: List<Match>
  * | object / array     | `return-object null`|
  *
  * Use the typed overloads to return a non-zero value.
+ *
+ * Kept over the patcher's stricter `returnEarly` (zero value for any type is relied upon).
  */
 fun MutableMethod.returnEarly() = addInstructions(
     0,

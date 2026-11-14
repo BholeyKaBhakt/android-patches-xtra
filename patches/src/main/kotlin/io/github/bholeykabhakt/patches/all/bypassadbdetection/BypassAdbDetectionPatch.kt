@@ -1,8 +1,10 @@
 package io.github.bholeykabhakt.patches.all.bypassadbdetection
 
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction3rc
@@ -51,7 +53,7 @@ private val TARGET_METHOD_NAMES = setOf(
  * Debug.isDebuggerConnected, ApplicationInfo.FLAG_DEBUGGABLE.
  */
 @Suppress("unused")
-val bypassAdbDetectionPatch = bytecodePatch(
+val bypassAdbDetectionPatch = patch(
     name = "Bypass ADB/Developer Options Detection",
     default = false,
 ) {

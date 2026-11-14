@@ -1,10 +1,11 @@
 package io.github.bholeykabhakt.patches.all.disableanalytics
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import org.w3c.dom.Element
 
-// Manifest meta-data keys consumed by Firebase Analytics, Firebase Crashlytics and
-// Google Analytics SDKs at init time. Keys ending in `_deactivated` use inverted
+// Manifest meta-data keys consumed by Firebase Analytics, Crashlytics, Performance, In-App
+// Messaging and Google Analytics SDKs at init time. Keys ending in `_deactivated` use inverted
 // semantics (true = off); the rest are direct (false = off).
 //
 // Apps embedding these SDKs sometimes ship a flag explicitly, sometimes don't —
@@ -15,6 +16,9 @@ private val FORCE_OFF_KEYS = listOf(
     "firebase_analytics_collection_deactivated" to "true",
     "firebase_analytics_collection_enabled" to "false",
     "firebase_crashlytics_collection_enabled" to "false",
+    "firebase_performance_collection_deactivated" to "true",
+    "firebase_performance_collection_enabled" to "false",
+    "firebase_inapp_messaging_auto_data_collection_enabled" to "false",
     "google_analytics_default_allow_ad_storage" to "false",
     "google_analytics_default_allow_ad_user_data" to "false",
     "google_analytics_default_allow_ad_personalization_signals" to "false",
@@ -27,6 +31,7 @@ private fun forcedOffValueFor(name: String): String? {
     FORCE_OFF_KEYS.firstOrNull { it.first == name }?.let { return it.second }
     if (name.startsWith("firebase_crashlytics_") ||
         name.startsWith("firebase_analytics_") ||
+        name.startsWith("firebase_performance_") ||
         name.startsWith("google_analytics_")
     ) {
         return if (name.endsWith("_deactivated")) "true" else "false"
@@ -35,7 +40,7 @@ private fun forcedOffValueFor(name: String): String? {
 }
 
 @Suppress("unused")
-val disableAnalyticsPatch = resourcePatch(
+val disableAnalyticsPatch = patch(
     name = "Disable Firebase(Google) Analytics",
     default = false,
 ) {

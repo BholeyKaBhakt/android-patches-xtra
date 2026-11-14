@@ -11,3 +11,9 @@ import app.morphe.patcher.Fingerprint
 internal object IapStatusEnumFingerprint : Fingerprint(
     strings = listOf("OK", "MISSING_SCOPE", "MISSING_SENSORS"),
 )
+
+/** Addon-pack enum, anchored by pack value names in `<clinit>`. */
+internal object AddonPackEnumFingerprint : Fingerprint(
+    name = "<clinit>",
+    strings = listOf("BUNDLE_PACK", "SCOPE_PACK"),
+)

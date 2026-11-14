@@ -1,6 +1,7 @@
 package io.github.bholeykabhakt.patches.all.disablefacebooktracking
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import org.w3c.dom.Element
 
 // Facebook SDK reads these meta-data values at init. Default behaviour for both is
@@ -12,7 +13,7 @@ private val FACEBOOK_TRACKING_KEYS = setOf(
 )
 
 @Suppress("unused")
-val disableFacebookTrackingPatch = resourcePatch(
+val disableFacebookTrackingPatch = patch(
     name = "Disable Facebook SDK Tracking",
     default = false,
 ) {

@@ -1,9 +1,10 @@
 package io.github.bholeykabhakt.patches.atmfee
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.literal
+import app.morphe.patcher.resource.ResourceType
+import app.morphe.patcher.resourceLiteral
 
-/** Fingerprints for `com.atmfee.utils.PremiumManager` (the premium chokepoint). See [unlockPremiumPatch]. */
+internal const val HOME_ACTIVITY = "Lcom/atmfee/ui/home_activity/HomeActivity;"
 
 /** `PremiumManager.isPremiumActive()` — the no-arg boolean getter (only one in the class). */
 internal object IsPremiumActiveFingerprint : Fingerprint(
@@ -13,41 +14,31 @@ internal object IsPremiumActiveFingerprint : Fingerprint(
 )
 
 /**
- * `HomeActivity.enableCurrentLocationDialog()` — builds and shows the recurring
- * "Location Permission Needed" nag. Anchored on the one resource it inflates,
- * `R.layout.custom_current_location_enable` (id `0x7f0c0037` in v3.7.9); it is the
- * only `HomeActivity` method that references that layout. See [hideLocationPopupPatch].
+ * `HomeActivity.enableCurrentLocationDialog()` — the "Location Permission Needed" nag. Anchored on the
+ * layout it inflates; the id is resolved by name per build (it shifted between releases).
  */
 internal object EnableCurrentLocationDialogFingerprint : Fingerprint(
     definingClass = "Lcom/atmfee/ui/home_activity/HomeActivity;",
     returnType = "V",
     parameters = emptyList(),
     filters = listOf(
-        literal(0x7f0c0037), // R.layout.custom_current_location_enable
+        resourceLiteral(ResourceType.LAYOUT, "custom_current_location_enable"),
     ),
 )
 
-/**
- * `HomeActivity.checkGpsEnable()` — shows the "Phone GPS Feature Needed" nag whenever
- * device location services are off. Same recurring trigger as the permission dialog.
- * Anchored on `R.layout.custom_enable_gps_location_enable` (id `0x7f0c003b` in v3.7.9),
- * the only `HomeActivity` method referencing it. See [hideLocationPopupPatch].
- */
+/** `HomeActivity.checkGpsEnable()` — the "Phone GPS Feature Needed" nag (same layout-name anchor). */
 internal object CheckGpsEnableFingerprint : Fingerprint(
     definingClass = "Lcom/atmfee/ui/home_activity/HomeActivity;",
     returnType = "V",
     parameters = emptyList(),
     filters = listOf(
-        literal(0x7f0c003b), // R.layout.custom_enable_gps_location_enable
+        resourceLiteral(ResourceType.LAYOUT, "custom_enable_gps_location_enable"),
     ),
 )
 
 /**
- * `HomeActivity.setuponCreateActivityContent()` — the once-per-launch setup run from
- * `onCreate`. It builds `countryViewModel` (with the getCountries endpoint) and then
- * calls `initHome()`. Anchored on that unique endpoint URL. [hideLocationPopupPatch]
- * injects a one-time `getCountryData()` here so the country dropdown still populates
- * after the location dialogs (which used to lazily trigger it) are suppressed.
+ * `HomeActivity.setuponCreateActivityContent()` — once-per-launch setup (anchored on the getCountries
+ * URL); `getCountryData()` is injected before its `initHome()` call.
  */
 internal object SetupContentFingerprint : Fingerprint(
     definingClass = "Lcom/atmfee/ui/home_activity/HomeActivity;",

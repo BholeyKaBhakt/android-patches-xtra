@@ -1,18 +1,17 @@
 package io.github.bholeykabhakt.patches.solidexplorer
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_SOLID_EXPLORER
 import io.github.bholeykabhakt.patches.utils.logMatch
 
 /**
- * Disables Solid Explorer's Firebase Analytics ("Send usage statistics") and Crashlytics. The
- * manifest dependency hard-deactivates Analytics; forcing the runtime switch
- * `SEApp.setAnalyticsEnabled(false)` is what also stops Crashlytics collection.
+ * Turns off Firebase Analytics and Crashlytics: the manifest dependency deactivates Analytics, and
+ * `SEApp.setAnalyticsEnabled(false)` is what also stops Crashlytics.
  */
 @Suppress("unused")
-val disableTelemetryPatch = bytecodePatch(
+val disableTelemetryPatch = patch(
     name = "Disable Telemetry",
 ) {
     compatibleWith(COMPATIBILITY_SOLID_EXPLORER)

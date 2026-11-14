@@ -1,110 +1,98 @@
 package io.github.bholeykabhakt.patches.stellarium
 
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.rawResourcePatch
+import app.morphe.patcher.patch.patch
+import app.morphe.patcher.patch.resourceFile
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STELLARIUM
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
+import io.github.bholeykabhakt.patches.utils.Arm64
+import io.github.bholeykabhakt.patches.utils.BinaryPatch
+import io.github.bholeykabhakt.patches.utils.Elf64
+import io.github.bholeykabhakt.patches.utils.applyBinaryPatches
 
 /**
- * Stellarium Mobile (Qt6 / C++). Unlocks the Plus tier via ARM64 rewrites in
- * `lib/arm64-v8a/libstellarium-mobile-plus_arm64-v8a.so`:
+ * Stellarium Mobile (Qt6 / C++). Unlocks the Plus tier in
+ * `lib/arm64-v8a/libstellarium-mobile-plus_arm64-v8a.so`. Sites are found by their exported
+ * symbols (Qt keeps them in .dynsym), so new releases need no offset table:
  *
  *  - the two `StelAPI` Plus getters (`getHasFeaturePLUS`, `hasValidLicense`) are rewritten to
  *    `MOV X0,X8 ; MOV W1,#1 ; B QVariant::QVariant(bool)` — constructs `QVariant(true)` into the
  *    caller's sret buffer (a bare `MOV W0,#1 ; RET` SIGSEGVs, since the caller reads the buffer
- *    via `QVariant::isNull()`); the branch displacement is computed at patch time, and
- *  - `getAppVariant()`'s flag branch is NOP-ed so it always reports "plus", removing the upsell.
- *
- * Offsets are per-version; entry bytes are asserted before writing.
+ *    via `QVariant::isNull()`). Each getter must already build its result with that constructor
+ *    from x8, which is what makes the rewrite ABI-safe;
+ *  - `getAppVariant()`'s flag branch (`LDRB ; CBZ` to the "free" arm) is NOP-ed so it always
+ *    reports "plus", removing the upsell.
  */
-
-// ARM64 instruction encodings (little-endian)
-private const val MOV_X0_X8 = 0xAA0803E0.toInt()      // MOV X0, X8
-private const val MOV_W1_1 = 0x52800021                // MOV W1, #1
-private const val B_OPCODE = 0x14000000                // B imm26 base
-private const val NOP = 0xD503201F.toInt()             // NOP
 
 private const val LIB_PATH = "lib/arm64-v8a/libstellarium-mobile-plus_arm64-v8a.so"
 
-/** One patch site: function entry to rewrite into the QVariant(true) tail-call. */
-private data class Site(
-    val label: String,
-    val offset: Int,
-    /** First two instructions expected at [offset] — sanity check before patching. */
-    val expectedFirstWords: IntArray,
-)
+private const val MOV_X0_X8 = 0xAA0803E0.toInt()      // MOV X0, X8
+private const val MOV_W1_1 = 0x52800021                // MOV W1, #1
 
-/** Single-word replacement (e.g. NOP out a branch). */
-private data class WordPatch(val label: String, val offset: Int, val expect: Int, val replace: Int)
+private const val QVARIANT_BOOL = "_ZN8QVariantC1Eb"
+private const val HAS_FEATURE_PLUS = "_ZNK7StelAPI17getHasFeaturePLUSEv"
+private const val HAS_VALID_LICENSE = "_ZNK7StelAPI15hasValidLicenseEv"
+private const val APP_VARIANT = "_ZNK7StelAPI13getAppVariantEv"
 
-private data class Targets(
-    val qvariantBoolCtorPltAddr: Int,
-    val sites: List<Site>,
-    /** NOP `getAppVariant()`'s flag branch so the QML "Stellarium PLUS" upsell item is never inserted. */
-    val wordPatches: List<WordPatch>,
-)
+private fun Elf64.body(symbol: Elf64.Symbol) =
+    (0 until (symbol.size / 4).toInt()).map { symbol.vaddr + it * 4L }
 
-private val PATCHES_BY_VERSION = mapOf(
-    "1.16.2" to Targets(
-        qvariantBoolCtorPltAddr = 0x8AB690,
-        wordPatches = listOf(
-            // getAppVariant: `cbz w9, <free>` → nop ⇒ always falls through to "plus".
-            WordPatch("getAppVariant() force plus", 0x736F98, 0x34000089, NOP),
-        ),
-        sites = listOf(
-            // getHasFeaturePLUS opens with a big stack frame (160 B + 12 callee saves)
-            // because the stock body walks a QList<QString>.
-            Site(
-                label = "StelAPI::getHasFeaturePLUS()",
-                offset = 0x72FB00,
-                expectedFirstWords = intArrayOf(
-                    0xD10283FF.toInt(),  // SUB SP, SP, #0xA0
-                    0xA9047BFD.toInt(),  // STP X29, X30, [SP, #0x40]
-                ),
-            ),
-            // hasValidLicense is small — reads status from [this+0x18], branches
-            // on its value to one of two pre-built "return QVariant(true/false)"
-            // tail-calls. Patching the entry collapses the whole decision tree.
-            Site(
-                label = "StelAPI::hasValidLicense()",
-                offset = 0x737B84,
-                expectedFirstWords = intArrayOf(
-                    0xB9401809.toInt(),  // LDR W9, [X0, #0x18]
-                    0x7100053F,          // CMP W9, #0x1
-                ),
-            ),
-        ),
-    ),
-    "1.16.3" to Targets(
-        qvariantBoolCtorPltAddr = 0x8ACCE0,
-        wordPatches = listOf(
-            WordPatch("getAppVariant() force plus", 0x737BAC, 0x34000089, NOP),
-        ),
-        sites = listOf(
-            Site(
-                label = "StelAPI::getHasFeaturePLUS()",
-                offset = 0x73069C,
-                expectedFirstWords = intArrayOf(
-                    0xD10283FF.toInt(),  // SUB SP, SP, #0xA0
-                    0xA9047BFD.toInt(),  // STP X29, X30, [SP, #0x40]
-                ),
-            ),
-            Site(
-                label = "StelAPI::hasValidLicense()",
-                offset = 0x738798,
-                expectedFirstWords = intArrayOf(
-                    0xB9401809.toInt(),  // LDR W9, [X0, #0x18]
-                    0x7100053F,          // CMP W9, #0x1
-                ),
-            ),
-        ),
-    ),
-)
+private fun Elf64.defined(name: String) =
+    symbol(name) ?: throw PatchException("Stellarium: $name not exported")
+
+/** Entry → tail-call returning `QVariant(true)`, after proving the getter returns a QVariant via x8. */
+private fun Elf64.returnQVariantTrue(name: String, ctor: Long): BinaryPatch {
+    val fn = defined(name)
+    val pcs = body(fn)
+    if (pcs.none { Arm64.branchTarget(it, word(it)) == ctor }) {
+        throw PatchException("Stellarium: $name no longer builds a QVariant(bool)")
+    }
+    // MOV Xd, X8 (ORR Xd, XZR, X8) — the sret buffer is consumed, so the return is a QVariant.
+    if (pcs.none { word(it) and 0xFFFFFFE0.toInt() == MOV_X0_X8 }) {
+        throw PatchException("Stellarium: $name does not return through x8")
+    }
+    val entry = fn.vaddr
+    return BinaryPatch(
+        "StelAPI::$name", fileOffset(entry),
+        expected = intArrayOf(word(entry), word(entry + 4), word(entry + 8)),
+        replacement = intArrayOf(MOV_X0_X8, MOV_W1_1, Arm64.b(pc = (entry + 8).toInt(), target = ctor.toInt())),
+    )
+}
+
+/** `LDRB Wn, [..] ; CBZ Wn, <free>` → NOP the CBZ, after checking its target loads "free". */
+private fun Elf64.forcePlusVariant(): BinaryPatch {
+    val pcs = body(defined(APP_VARIANT))
+    val cbz = pcs.zipWithNext().firstOrNull { (prev, pc) ->
+        val ldrb = word(prev)
+        val insn = word(pc)
+        Arm64.isLdrbW(ldrb) && Arm64.isCbzW(insn) && Arm64.rt(ldrb) == Arm64.rt(insn) &&
+            loadsString(Arm64.cbTarget(pc, insn)) == "free"
+    }?.second
+        // Already patched: the flag load is followed by our NOP.
+        ?: pcs.zipWithNext().firstOrNull { (prev, pc) -> Arm64.isLdrbW(word(prev)) && word(pc) == Arm64.NOP }?.second
+        ?: throw PatchException("Stellarium: getAppVariant() flag branch not found")
+    return BinaryPatch("StelAPI::getAppVariant() force plus", fileOffset(cbz), intArrayOf(word(cbz)), intArrayOf(Arm64.NOP))
+}
+
+private fun Elf64.loadsString(pc: Long): String? {
+    val adrp = word(pc)
+    val add = word(pc + 4)
+    if (!Arm64.isAdrp(adrp) || !Arm64.isAddImmX(add)) return null
+    return runCatching { string(Arm64.adrpTarget(pc, adrp) + Arm64.addImm(add)) }.getOrNull()
+}
+
+internal fun stellariumPlusPatches(lib: ByteArray): List<BinaryPatch> {
+    val elf = Elf64(lib)
+    val ctor = elf.pltStub(QVARIANT_BOOL) ?: throw PatchException("Stellarium: QVariant(bool) import not found")
+    return listOf(
+        elf.returnQVariantTrue(HAS_FEATURE_PLUS, ctor),
+        elf.returnQVariantTrue(HAS_VALID_LICENSE, ctor),
+        elf.forcePlusVariant(),
+    )
+}
 
 @Suppress("unused")
-val unlockPlusPatch = rawResourcePatch(
+val unlockPlusPatch = patch(
     name = "Unlock Plus",
 ) {
     compatibleWith(COMPATIBILITY_STELLARIUM)
@@ -112,72 +100,11 @@ val unlockPlusPatch = rawResourcePatch(
     dependsOn(disableAnalyticsPatch)
 
     execute {
-        val version = packageMetadata.versionName
-        val targets = PATCHES_BY_VERSION[version] ?: throw PatchException(
-            "Stellarium version $version is not supported. " +
-                    "Supported: ${PATCHES_BY_VERSION.keys.joinToString()}. " +
-                    "Add offsets via `nm -D <so> | c++filt` (see KDoc).",
-        )
-
-        val so = get(LIB_PATH)
-        if (!so.exists()) throw PatchException("$LIB_PATH not found in APK")
-
+        val so = resourceFile(LIB_PATH)
+        if (!so.exists()) throw PatchException("$LIB_PATH not found in Stellarium APK")
         val bytes = so.readBytes()
-        val buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
-
-        targets.sites.forEach { site ->
-            val branchPc = site.offset + 8 // B is the third instruction
-            val branchEnc = encodeB(branchPc, targets.qvariantBoolCtorPltAddr)
-            val replacement = intArrayOf(MOV_X0_X8, MOV_W1_1, branchEnc)
-
-            // Idempotency: skip if first two replacement words are already in place.
-            if (buffer.getInt(site.offset) == replacement[0] &&
-                buffer.getInt(site.offset + 4) == replacement[1]
-            ) return@forEach
-
-            if (buffer.getInt(site.offset) != site.expectedFirstWords[0] ||
-                buffer.getInt(site.offset + 4) != site.expectedFirstWords[1]
-            ) {
-                throw PatchException(
-                    "${site.label} @ 0x${site.offset.toString(16).uppercase()} — " +
-                            "expected entry bytes don't match; the offset table for v$version is stale",
-                )
-            }
-
-            replacement.forEachIndexed { i, insn ->
-                buffer.putInt(site.offset + i * 4, insn)
-            }
+        if (bytes.applyBinaryPatches(stellariumPlusPatches(bytes), "Stellarium library layout changed") > 0) {
+            so.writeBytes(bytes)
         }
-
-        targets.wordPatches.forEach { wp ->
-            val cur = buffer.getInt(wp.offset)
-            if (cur == wp.replace) return@forEach // idempotent
-            if (cur != wp.expect) {
-                throw PatchException(
-                    "${wp.label} @ 0x${wp.offset.toString(16).uppercase()} — expected " +
-                            "0x${wp.expect.toUInt().toString(16)} but found " +
-                            "0x${cur.toUInt().toString(16)}; offset table stale for v$version",
-                )
-            }
-            buffer.putInt(wp.offset, wp.replace)
-        }
-
-        so.writeBytes(bytes)
     }
-}
-
-/** ARM64 B (unconditional branch) imm26 encoding. Throws if out of range. */
-private fun encodeB(pc: Int, target: Int): Int {
-    val byteOffset = target - pc
-    if (byteOffset % 4 != 0) {
-        throw PatchException("B target not 4-byte aligned (pc=0x$pc target=0x$target)")
-    }
-    val wordOffset = byteOffset shr 2
-    // imm26 is a signed 26-bit field
-    val min = -(1 shl 25)
-    val max = (1 shl 25) - 1
-    if (wordOffset < min || wordOffset > max) {
-        throw PatchException("B target out of ±128MB range (pc=0x$pc target=0x$target)")
-    }
-    return B_OPCODE or (wordOffset and 0x03FFFFFF)
 }

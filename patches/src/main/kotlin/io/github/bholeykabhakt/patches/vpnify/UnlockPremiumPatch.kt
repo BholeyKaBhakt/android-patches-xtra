@@ -1,8 +1,9 @@
 package io.github.bholeykabhakt.patches.vpnify
 
+import app.morphe.patcher.patch.mutableClassDefByOrNull
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction11n
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
@@ -19,7 +20,7 @@ import io.github.bholeykabhakt.patches.utils.returnEarly
  * [disablePairipPatch], [spoofSignatureHashPatch] and [disableAnalyticsPatch].
  */
 @Suppress("unused")
-val unlockPremiumPatch = bytecodePatch(
+val unlockPremiumPatch = patch(
     name = "Unlock Premium",
 ) {
     compatibleWith(COMPATIBILITY_VPNIFY)

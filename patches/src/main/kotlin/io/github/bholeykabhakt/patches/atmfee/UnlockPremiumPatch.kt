@@ -1,18 +1,19 @@
 package io.github.bholeykabhakt.patches.atmfee
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_ATM_FEE_SAVER
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 /**
- * Unlocks ATM Fee Saver premium (removes ads, paywalls, feature locks) by forcing the single
- * chokepoint getter `PremiumManager.isPremiumActive()` to return true. Pulls in
- * [disableAnalyticsPatch] to turn off Firebase Analytics / Crashlytics collection.
+ * Forces `PremiumManager.isPremiumActive()` true (every ad/feature gate reads it), and skips the ad
+ * consent form + AdMob init that `HomeActivity` otherwise runs regardless of premium.
  */
 @Suppress("unused")
-val unlockPremiumPatch = bytecodePatch(
+val unlockPremiumPatch = patch(
     name = "Unlock Premium",
 ) {
     compatibleWith(COMPATIBILITY_ATM_FEE_SAVER)
@@ -21,5 +22,11 @@ val unlockPremiumPatch = bytecodePatch(
 
     execute {
         IsPremiumActiveFingerprint.logMatch.method.returnEarly(true)
+
+        // Not initConsentSettings(): it sets the lateinit ConsentInformation the options menu reads.
+        mutableClassDefBy(HOME_ACTIVITY).methods
+            .filter { it.name == "requestConsentInfo" || it.name == "initializeMobileAdsSdk" }
+            .also { if (it.size != 2) throw PatchException("Consent/ads init methods not found") }
+            .forEach { it.returnEarly() }
     }
 }

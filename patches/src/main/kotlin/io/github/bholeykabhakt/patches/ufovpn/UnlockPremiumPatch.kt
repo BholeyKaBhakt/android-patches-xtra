@@ -2,7 +2,7 @@ package io.github.bholeykabhakt.patches.ufovpn
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
@@ -15,7 +15,7 @@ import io.github.bholeykabhakt.patches.utils.logMatchAll
  * expiry to the far future, so the client-side VIP flag every gate reads is always true.
  */
 @Suppress("unused")
-val unlockPremiumPatch = bytecodePatch(
+val unlockPremiumPatch = patch(
     name = "Unlock Premium",
 ) {
     compatibleWith(COMPATIBILITY_UFOVPN)

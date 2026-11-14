@@ -1,7 +1,8 @@
 package io.github.bholeykabhakt.patches.blockerx
 
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_BLOCKERX
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
@@ -34,7 +35,7 @@ private val UNLOCK_FLAGS = setOf(
  *     otherwise. (Permissions are still grantable from the home screen.)
  */
 @Suppress("unused")
-val unlockPremiumPatch = bytecodePatch(
+val unlockPremiumPatch = patch(
     name = "Unlock Premium",
 ) {
     compatibleWith(COMPATIBILITY_BLOCKERX)
