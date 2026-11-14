@@ -1,3 +1,10 @@
+# [2.14.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.14.0-dev.1...v2.14.0-dev.2) (2026-11-14)
+
+
+### Features
+
+* **everycircuit:** add unlock premium patch ([db15e02](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/db15e02ba4285a389d4444b36e0f43c8cbba1680))
+
 # [2.14.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.13.0...v2.14.0-dev.1) (2026-11-14)
 
 

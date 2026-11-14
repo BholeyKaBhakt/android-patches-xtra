@@ -1,5 +1,5 @@
 {
-  "version": "2.14.0-dev.1",
+  "version": "2.14.0-dev.2",
   "patches": [
     {
       "name": "AdFree Account",
@@ -832,6 +832,37 @@
             },
             {
               "version": "5.0.67",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Premium",
+      "description": null,
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.everycircuit.free",
+          "name": "EveryCircuit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "2.31",
               "isExperimental": false,
               "minSdk": null,
               "description": null
