@@ -1,5 +1,5 @@
 {
-  "version": "2.13.0",
+  "version": "2.14.0-dev.1",
   "patches": [
     {
       "name": "AdFree Account",
@@ -616,6 +616,39 @@
             },
             {
               "version": "1.53.0",
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock All Features",
+      "description": null,
+      "default": true,
+      "dependencies": [
+        "Patch"
+      ],
+      "compatiblePackages": [
+        {
+          "packageName": "com.mordiastudio.simurelayfree",
+          "name": "Simurelay",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "targets": [
+            {
+              "version": null,
+              "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "3.0.6",
               "isExperimental": false,
               "minSdk": null,
               "description": null

@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.13.0](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.13.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;28 patches total
+> **[v2.14.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.14.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;29 patches total
 <details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -158,6 +158,21 @@ This repo contains some Android app patches.
 
 | 1.48.0 | 1.49.0 | 1.53.0 |
 | :---: | :---: | :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Unlock All Features |  |  |
+
+</details>
+
+<details>
+<summary><b>📦 Simurelay</b>&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 3.0.6 |
+| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
