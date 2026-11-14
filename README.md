@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.13.0-dev.3](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.13.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
+> **[v2.13.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.13.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;28 patches total
 <details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -19,6 +19,22 @@ This repo contains some Android app patches.
 |----------|----------------|-----------|
 | AdFree Account |  |  |
 | Disable Logging(analytics) |  |  |
+
+</details>
+
+<details>
+<summary><b>📦 Zangi</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 6.6.4 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Backup & Restore |  |  |
+| Unlock Premium |  |  |
 
 </details>
 
@@ -70,6 +86,23 @@ This repo contains some Android app patches.
 </details>
 
 <details>
+<summary><b>📦 ATM Fee Saver</b>&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 3.8 | 3.7.9 |
+| :---: | :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Disable Telemetry |  |  |
+| Hide Location Permission Popup |  |  |
+| Unlock Premium |  |  |
+
+</details>
+
+<details>
 <summary><b>📦 Solid Explorer</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
@@ -86,33 +119,17 @@ This repo contains some Android app patches.
 </details>
 
 <details>
-<summary><b>📦 ATM Fee Saver</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
-<br>
-
-> **🎯 Supported versions:**
-
-| 3.8 | 3.7.9 |
-| :---: | :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| Hide Location Permission Popup |  |  |
-| Unlock Premium |  |  |
-
-</details>
-
-<details>
 <summary><b>📦 Stellarium</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
 > **🎯 Supported versions:**
 
-| 1.16.2 | 1.16.3 |
-| :---: | :---: |
+| 1.16.2 | 1.16.3 | 1.16.8 | 1.16.9 | 1.16.10 |
+| :---: | :---: | :---: | :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| Install Extended (Deep Sky) Catalog |  |  |
+| Install Extended (Deep Sky) Catalog | Download or import the deep sky catalog. Long-press the app icon to open it again. |  |
 | Unlock Plus |  |  |
 
 </details>
@@ -224,12 +241,13 @@ This repo contains some Android app patches.
 </details>
 
 <details>
-<summary><b>🌐 Universal</b>&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
+<summary><b>🌐 Universal</b>&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
 <br>
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Bypass ADB/Developer Options Detection |  |  |
+| Custom name and icon |  | • App name<br>• Preset<br>• Icon image<br>• Icon background<br>• Fill the icon<br>• Silhouette image<br>• Rename inside the app |
 | Disable Facebook SDK Tracking |  |  |
 | Disable Firebase(Google) Analytics |  |  |
 
