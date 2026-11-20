@@ -50,6 +50,14 @@ object Constants {
         ),
     )
 
+    val COMPATIBILITY_MT_MANAGER = Compatibility(
+        name = "MT Manager",
+        packageName = "bin.mt.plus",
+        targets = listOf(
+            AppTarget(version = "2.26.11", minSdk = 28),
+        ),
+    )
+
     val COMPATIBILITY_SKY_TONIGHT = Compatibility(
         name = "Sky Tonight",
         packageName = "com.vitotechnology.sky.tonight.map.star.walk",
