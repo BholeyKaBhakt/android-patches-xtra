@@ -76,6 +76,14 @@ object Constants {
         ),
     )
 
+    val COMPATIBILITY_SOLAR_WALK_2 = Compatibility(
+        name = "Solar Walk 2",
+        packageName = "com.vitotechnology.SolarWalk2Free",
+        targets = listOf(
+            AppTarget(version = "1.6.9"),
+        ),
+    )
+
     val COMPATIBILITY_ATM_FEE_SAVER = Compatibility(
         name = "ATM Fee Saver",
         packageName = "com.atmfee",
