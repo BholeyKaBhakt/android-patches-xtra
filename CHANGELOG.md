@@ -1,3 +1,15 @@
+# [2.15.0-dev.3](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.15.0-dev.2...v2.15.0-dev.3) (2026-11-21)
+
+
+### Bug Fixes
+
+* **inshorts:** move Fingerprints.kt to its file path ([73d00b8](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/73d00b8b50aa6674b980450f34992f097a997e23))
+
+
+### Performance Improvements
+
+* only make matching classes mutable in scanning patches ([419091c](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/419091c198ad6150e5155f6ea658078e54cbe427))
+
 # [2.15.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.15.0-dev.1...v2.15.0-dev.2) (2026-11-21)
 
 
