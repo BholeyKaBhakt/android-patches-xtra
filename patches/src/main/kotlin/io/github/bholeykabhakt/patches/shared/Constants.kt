@@ -27,6 +27,7 @@ object Constants {
         packageName = "com.llamalab.automate",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "1.54.0-play"),
             AppTarget(version = "1.51.1"),
         ),
     )
