@@ -1,3 +1,10 @@
+# [2.15.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.15.0-dev.1...v2.15.0-dev.2) (2026-11-21)
+
+
+### Features
+
+* **mt-manager:** Add VIP unlock patch ([6c7de3c](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/6c7de3ca5857a0fddab6612ffbc857e3f9e0dcde))
+
 # [2.15.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.14.0...v2.15.0-dev.1) (2026-11-21)
 
 
