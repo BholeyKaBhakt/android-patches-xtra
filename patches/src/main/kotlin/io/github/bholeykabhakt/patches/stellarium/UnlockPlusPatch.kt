@@ -10,17 +10,12 @@ import io.github.bholeykabhakt.patches.utils.Elf64
 import io.github.bholeykabhakt.patches.utils.patchNativeLibrary
 
 /**
- * Stellarium Mobile (Qt6 / C++). Unlocks the Plus tier in
- * `lib/arm64-v8a/libstellarium-mobile-plus_arm64-v8a.so`. Sites are found by their exported
- * symbols (Qt keeps them in .dynsym), so new releases need no offset table:
- *
- *  - the two `StelAPI` Plus getters (`getHasFeaturePLUS`, `hasValidLicense`) are rewritten to
- *    `MOV X0,X8 ; MOV W1,#1 ; B QVariant::QVariant(bool)` — constructs `QVariant(true)` into the
- *    caller's sret buffer (a bare `MOV W0,#1 ; RET` SIGSEGVs, since the caller reads the buffer
- *    via `QVariant::isNull()`). Each getter must already build its result with that constructor
- *    from x8, which is what makes the rewrite ABI-safe;
- *  - `getAppVariant()`'s flag branch (`LDRB ; CBZ` to the "free" arm) is NOP-ed so it always
- *    reports "plus", removing the upsell.
+ * Stellarium Mobile (Qt6 / C++): unlocks Plus in the arm64 engine library. Sites are found by their
+ * exported symbols, so new releases need no offsets:
+ *  - `StelAPI::getHasFeaturePLUS` / `hasValidLicense` return a `QVariant` through the x8 sret buffer;
+ *    each entry becomes `MOV X0,X8 ; MOV W1,#1 ; B QVariant::QVariant(bool)`;
+ *  - `StelAPI::getAppVariant`'s `LDRB ; CBZ` to the "free" arm is NOP-ed so it reports "plus",
+ *    which drops the upsell menu item.
  */
 
 private const val LIB_PATH = "lib/arm64-v8a/libstellarium-mobile-plus_arm64-v8a.so"
