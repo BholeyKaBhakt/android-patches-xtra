@@ -1,3 +1,11 @@
+# [2.16.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.15.0...v2.16.0) (2026-11-21)
+
+
+### Features
+
+* **cosmicwatch:** unlock pro and disable telemetry ([ef8ebad](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/ef8ebad93b5623135fa748a120af57c071b67e29))
+* **solarwalk2:** unlock premium and remove ads ([0832248](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/0832248321ec4e205444c39b44e2fe983a79e751))
+
 # [2.16.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.15.0...v2.16.0-dev.1) (2026-11-21)
 
 
