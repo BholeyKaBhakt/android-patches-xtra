@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.15.0](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.15.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;31 patches total
+> **[v2.16.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.16.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;35 patches total
 <details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -50,6 +50,22 @@ This repo contains some Android app patches.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | Bypass Blocks Limit |  |  |
+
+</details>
+
+<details>
+<summary><b>📦 Cosmic Watch</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 3.0.1 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Disable In-App Telemetry |  |  |
+| Unlock Pro |  |  |
 
 </details>
 
@@ -147,6 +163,22 @@ This repo contains some Android app patches.
 |----------|----------------|-----------|
 | Remove Ads |  |  |
 | Skip Login |  |  |
+
+</details>
+
+<details>
+<summary><b>📦 Solar Walk 2</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+> **🎯 Supported versions:**
+
+| 1.6.9 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| Remove Ads |  |  |
+| Unlock Premium |  |  |
 
 </details>
 

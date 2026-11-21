@@ -4,7 +4,7 @@ import io.github.bholeykabhakt.patches.utils.Arm64
 import io.github.bholeykabhakt.patches.utils.BinaryPatch
 import io.github.bholeykabhakt.patches.utils.retHead
 
-/** `libil2cpp.so` sites shared by Vito Technology's Unity apps (Sky Tonight, Star Walk 2). */
+/** `libil2cpp.so` sites shared by Vito Technology's Unity apps (Sky Tonight, Star Walk 2, Solar Walk 2). */
 
 internal const val LIBIL2CPP_PATH = "lib/arm64-v8a/libil2cpp.so"
 
