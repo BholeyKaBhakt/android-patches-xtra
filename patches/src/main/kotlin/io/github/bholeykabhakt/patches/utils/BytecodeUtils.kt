@@ -74,14 +74,10 @@ fun MutableMethod.returnEarly() = addInstructions(
     },
 )
 
-/** Return a fixed boolean: `Z`, or `Boolean.TRUE`/`FALSE` for a `Ljava/lang/Boolean;` or `Ljava/lang/Object;` return. */
-fun MutableMethod.returnEarly(value: Boolean) = when (returnType) {
-    "Z" -> addInstructions(0, "const/4 v0, 0x${if (value) 1 else 0}\nreturn v0")
-    "Ljava/lang/Boolean;", "Ljava/lang/Object;" -> addInstructions(
-        0,
-        "sget-object v0, Ljava/lang/Boolean;->${if (value) "TRUE" else "FALSE"}:Ljava/lang/Boolean;\nreturn-object v0",
-    )
-    else -> throw IllegalArgumentException("returnEarly(Boolean) needs a Z, Boolean or Object return, got $returnType")
+/** Return a fixed boolean. Method must return `Z` (boxed: the patcher's `returnBoxedBooleanEarly`). */
+fun MutableMethod.returnEarly(value: Boolean) {
+    require(returnType == "Z") { "returnEarly(Boolean) needs Z return, got $returnType" }
+    addInstructions(0, "const/4 v0, 0x${if (value) 1 else 0}\nreturn v0")
 }
 
 /** Return a fixed int. Method must return `Z`, `B`, `C`, `S`, or `I`. */

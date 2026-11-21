@@ -5,6 +5,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLa
 import app.morphe.patcher.patch.classDefForEach
 import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.patch.patch
+import app.morphe.patcher.util.returnBoxedBooleanEarly
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
@@ -15,7 +16,6 @@ import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_INSHORTS
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.method
-import io.github.bholeykabhakt.patches.utils.returnEarly
 
 /**
  * Removes every login surface so first run lands on the feed:
@@ -51,7 +51,7 @@ val noLoginPatch = patch(
 
         // 2) Login dialog: OnboardingCardData.getLoginEnabled() -> Boolean.FALSE.
         mutableClassDefBy("Lcom/nis/app/network/models/onboarding/onboardingconfig/OnboardingCardData;")
-            .method("getLoginEnabled").returnEarly(false)
+            .method("getLoginEnabled").returnBoxedBooleanEarly(false)
 
         // 3) Relevancy cards (6.13+): take the signed-in branch when laying out the card buttons,
         //    which hides "Login & Save My Preferences".

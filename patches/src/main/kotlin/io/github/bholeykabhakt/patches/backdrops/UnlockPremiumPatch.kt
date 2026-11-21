@@ -3,6 +3,7 @@ package io.github.bholeykabhakt.patches.backdrops
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.patch
+import app.morphe.patcher.util.returnBoxedBooleanEarly
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
@@ -10,7 +11,6 @@ import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_BACKDROPS
 import io.github.bholeykabhakt.patches.utils.logMatch
-import io.github.bholeykabhakt.patches.utils.returnEarly
 
 /**
  * Reports the local `Premium` purchases as owned (Pro + every pack) on both paths: the async
@@ -42,6 +42,6 @@ val unlockPremiumPatch = patch(
             )
         }
 
-        GetPurchasedFingerprint.logMatch.method.returnEarly(true)
+        GetPurchasedFingerprint.logMatch.method.returnBoxedBooleanEarly(true)
     }
 }
