@@ -1,12 +1,11 @@
 package io.github.bholeykabhakt.patches.starwalk2
 
-import app.morphe.patcher.patch.packageMetadata
 import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STAR_WALK_2
-import io.github.bholeykabhakt.patches.utils.forVersion
-import io.github.bholeykabhakt.patches.utils.patchNativeLibrary
-import io.github.bholeykabhakt.patches.utils.retHead
+import io.github.bholeykabhakt.patches.shared.LIBIL2CPP_PATH
+import io.github.bholeykabhakt.patches.shared.telemetryHead
+import io.github.bholeykabhakt.patches.utils.patchNativeLibraryForVersion
 
 /**
  * RET at the heads of `InitFirebaseAnalytics()` (Vito analytics dispatcher) and
@@ -15,18 +14,10 @@ import io.github.bholeykabhakt.patches.utils.retHead
  * the manifest analytics dependency.
  */
 
-// (name, file offset, prologue words). InitFirebaseAnalytics / AdsInitializer heads:
-// STP X30,X21,[SP,#-0x20]! ; STP X20,X19,[SP,#0x10]
 internal val STAR_WALK_2_TELEMETRY_SITES = mapOf(
     "2.22.0" to listOf(
-        retHead("InitFirebaseAnalytics", 0x25544BC, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-        retHead("AdsInitializer.Initialize", 0x2597438, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-    ),
-    "2.20.3" to listOf(
-        retHead("InitFirebaseAnalytics", 0x2368C84, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-        retHead("AdsInitializer.Initialize", 0x23A7874, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-        // Pre-2.22.0 site, kept (not proven dead on this build): GoogleMobileAdsInitializer.Initialize
-        retHead("GoogleMobileAdsInitializer.Initialize", 0x23AC330, 0xF81E0FFE.toInt(), 0xA9014FF4.toInt()),
+        telemetryHead("InitFirebaseAnalytics", 0x25544BC),
+        telemetryHead("AdsInitializer.Initialize", 0x2597438),
     ),
 )
 
@@ -39,8 +30,6 @@ val disableTelemetryPatch = patch(
     dependsOn(disableAnalyticsPatch)
 
     execute {
-        val version = packageMetadata.versionName
-        val sites = STAR_WALK_2_TELEMETRY_SITES.forVersion("Star Walk 2", version, "Add offsets via Il2CppDumper.")
-        patchNativeLibrary(LIBIL2CPP_PATH, "Star Walk 2", version, sites)
+        patchNativeLibraryForVersion(LIBIL2CPP_PATH, "Star Walk 2", STAR_WALK_2_TELEMETRY_SITES)
     }
 }

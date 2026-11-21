@@ -1,6 +1,7 @@
 package io.github.bholeykabhakt.patches.utils
 
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.patch.packageMetadata
 import app.morphe.patcher.patch.resourceFile
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -109,14 +110,24 @@ fun ByteArray.applyBinaryPatches(patches: List<BinaryPatch>, staleHint: String):
     return pending.size
 }
 
-/** Applies [patches] to the native library at [path] (e.g. `lib/arm64-v8a/libil2cpp.so`). */
-fun patchNativeLibrary(path: String, appLabel: String, version: String, patches: List<BinaryPatch>) {
+/**
+ * Applies the sites [compute] derives from the native library at [path] (e.g. located by symbol);
+ * [staleHint] ends the error when a site's expected words aren't there.
+ */
+fun patchNativeLibrary(path: String, appLabel: String, staleHint: String, compute: (ByteArray) -> List<BinaryPatch>) {
     val so = resourceFile(path)
     if (!so.exists()) throw PatchException("$path not found in $appLabel APK")
     val bytes = so.readBytes()
-    if (bytes.applyBinaryPatches(patches, "the $appLabel v$version offset table is stale") > 0) {
+    if (bytes.applyBinaryPatches(compute(bytes), staleHint) > 0) {
         so.writeBytes(bytes)
     }
+}
+
+/** Applies [table]'s entry for the version being patched to the native library at [path]. */
+fun patchNativeLibraryForVersion(path: String, appLabel: String, table: Map<String, List<BinaryPatch>>) {
+    val version = packageMetadata.versionName
+    val patches = table.forVersion(appLabel, version, "Add its offsets to the table.")
+    patchNativeLibrary(path, appLabel, "the $appLabel v$version offset table is stale") { patches }
 }
 
 /** The entry for [version], or a [PatchException] listing the supported versions and [howToAdd]. */

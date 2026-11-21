@@ -1,3 +1,30 @@
+# [2.15.0-dev.3](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.15.0-dev.2...v2.15.0-dev.3) (2026-11-21)
+
+
+### Bug Fixes
+
+* **inshorts:** move Fingerprints.kt to its file path ([73d00b8](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/73d00b8b50aa6674b980450f34992f097a997e23))
+
+
+### Performance Improvements
+
+* only make matching classes mutable in scanning patches ([419091c](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/419091c198ad6150e5155f6ea658078e54cbe427))
+
+# [2.15.0-dev.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.15.0-dev.1...v2.15.0-dev.2) (2026-11-21)
+
+
+### Features
+
+* **mt-manager:** Add VIP unlock patch ([6c7de3c](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/6c7de3ca5857a0fddab6612ffbc857e3f9e0dcde))
+
+# [2.15.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.14.0...v2.15.0-dev.1) (2026-11-21)
+
+
+### Features
+
+* **skytonight:** add support for v2.6.0 ([fabbdaf](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/fabbdafe922c340b3d446b12fa3abf3894aa5c0d))
+* **solid-explorer:** add support for v3.6.5 ([1c7a4fb](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/1c7a4fb1987311d5c9c75e9c071e1cd5a32432ec))
+
 # [2.14.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.13.0...v2.14.0) (2026-11-14)
 
 

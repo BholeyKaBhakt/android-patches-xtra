@@ -69,6 +69,15 @@ class Elf64(val bytes: ByteArray) {
     /** A defined dynamic symbol by its mangled [name]. */
     fun symbol(name: String): Symbol? = dynsym.firstOrNull { it.name == name && it.vaddr != 0L }
 
+    /** A defined dynamic symbol by its mangled [name]; throws if it isn't exported. */
+    fun requireSymbol(name: String): Symbol = symbol(name) ?: throw PatchException("$name is not exported")
+
+    /** The address of each instruction word in [symbol]'s body. */
+    fun addresses(symbol: Symbol): List<Long> = (0 until (symbol.size / 4).toInt()).map { symbol.vaddr + it * 4L }
+
+    /** The instruction words of [symbol]'s body. */
+    fun words(symbol: Symbol): List<Int> = addresses(symbol).map(::word)
+
     /** Vaddr of the PLT stub that calls the imported [name] (`adrp x16 ; ldr x17, [x16, #…]` → its GOT slot). */
     fun pltStub(name: String): Long? {
         val index = dynsym.indexOfFirst { it.name == name }.takeIf { it >= 0 } ?: return null

@@ -1,10 +1,11 @@
 package io.github.bholeykabhakt.patches.stellarium
 
-import app.morphe.patcher.patch.classDefForEach
-import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.patch.patch
+import com.android.tools.smali.dexlib2.iface.Method
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STELLARIUM
 
 /**
@@ -20,6 +21,10 @@ private const val ASSET_PACK_LOCATION =
     "Lcom/google/android/play/core/assetpacks/AssetPackLocation;"
 private const val ASSET_SHIM = "Lio/github/bholeykabhakt/extension/stellariumassetpack/AssetShim;"
 
+/** Concrete `getPackLocation(String)` returning an `AssetPackLocation` (skips the abstract interface decl). */
+private fun Method.isPackLocationGetter() = name == "getPackLocation" && returnType == ASSET_PACK_LOCATION &&
+    parameterTypes.singleOrNull()?.toString() == "Ljava/lang/String;" && implementation != null
+
 @Suppress("unused")
 val loadExtendedCatalogShimPatch = patch {
     compatibleWith(COMPATIBILITY_STELLARIUM)
@@ -31,15 +36,9 @@ val loadExtendedCatalogShimPatch = patch {
             // Don't rewrite the shim/extension itself.
             if (classDef.type.startsWith("Lio/github/bholeykabhakt/extension/")) return@classDefForEach
             if (classDef.type == ASSET_PACK_LOCATION) return@classDefForEach
+            if (classDef.methods.none { it.isPackLocationGetter() }) return@classDefForEach
 
-            val mutableClass = mutableClassDefBy(classDef.type)
-            mutableClass.methods.forEach methodLoop@{ method ->
-                if (method.name != "getPackLocation") return@methodLoop
-                if (method.returnType != ASSET_PACK_LOCATION) return@methodLoop
-                if (method.parameterTypes.singleOrNull()
-                        ?.toString() != "Ljava/lang/String;"
-                ) return@methodLoop
-                method.implementation ?: return@methodLoop // skip the abstract interface decl
+            mutableClassDefBy(classDef.type).methods.filter { it.isPackLocationGetter() }.forEach { method ->
 
                 // Short-circuit: return the shim location (or null) before the
                 // original Play Core logic. v0 is written then returned, so it is

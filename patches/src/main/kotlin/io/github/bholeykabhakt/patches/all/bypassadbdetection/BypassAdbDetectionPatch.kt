@@ -1,13 +1,14 @@
 package io.github.bholeykabhakt.patches.all.bypassadbdetection
 
-import app.morphe.patcher.patch.classDefForEach
-import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction3rc
+import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference
@@ -38,6 +39,12 @@ private val TARGET_METHOD_NAMES = setOf(
     "getUriFor",
 )
 
+private fun Instruction.isSettingsGetterCall(): Boolean {
+    if (opcode != Opcode.INVOKE_STATIC && opcode != Opcode.INVOKE_STATIC_RANGE) return false
+    val ref = (this as? ReferenceInstruction)?.reference as? MethodReference ?: return false
+    return ref.definingClass in SHIM_FOR && ref.name in TARGET_METHOD_NAMES
+}
+
 /**
  * Bypasses ADB / Developer-Options detection at the Settings.getXxx() API surface.
  *
@@ -62,6 +69,9 @@ val bypassAdbDetectionPatch = patch(
     execute {
         classDefForEach { classDef ->
             if (classDef.type.startsWith(EXTENSION_PACKAGE_PREFIX)) return@classDefForEach
+            if (classDef.methods.none { m -> m.implementation?.instructions?.any { it.isSettingsGetterCall() } == true }) {
+                return@classDefForEach
+            }
 
             val mutableClass = mutableClassDefBy(classDef.type)
             mutableClass.methods.forEach methodLoop@{ method ->

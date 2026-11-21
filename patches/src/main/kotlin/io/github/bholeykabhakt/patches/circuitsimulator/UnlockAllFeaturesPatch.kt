@@ -1,12 +1,12 @@
 package io.github.bholeykabhakt.patches.circuitsimulator
 
-import app.morphe.patcher.patch.classDefForEach
-import app.morphe.patcher.patch.mutableClassDefBy
-import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.patch.patch
+import app.morphe.patcher.util.returnBoxedBooleanEarly
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.BuilderOffsetInstruction
 import com.android.tools.smali.dexlib2.builder.BuilderSwitchPayload
@@ -92,13 +92,7 @@ private fun forcePackOwnership() {
     if (owners.size != 1) return
     val queries = mutableClassDefBy(owners.single()).methods.filter { it.isOwnershipQuery() }
     if (queries.size != 1) return
-    queries.single().addInstructions(
-        0,
-        """
-            sget-object v0, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
-            return-object v0
-        """,
-    )
+    queries.single().returnBoxedBooleanEarly(true)
 }
 
 /**
