@@ -2,7 +2,9 @@ package io.github.bholeykabhakt.patches.all.disablefacebooktracking
 
 import app.morphe.patcher.patch.document
 import app.morphe.patcher.patch.patch
-import org.w3c.dom.Element
+import io.github.bholeykabhakt.patches.utils.appendMetaData
+import io.github.bholeykabhakt.patches.utils.applicationElement
+import io.github.bholeykabhakt.patches.utils.elements
 
 // Facebook SDK reads these meta-data values at init. Default behaviour for both is
 // "on" — apps embedding the SDK have to explicitly opt out. Flip them to "false"
@@ -19,15 +21,10 @@ val disableFacebookTrackingPatch = patch(
 ) {
     execute {
         document("AndroidManifest.xml").use { document ->
-            val application = document
-                .getElementsByTagName("application")
-                .item(0) as Element
-
-            val metaDataNodes = application.getElementsByTagName("meta-data")
+            val application = document.applicationElement()
             val existingNames = mutableSetOf<String>()
 
-            for (i in 0 until metaDataNodes.length) {
-                val element = metaDataNodes.item(i) as Element
+            for (element in application.elements("meta-data")) {
                 val name = element.getAttribute("android:name")
                 if (name in FACEBOOK_TRACKING_KEYS) {
                     element.setAttribute("android:value", "false")
@@ -35,14 +32,8 @@ val disableFacebookTrackingPatch = patch(
                 }
             }
 
-            // Insert missing keys so the patch covers apps that ship Facebook SDK
-            // without setting the values explicitly (in which case SDK defaults to on).
-            (FACEBOOK_TRACKING_KEYS - existingNames).forEach { name ->
-                val element = document.createElement("meta-data")
-                element.setAttribute("android:name", name)
-                element.setAttribute("android:value", "false")
-                application.appendChild(element)
-            }
+            // Insert missing keys (the SDK defaults to on when a key is absent).
+            (FACEBOOK_TRACKING_KEYS - existingNames).forEach { application.appendMetaData(it, "false") }
         }
     }
 }

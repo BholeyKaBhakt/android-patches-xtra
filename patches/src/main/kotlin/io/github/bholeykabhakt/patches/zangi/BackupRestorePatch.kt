@@ -7,8 +7,8 @@ import app.morphe.patcher.patch.document
 import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_ZANGI
+import io.github.bholeykabhakt.patches.utils.applicationElement
 import io.github.bholeykabhakt.patches.utils.logMatch
-import org.w3c.dom.Element
 
 private const val EXT = "io.github.bholeykabhakt.extension.zangibackup"
 private const val HOOKS = "Lio/github/bholeykabhakt/extension/zangibackup/ZHooks;"
@@ -75,7 +75,7 @@ val backupRestorePatch = patch(
         )
 
         document("AndroidManifest.xml").use { doc ->
-            val app = doc.getElementsByTagName("application").item(0) as Element
+            val app = doc.applicationElement()
             fun activity(name: String, vararg attrs: Pair<String, String>) {
                 val a = doc.createElement("activity")
                 a.setAttribute("android:name", "$EXT.$name")

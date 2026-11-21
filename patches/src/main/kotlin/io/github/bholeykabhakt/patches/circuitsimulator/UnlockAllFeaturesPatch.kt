@@ -1,11 +1,10 @@
 package io.github.bholeykabhakt.patches.circuitsimulator
 
-import app.morphe.patcher.patch.classDefForEach
-import app.morphe.patcher.patch.mutableClassDefBy
-import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.patch.patch
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.BuilderOffsetInstruction
@@ -22,6 +21,7 @@ import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_CIRCUIT_SIMULATOR
 import io.github.bholeykabhakt.patches.utils.logMatch
+import io.github.bholeykabhakt.patches.utils.returnEarly
 
 private const val FIRESTORE = "Lcom/google/firebase/firestore/FirebaseFirestore;"
 
@@ -92,13 +92,7 @@ private fun forcePackOwnership() {
     if (owners.size != 1) return
     val queries = mutableClassDefBy(owners.single()).methods.filter { it.isOwnershipQuery() }
     if (queries.size != 1) return
-    queries.single().addInstructions(
-        0,
-        """
-            sget-object v0, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
-            return-object v0
-        """,
-    )
+    queries.single().returnEarly(true)
 }
 
 /**

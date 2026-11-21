@@ -1,13 +1,8 @@
 package io.github.bholeykabhakt.patches.solidexplorer
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.patch
-import com.android.tools.smali.dexlib2.Opcode
-import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
-import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_SOLID_EXPLORER
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.returnEarly
@@ -26,16 +21,11 @@ val unlockProPatch = patch(
 
     execute {
         // Force the LicenseState field to PREMIUM_PRO at the iput-object that stores it.
-        val constructor = LicenseDetailsConstructorFingerprint.logMatch.method
-        val writeIndex = constructor.implementation!!.instructions.indexOfFirst {
-            it.opcode == Opcode.IPUT_OBJECT &&
-                    ((it as ReferenceInstruction).reference as FieldReference).type == LICENSE_STATE
-        }
-        if (writeIndex < 0) throw PatchException("LicenseState write not found in LicenseDetails.<init>")
-        val valueRegister =
-            (constructor.getInstruction(writeIndex) as TwoRegisterInstruction).registerA
-        constructor.addInstructions(
-            writeIndex,
+        val constructor = LicenseDetailsConstructorFingerprint.logMatch
+        val write = constructor.instructionMatches.first()
+        val valueRegister = write.getInstruction<TwoRegisterInstruction>().registerA
+        constructor.method.addInstructions(
+            write.index,
             "sget-object v$valueRegister, $LICENSE_STATE->PREMIUM_PRO:$LICENSE_STATE",
         )
 

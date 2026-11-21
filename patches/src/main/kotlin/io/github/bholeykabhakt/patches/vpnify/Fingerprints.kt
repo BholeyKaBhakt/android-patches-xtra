@@ -4,14 +4,14 @@ import app.morphe.patcher.Fingerprint
 
 /** Fingerprints for the premium getters / signature-hash getter. See [unlockPremiumPatch]. */
 
-/** `vf.d.f()` — "is subscription active"; the premium chokepoint (~32 callers). */
+/** `vf.d.f()` — "is subscription active"; the premium chokepoint. */
 internal object SubscriptionActiveFingerprint : Fingerprint(
     returnType = "Z",
     parameters = emptyList(),
     strings = listOf("subscription_active"),
 )
 
-/** `vf.d.e()` — "is auto-renewing subscription" (auxiliary; 2 callers). */
+/** `vf.d.e()` — "is auto-renewing subscription". */
 internal object AutoRenewingSubscriptionFingerprint : Fingerprint(
     returnType = "Z",
     parameters = emptyList(),

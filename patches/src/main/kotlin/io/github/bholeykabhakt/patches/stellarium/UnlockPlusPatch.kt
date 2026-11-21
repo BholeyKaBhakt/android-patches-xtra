@@ -2,13 +2,12 @@ package io.github.bholeykabhakt.patches.stellarium
 
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.patch
-import app.morphe.patcher.patch.resourceFile
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_STELLARIUM
 import io.github.bholeykabhakt.patches.utils.Arm64
 import io.github.bholeykabhakt.patches.utils.BinaryPatch
 import io.github.bholeykabhakt.patches.utils.Elf64
-import io.github.bholeykabhakt.patches.utils.applyBinaryPatches
+import io.github.bholeykabhakt.patches.utils.patchNativeLibrary
 
 /**
  * Stellarium Mobile (Qt6 / C++). Unlocks the Plus tier in
@@ -34,16 +33,10 @@ private const val HAS_FEATURE_PLUS = "_ZNK7StelAPI17getHasFeaturePLUSEv"
 private const val HAS_VALID_LICENSE = "_ZNK7StelAPI15hasValidLicenseEv"
 private const val APP_VARIANT = "_ZNK7StelAPI13getAppVariantEv"
 
-private fun Elf64.body(symbol: Elf64.Symbol) =
-    (0 until (symbol.size / 4).toInt()).map { symbol.vaddr + it * 4L }
-
-private fun Elf64.defined(name: String) =
-    symbol(name) ?: throw PatchException("Stellarium: $name not exported")
-
 /** Entry → tail-call returning `QVariant(true)`, after proving the getter returns a QVariant via x8. */
 private fun Elf64.returnQVariantTrue(name: String, ctor: Long): BinaryPatch {
-    val fn = defined(name)
-    val pcs = body(fn)
+    val fn = requireSymbol(name)
+    val pcs = addresses(fn)
     if (pcs.none { Arm64.branchTarget(it, word(it)) == ctor }) {
         throw PatchException("Stellarium: $name no longer builds a QVariant(bool)")
     }
@@ -61,7 +54,7 @@ private fun Elf64.returnQVariantTrue(name: String, ctor: Long): BinaryPatch {
 
 /** `LDRB Wn, [..] ; CBZ Wn, <free>` → NOP the CBZ, after checking its target loads "free". */
 private fun Elf64.forcePlusVariant(): BinaryPatch {
-    val pcs = body(defined(APP_VARIANT))
+    val pcs = addresses(requireSymbol(APP_VARIANT))
     val cbz = pcs.zipWithNext().firstOrNull { (prev, pc) ->
         val ldrb = word(prev)
         val insn = word(pc)
@@ -100,11 +93,6 @@ val unlockPlusPatch = patch(
     dependsOn(disableAnalyticsPatch)
 
     execute {
-        val so = resourceFile(LIB_PATH)
-        if (!so.exists()) throw PatchException("$LIB_PATH not found in Stellarium APK")
-        val bytes = so.readBytes()
-        if (bytes.applyBinaryPatches(stellariumPlusPatches(bytes), "Stellarium library layout changed") > 0) {
-            so.writeBytes(bytes)
-        }
+        patchNativeLibrary(LIB_PATH, "Stellarium", "Stellarium library layout changed", ::stellariumPlusPatches)
     }
 }

@@ -2,7 +2,9 @@ package io.github.bholeykabhakt.patches.all.disableanalytics
 
 import app.morphe.patcher.patch.document
 import app.morphe.patcher.patch.patch
-import org.w3c.dom.Element
+import io.github.bholeykabhakt.patches.utils.appendMetaData
+import io.github.bholeykabhakt.patches.utils.applicationElement
+import io.github.bholeykabhakt.patches.utils.elements
 
 // Manifest meta-data keys consumed by Firebase Analytics, Crashlytics, Performance, In-App
 // Messaging and Google Analytics SDKs at init time. Keys ending in `_deactivated` use inverted
@@ -46,30 +48,19 @@ val disableAnalyticsPatch = patch(
 ) {
     execute {
         document("AndroidManifest.xml").use { document ->
-            val application = document
-                .getElementsByTagName("application")
-                .item(0) as Element
-
-            val metaDataNodes = application.getElementsByTagName("meta-data")
+            val application = document.applicationElement()
             val existingNames = mutableSetOf<String>()
 
-            for (i in 0 until metaDataNodes.length) {
-                val element = metaDataNodes.item(i) as Element
+            for (element in application.elements("meta-data")) {
                 val name = element.getAttribute("android:name")
                 val off = forcedOffValueFor(name) ?: continue
                 element.setAttribute("android:value", off)
                 existingNames += name
             }
 
-            // Insert the canonical "off" set for any key we'd want flipped but
-            // wasn't present — covers apps that ship the SDK without explicit
-            // opt-out keys (SDK then defaults to on).
+            // Insert the canonical "off" set for any key that wasn't present (the SDK then defaults to on).
             FORCE_OFF_KEYS.forEach { (name, value) ->
-                if (name in existingNames) return@forEach
-                val element = document.createElement("meta-data")
-                element.setAttribute("android:name", name)
-                element.setAttribute("android:value", value)
-                application.appendChild(element)
+                if (name !in existingNames) application.appendMetaData(name, value)
             }
         }
     }

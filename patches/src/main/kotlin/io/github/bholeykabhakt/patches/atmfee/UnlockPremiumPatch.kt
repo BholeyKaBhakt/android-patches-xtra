@@ -1,11 +1,11 @@
 package io.github.bholeykabhakt.patches.atmfee
 
 import app.morphe.patcher.patch.mutableClassDefBy
-import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_ATM_FEE_SAVER
 import io.github.bholeykabhakt.patches.utils.logMatch
+import io.github.bholeykabhakt.patches.utils.methodsNamed
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 /**
@@ -24,9 +24,7 @@ val unlockPremiumPatch = patch(
         IsPremiumActiveFingerprint.logMatch.method.returnEarly(true)
 
         // Not initConsentSettings(): it sets the lateinit ConsentInformation the options menu reads.
-        mutableClassDefBy(HOME_ACTIVITY).methods
-            .filter { it.name == "requestConsentInfo" || it.name == "initializeMobileAdsSdk" }
-            .also { if (it.size != 2) throw PatchException("Consent/ads init methods not found") }
+        mutableClassDefBy(HOME_ACTIVITY).methodsNamed("requestConsentInfo", "initializeMobileAdsSdk")
             .forEach { it.returnEarly() }
     }
 }

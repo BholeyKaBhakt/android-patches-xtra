@@ -2,12 +2,11 @@ package io.github.bholeykabhakt.patches.everycircuit
 
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.patch
-import app.morphe.patcher.patch.resourceFile
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_EVERYCIRCUIT
 import io.github.bholeykabhakt.patches.utils.Arm64
 import io.github.bholeykabhakt.patches.utils.BinaryPatch
 import io.github.bholeykabhakt.patches.utils.Elf64
-import io.github.bholeykabhakt.patches.utils.applyBinaryPatches
+import io.github.bholeykabhakt.patches.utils.patchNativeLibrary
 
 /**
  * EveryCircuit keeps its licence in the native `MMLicenseManager` (`libinterface.so`, symbols exported):
@@ -30,12 +29,7 @@ private const val IS_SAVABLE = "_ZNK16MMLicenseManager9isSavableEbi"
 
 private fun Int.bits(shift: Int, width: Int) = (this ushr shift) and ((1 shl width) - 1)
 
-private fun Elf64.defined(name: String) = symbol(name) ?: throw PatchException("EveryCircuit: $name not exported")
-
-private fun Elf64.words(name: String): List<Int> {
-    val fn = defined(name)
-    return (0 until (fn.size / 4).toInt()).map { word(fn.vaddr + it * 4L) }
-}
+private fun Elf64.words(name: String): List<Int> = words(requireSymbol(name))
 
 /** `ADD X0, X0, #imm ; RET` → imm: where the feature vector sits in the manager. */
 private fun Elf64.featureVectorOffset(): Int {
@@ -102,7 +96,7 @@ private object A64 {
 
 internal fun everyCircuitPatches(lib: ByteArray): List<BinaryPatch> {
     val elf = Elf64(lib)
-    val fn = elf.defined(ENABLE_PERMANENT)
+    val fn = elf.requireSymbol(ENABLE_PERMANENT)
     val vector = elf.featureVectorOffset()
     val first = elf.word(fn.vaddr)
     if (first == A64.ldpX(8, 9, 0, vector)) return emptyList() // already rewritten
@@ -146,11 +140,6 @@ val unlockPremiumPatch = patch(
     compatibleWith(COMPATIBILITY_EVERYCIRCUIT)
 
     execute {
-        val so = resourceFile(LIB_PATH)
-        if (!so.exists()) throw PatchException("$LIB_PATH not found in EveryCircuit APK")
-        val bytes = so.readBytes()
-        if (bytes.applyBinaryPatches(everyCircuitPatches(bytes), "EveryCircuit library layout changed") > 0) {
-            so.writeBytes(bytes)
-        }
+        patchNativeLibrary(LIB_PATH, "EveryCircuit", "EveryCircuit library layout changed", ::everyCircuitPatches)
     }
 }

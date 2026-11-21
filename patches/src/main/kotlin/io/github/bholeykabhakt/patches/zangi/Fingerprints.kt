@@ -1,6 +1,7 @@
 package io.github.bholeykabhakt.patches.zangi
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.methodCall
 
 // Zangi keeps its own class and member names (R8 only renames libraries), so these anchor on them.
 
@@ -57,4 +58,7 @@ internal object OnRtmpEventFingerprint : Fingerprint(
     name = "OnRtmpEvent",
     returnType = "I",
     parameters = listOf("Lcom/beint/project/core/RtmpEvent;"),
+    filters = listOf(
+        methodCall(definingClass = "Lcom/beint/project/core/httpclient/RequestHostTypeManager;", name = "setVpnConnectionType"),
+    ),
 )

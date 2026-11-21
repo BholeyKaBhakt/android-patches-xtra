@@ -1,8 +1,10 @@
 package io.github.bholeykabhakt.patches.atmfee
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.methodCall
 import app.morphe.patcher.resource.ResourceType
 import app.morphe.patcher.resourceLiteral
+import com.android.tools.smali.dexlib2.Opcode
 
 internal const val HOME_ACTIVITY = "Lcom/atmfee/ui/home_activity/HomeActivity;"
 
@@ -45,4 +47,5 @@ internal object SetupContentFingerprint : Fingerprint(
     returnType = "V",
     parameters = emptyList(),
     strings = listOf("https://www.atmfeesaver.com/apis/getCountries"),
+    filters = listOf(methodCall(definingClass = HOME_ACTIVITY, name = "initHome", opcode = Opcode.INVOKE_VIRTUAL)),
 )

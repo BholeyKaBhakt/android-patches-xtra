@@ -1,10 +1,10 @@
 package io.github.bholeykabhakt.patches.atmfee
 
-import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_ATM_FEE_SAVER
+import io.github.bholeykabhakt.patches.utils.methodsNamed
 import io.github.bholeykabhakt.patches.utils.returnEarly
 
 /**
@@ -21,9 +21,7 @@ val disableTelemetryPatch = patch(
     dependsOn(disableAnalyticsPatch)
 
     execute {
-        mutableClassDefBy(HOME_ACTIVITY).methods
-            .filter { it.name == "initClarity" || it.name == "enableInAppMessaging" }
-            .also { if (it.size != 2) throw PatchException("Clarity/in-app messaging init not found") }
+        mutableClassDefBy(HOME_ACTIVITY).methodsNamed("initClarity", "enableInAppMessaging")
             .forEach { it.returnEarly() }
     }
 }

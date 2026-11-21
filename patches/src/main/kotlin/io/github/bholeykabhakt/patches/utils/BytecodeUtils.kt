@@ -4,6 +4,7 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.Match
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.util.proxy.mutableTypes.MutableClass
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import com.android.tools.smali.dexlib2.iface.Method
 
@@ -73,10 +74,14 @@ fun MutableMethod.returnEarly() = addInstructions(
     },
 )
 
-/** Return a fixed boolean. Method must return `Z`. */
-fun MutableMethod.returnEarly(value: Boolean) {
-    require(returnType == "Z") { "returnEarly(Boolean) needs Z return, got $returnType" }
-    addInstructions(0, "const/4 v0, 0x${if (value) 1 else 0}\nreturn v0")
+/** Return a fixed boolean: `Z`, or `Boolean.TRUE`/`FALSE` for a `Ljava/lang/Boolean;` or `Ljava/lang/Object;` return. */
+fun MutableMethod.returnEarly(value: Boolean) = when (returnType) {
+    "Z" -> addInstructions(0, "const/4 v0, 0x${if (value) 1 else 0}\nreturn v0")
+    "Ljava/lang/Boolean;", "Ljava/lang/Object;" -> addInstructions(
+        0,
+        "sget-object v0, Ljava/lang/Boolean;->${if (value) "TRUE" else "FALSE"}:Ljava/lang/Boolean;\nreturn-object v0",
+    )
+    else -> throw IllegalArgumentException("returnEarly(Boolean) needs a Z, Boolean or Object return, got $returnType")
 }
 
 /** Return a fixed int. Method must return `Z`, `B`, `C`, `S`, or `I`. */
@@ -110,3 +115,15 @@ fun MutableMethod.returnEarly(value: String) {
     }
     addInstructions(0, "const-string v0, \"$value\"\nreturn-object v0")
 }
+
+/** The method named [name] (the first, if overloaded); throws if the class has none. */
+fun MutableClass.method(name: String): MutableMethod =
+    methods.firstOrNull { it.name == name } ?: throw PatchException("$type has no method $name")
+
+/** One method per name in [names]; throws if any is missing or overloaded. */
+fun MutableClass.methodsNamed(names: Iterable<String>): List<MutableMethod> = names.map { name ->
+    methods.filter { it.name == name }.singleOrNull()
+        ?: throw PatchException("$type: expected exactly one method $name")
+}
+
+fun MutableClass.methodsNamed(vararg names: String) = methodsNamed(names.asList())

@@ -1,10 +1,10 @@
 package io.github.bholeykabhakt.patches.utils
 
 import app.morphe.patcher.patch.Compatibility
-import app.morphe.patcher.patch.mutableClassDefBy
-import app.morphe.patcher.patch.patch
-import app.morphe.patcher.patch.mutableClassDefByOrNull
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.mutableClassDefByOrNull
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
@@ -40,16 +40,16 @@ fun pairIpVmPatch(compatibility: Compatibility, app: String, vararg extraNoOps: 
  * plus any app-specific [extraNoOps] (`class to method`).
  */
 fun gutPairIpVm(vararg extraNoOps: Pair<String, String>) {
-    mutableClassDefBy(SIGNATURE_CHECK).methods.first { it.name == "verifyIntegrity" }.returnEarly()
+    mutableClassDefBy(SIGNATURE_CHECK).method("verifyIntegrity").returnEarly()
 
     val vmRunner = mutableClassDefBy(VM_RUNNER)
-    vmRunner.methods.first { it.name == "<clinit>" }.returnEarly()
-    vmRunner.methods.first { it.name == "invoke" }.returnEarly()
+    vmRunner.method("<clinit>").returnEarly()
+    vmRunner.method("invoke").returnEarly()
 
-    mutableClassDefBy(STARTUP_LAUNCHER).methods.first { it.name == "launch" }.returnEarly()
+    mutableClassDefBy(STARTUP_LAUNCHER).method("launch").returnEarly()
 
     for ((classDescriptor, methodName) in extraNoOps) {
-        mutableClassDefBy(classDescriptor).methods.first { it.name == methodName }.returnEarly()
+        mutableClassDefBy(classDescriptor).method(methodName).returnEarly()
     }
 }
 
