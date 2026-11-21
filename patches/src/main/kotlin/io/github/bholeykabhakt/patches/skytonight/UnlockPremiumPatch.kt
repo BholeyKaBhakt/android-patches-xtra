@@ -45,6 +45,10 @@ private fun lockedItems(offset: Int) = BinaryPatch(
 )
 
 internal val SKY_TONIGHT_PREMIUM_PATCHES = mapOf(
+    "2.6.0" to listOf(
+        invalidLicense(0x4E57CA8),
+        premiumAccess(0x505B90C),
+    ),
     "2.5.3" to listOf(
         invalidLicense(0x4BC9BB8),
         premiumAccess(0x4DC01E4),
