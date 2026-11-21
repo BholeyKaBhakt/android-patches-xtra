@@ -1,3 +1,11 @@
+# [2.15.0-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.14.0...v2.15.0-dev.1) (2026-11-21)
+
+
+### Features
+
+* **skytonight:** add support for v2.6.0 ([fabbdaf](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/fabbdafe922c340b3d446b12fa3abf3894aa5c0d))
+* **solid-explorer:** add support for v3.6.5 ([1c7a4fb](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/1c7a4fb1987311d5c9c75e9c071e1cd5a32432ec))
+
 # [2.14.0](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.13.0...v2.14.0) (2026-11-14)
 
 
