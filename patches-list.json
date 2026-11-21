@@ -1,5 +1,5 @@
 {
-  "version": "2.15.0-dev.3",
+  "version": "2.15.0",
   "patches": [
     {
       "name": "AdFree Account",
@@ -88,6 +88,12 @@
             {
               "version": null,
               "isExperimental": true,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "1.54.0-play",
+              "isExperimental": false,
               "minSdk": null,
               "description": null
             },
@@ -464,18 +470,6 @@
               "isExperimental": false,
               "minSdk": null,
               "description": null
-            },
-            {
-              "version": "1.16.3",
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "1.16.2",
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
             }
           ]
         }
@@ -682,18 +676,6 @@
             },
             {
               "version": "1.16.8",
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "1.16.3",
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "1.16.2",
               "isExperimental": false,
               "minSdk": null,
               "description": null

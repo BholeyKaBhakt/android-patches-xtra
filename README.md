@@ -5,7 +5,7 @@ This repo contains some Android app patches.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.15.0-dev.3](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.15.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;31 patches total
+> **[v2.15.0](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.15.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;31 patches total
 <details>
 <summary><b>📦 Speedtest</b>&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -44,8 +44,8 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 1.51.1 |
-| :---: |
+| 1.54.0-play | 1.51.1 |
+| :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
@@ -124,8 +124,8 @@ This repo contains some Android app patches.
 
 > **🎯 Supported versions:**
 
-| 1.16.10 | 1.16.9 | 1.16.8 | 1.16.3 | 1.16.2 |
-| :---: | :---: | :---: | :---: | :---: |
+| 1.16.10 | 1.16.9 | 1.16.8 |
+| :---: | :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
