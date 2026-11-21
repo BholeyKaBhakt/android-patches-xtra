@@ -56,7 +56,6 @@ object Constants {
         targets = listOf(
             AppTarget(version = "2.6.0"),
             AppTarget(version = "2.5.3"),
-            AppTarget(version = "2.5.0"),
         ),
     )
 

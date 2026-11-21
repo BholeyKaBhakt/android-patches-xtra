@@ -26,12 +26,6 @@ internal val SKY_TONIGHT_TELEMETRY_SITES = mapOf(
         retHead("InitFirebaseAnalytics", 0x2B812F8, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
         retHead("AdsInitializer.Initialize", 0x2BC14B8, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
     ),
-    "2.5.0" to listOf(
-        retHead("InitFirebaseAnalytics", 0x2B27208, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-        retHead("AdsInitializer.Initialize", 0x2B66BF8, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-        // Pre-2.5.3 site, kept (not proven dead on this build): GoogleMobileAdsInitializer.Initialize
-        retHead("GoogleMobileAdsInitializer.Initialize", 0x2B69878, 0xA9BD5FFE.toInt(), 0xA90157F6.toInt()),
-    ),
 )
 
 @Suppress("unused")
