@@ -22,12 +22,6 @@ internal val STAR_WALK_2_TELEMETRY_SITES = mapOf(
         retHead("InitFirebaseAnalytics", 0x25544BC, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
         retHead("AdsInitializer.Initialize", 0x2597438, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
     ),
-    "2.20.3" to listOf(
-        retHead("InitFirebaseAnalytics", 0x2368C84, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-        retHead("AdsInitializer.Initialize", 0x23A7874, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt()),
-        // Pre-2.22.0 site, kept (not proven dead on this build): GoogleMobileAdsInitializer.Initialize
-        retHead("GoogleMobileAdsInitializer.Initialize", 0x23AC330, 0xF81E0FFE.toInt(), 0xA9014FF4.toInt()),
-    ),
 )
 
 @Suppress("unused")

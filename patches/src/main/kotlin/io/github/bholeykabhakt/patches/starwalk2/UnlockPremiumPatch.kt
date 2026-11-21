@@ -64,12 +64,6 @@ internal val STAR_WALK_2_PREMIUM_PATCHES = mapOf(
         showInstallNotBuy(0x24A9B30),
         itemBought(0x24B2D04),
     ),
-    "2.20.3" to listOf(
-        invalidLicense(0x3CE8274),
-        hasFullAccess(0x3DA9A50),
-        showInstallNotBuy(0x22F113C),
-        itemBought(0x22FA26C),
-    ),
 )
 
 @Suppress("unused")

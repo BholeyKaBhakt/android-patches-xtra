@@ -64,7 +64,6 @@ object Constants {
         packageName = "com.vitotechnology.StarWalk2Free",
         targets = listOf(
             AppTarget(version = "2.22.0"),
-            AppTarget(version = "2.20.3"),
         ),
     )
 
