@@ -76,6 +76,14 @@ object Constants {
         ),
     )
 
+    val COMPATIBILITY_COSMIC_WATCH = Compatibility(
+        name = "Cosmic Watch",
+        packageName = "com.cosmic_watch.cosmicwatch",
+        targets = listOf(
+            AppTarget(version = "3.0.1"),
+        ),
+    )
+
     val COMPATIBILITY_SOLAR_WALK_2 = Compatibility(
         name = "Solar Walk 2",
         packageName = "com.vitotechnology.SolarWalk2Free",
