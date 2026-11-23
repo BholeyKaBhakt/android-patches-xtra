@@ -15,8 +15,10 @@ import app.morphe.patcher.patch.resourceFile
 import app.morphe.patcher.patch.stringOption
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c
+import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction3rc
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.RegisterRangeInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference
 import org.w3c.dom.Element
@@ -69,6 +71,11 @@ val customBrandingPatch = patch(
         default = "#FFFFFF",
         title = "Icon background",
         description = "Shown behind the icon image.",
+        // A color value (#RGB, #ARGB, #RRGGBB, #AARRGGBB) or a color reference; caught here instead of at resource compile.
+        validator = {
+            it.isNullOrBlank() ||
+                Regex("#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|@(android:)?color/[A-Za-z0-9_.]+").matches(it)
+        },
     )
     val fullBleed by booleanOption(
         key = "fullBleed",
@@ -128,7 +135,7 @@ val customBrandingPatch = patch(
 
         // The resource encoder wants each value type in its own file (strings.xml, colors.xml).
         if (name != null) addValue("strings.xml", "<string name=\"${NS}_name\">${escape(name)}</string>")
-        if (icon) addValue("colors.xml", "<color name=\"${NS}_background\">${look?.background ?: background ?: "#FFFFFF"}</color>")
+        if (icon) addValue("colors.xml", "<color name=\"${NS}_background\">${look?.background ?: background?.takeIf { it.isNotBlank() } ?: "#FFFFFF"}</color>")
 
         val appLabel = editManifest(name, icon, notification)
         if (name != null && renameInApp == true && appLabel?.startsWith("@string/") == true) {
@@ -324,7 +331,7 @@ private fun rerouteSmallIcons() {
         if (classDef.type.startsWith(EXTENSION_PREFIX)) return@classDefForEach
         val hits = classDef.methods.any { m ->
             m.implementation?.instructions?.any { insn ->
-                insn.opcode == Opcode.INVOKE_VIRTUAL &&
+                (insn.opcode == Opcode.INVOKE_VIRTUAL || insn.opcode == Opcode.INVOKE_VIRTUAL_RANGE) &&
                     ((insn as ReferenceInstruction).reference as MethodReference).let {
                         it.definingClass == BUILDER && it.name == "setSmallIcon"
                     }
@@ -336,16 +343,21 @@ private fun rerouteSmallIcons() {
             val impl = method.implementation ?: return@forEach
             for (i in 0 until impl.instructions.size) {
                 val insn = impl.getInstruction(i)
-                if (insn.opcode != Opcode.INVOKE_VIRTUAL) continue
+                if (insn.opcode != Opcode.INVOKE_VIRTUAL && insn.opcode != Opcode.INVOKE_VIRTUAL_RANGE) continue
                 val ref = (insn as ReferenceInstruction).reference as MethodReference
                 if (ref.definingClass != BUILDER || ref.name != "setSmallIcon") continue
-                val r = insn as FiveRegisterInstruction
                 // Same registers, static form with the builder as first parameter; returns the builder.
+                // The /range form is used when a register is above v15 (large R8 methods).
                 val target = ImmutableMethodReference(SHIM, "setSmallIcon", listOf(BUILDER) + ref.parameterTypes.map { it.toString() }, BUILDER)
-                method.replaceInstruction(
-                    i,
-                    BuilderInstruction35c(Opcode.INVOKE_STATIC, r.registerCount, r.registerC, r.registerD, r.registerE, r.registerF, r.registerG, target),
-                )
+                val static = when (insn) {
+                    is RegisterRangeInstruction ->
+                        BuilderInstruction3rc(Opcode.INVOKE_STATIC_RANGE, insn.startRegister, insn.registerCount, target)
+                    is FiveRegisterInstruction -> BuilderInstruction35c(
+                        Opcode.INVOKE_STATIC, insn.registerCount, insn.registerC, insn.registerD, insn.registerE, insn.registerF, insn.registerG, target,
+                    )
+                    else -> throw PatchException("Unexpected setSmallIcon call format ${insn.opcode}")
+                }
+                method.replaceInstruction(i, static)
             }
         }
     }
