@@ -1,3 +1,9 @@
+## [2.16.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.16.0...v2.16.1) (2026-11-23)
+
+### 🐛 Bug Fixes
+
+* **mt-manager:** pin correct version code ([6d94819](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/6d9481910600b5e941bfce72f2479f8389772248))
+
 ## [2.16.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.16.0...v2.16.1-dev.1) (2026-11-23)
 
 ### 🐛 Bug Fixes

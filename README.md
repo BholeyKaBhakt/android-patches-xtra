@@ -9,7 +9,7 @@ Collection of patches for the apps I find useful.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.16.1-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.16.1-dev.1)**&nbsp;&nbsp;&middot;&nbsp;&nbsp;`dev`&nbsp;&nbsp;&middot;&nbsp;&nbsp;**35 patches** across **20 apps**&nbsp;&nbsp;&middot;&nbsp;&nbsp;[Full details](PATCHES.md)
+> **[v2.16.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.16.1)**&nbsp;&nbsp;&middot;&nbsp;&nbsp;`main`&nbsp;&nbsp;&middot;&nbsp;&nbsp;**35 patches** across **20 apps**&nbsp;&nbsp;&middot;&nbsp;&nbsp;[Full details](PATCHES.md)
 
 - [ATM Fee Saver](PATCHES.md#atm-fee-saver-comatmfee) <kbd>3.8</kbd> <kbd>3.7.9</kbd>
 - [Automate](PATCHES.md#automate-comllamalabautomate) <kbd>1.54.0-play</kbd> <kbd>1.51.1</kbd>
