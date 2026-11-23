@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.window.OnBackInvokedCallback;
+import android.window.OnBackInvokedDispatcher;
 
 import org.json.JSONObject;
 
@@ -139,7 +141,7 @@ public final class ZBackupActivity extends Activity {
     }
 
     private ZBackup.Progress progressSink() {
-        return (stage, done, total) -> runOnUiThread(() -> {
+        return (stage, done, total) -> onUi(() -> {
             if (!busy) return;
             status.setText(stage);
             if (total > 0) {
@@ -153,6 +155,41 @@ public final class ZBackupActivity extends Activity {
     }
 
     interface Job { String run() throws Exception; }
+
+    /** Back is ignored while a restore is staged: leaving would lose the restart that applies it. */
+    private boolean restoring;
+    private Object backBlocker; // OnBackInvokedCallback (API 33+)
+
+    private void holdBack(boolean hold) {
+        restoring = hold;
+        if (Build.VERSION.SDK_INT < 33) return;
+        OnBackInvokedDispatcher dispatcher = getOnBackInvokedDispatcher();
+        if (hold && backBlocker == null) {
+            OnBackInvokedCallback cb = () -> { };
+            dispatcher.registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, cb);
+            backBlocker = cb;
+        } else if (!hold && backBlocker != null) {
+            dispatcher.unregisterOnBackInvokedCallback((OnBackInvokedCallback) backBlocker);
+            backBlocker = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!restoring) super.onBackPressed();
+    }
+
+    /** False once the user has left: a job finishing later must not show a dialog on a dead window. */
+    private boolean alive() {
+        return !isFinishing() && !isDestroyed();
+    }
+
+    /** Runs on the UI thread only while this screen is still showing. */
+    private void onUi(Runnable r) {
+        runOnUiThread(() -> {
+            if (alive()) r.run();
+        });
+    }
 
     private void runJob(String start, Job job) {
         setBusy(true, start);
@@ -168,7 +205,9 @@ public final class ZBackupActivity extends Activity {
             }
             final String m = msg;
             final boolean success = ok;
-            runOnUiThread(() -> {
+            onUi(() -> {
+                // A staged restore keeps Back blocked until the restart that applies it.
+                if (!success) holdBack(false);
                 setBusy(false, null);
                 refresh();
                 if (m != null) new AlertDialog.Builder(this)
@@ -255,7 +294,7 @@ public final class ZBackupActivity extends Activity {
             JSONObject meta = ZBackup.readMeta(this, archive, pw);
             String problem = ZBackup.checkCompatible(this, meta);
             if (problem != null) throw new Exception(problem);
-            runOnUiThread(() -> confirmRestore(uri, folder, pw, meta));
+            onUi(() -> confirmRestore(uri, folder, pw, meta));
             return null;
         }));
     }
@@ -277,19 +316,22 @@ public final class ZBackupActivity extends Activity {
         new AlertDialog.Builder(this)
                 .setTitle("Restore this backup?")
                 .setMessage(msg)
-                .setPositiveButton("Restore", (d, w) -> runJob("Restoring…", () -> {
-                    JSONObject m = folder ? ZBackup.stageFromFolder(this, uri, pw, progressSink())
-                            : ZBackup.stageArchive(this, uri, pw, progressSink());
-                    ZBackup.adoptRestoreSource(this, folder ? uri : null, pw);
-                    int failed = m.optInt("media_failed", 0);
-                    runOnUiThread(() -> new AlertDialog.Builder(this)
-                            .setTitle("Restore ready")
-                            .setMessage("Zangi restarts now to finish." + (failed > 0 ? "\n(" + failed + " media files couldn't be restored.)" : ""))
-                            .setCancelable(false)
-                            .setPositiveButton("Restart", (d2, w2) -> ZBackup.restartApp(this))
-                            .show());
-                    return null;
-                }))
+                .setPositiveButton("Restore", (d, w) -> {
+                    holdBack(true);
+                    runJob("Restoring…", () -> {
+                        JSONObject m = folder ? ZBackup.stageFromFolder(this, uri, pw, progressSink())
+                                : ZBackup.stageArchive(this, uri, pw, progressSink());
+                        ZBackup.adoptRestoreSource(this, folder ? uri : null, pw);
+                        int failed = m.optInt("media_failed", 0);
+                        onUi(() -> new AlertDialog.Builder(this)
+                                .setTitle("Restore ready")
+                                .setMessage("Zangi restarts now to finish." + (failed > 0 ? "\n(" + failed + " media files couldn't be restored.)" : ""))
+                                .setCancelable(false)
+                                .setPositiveButton("Restart", (d2, w2) -> ZBackup.restartApp(this))
+                                .show());
+                        return null;
+                    });
+                })
                 .setNegativeButton("Cancel", null)
                 .show();
     }

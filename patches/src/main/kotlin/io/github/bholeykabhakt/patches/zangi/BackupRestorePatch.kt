@@ -5,10 +5,12 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLa
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.document
 import app.morphe.patcher.patch.patch
+import app.morphe.patcher.util.addInstructionsAtControlFlowLabel
 import com.android.tools.smali.dexlib2.Opcode
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_ZANGI
 import io.github.bholeykabhakt.patches.utils.applicationElement
 import io.github.bholeykabhakt.patches.utils.logMatch
+import io.github.bholeykabhakt.patches.utils.requireFreeRegisters
 
 private const val EXT = "io.github.bholeykabhakt.extension.zangibackup"
 private const val HOOKS = "Lio/github/bholeykabhakt/extension/zangibackup/ZHooks;"
@@ -34,7 +36,9 @@ val backupRestorePatch = patch(
         )
 
         // The restart trampoline process must not run Zangi's init (it would open the DBs mid-swap).
-        ApplicationOnCreateFingerprint.logMatch.method.addInstructionsWithLabels(
+        val appOnCreate = ApplicationOnCreateFingerprint.logMatch.method
+        appOnCreate.requireFreeRegisters(1)
+        appOnCreate.addInstructionsWithLabels(
             0,
             """
                 invoke-static { }, $HOOKS->isRestartProcess()Z
@@ -51,8 +55,9 @@ val backupRestorePatch = patch(
         val returns = onCreate.implementation!!.instructions.withIndex()
             .filter { it.value.opcode == Opcode.RETURN_VOID }.map { it.index }
         if (returns.isEmpty()) throw PatchException("MainActivity.onCreate has no return-void")
+        // At the branch label of each return, so early-exit branches that jump to it run the hook too.
         returns.asReversed().forEach {
-            onCreate.addInstruction(it, "invoke-static { p0 }, $HOOKS->mainCreated(Landroid/app/Activity;)V")
+            onCreate.addInstructionsAtControlFlowLabel(it, "invoke-static { p0 }, $HOOKS->mainCreated(Landroid/app/Activity;)V")
         }
 
         MainActivityOnStopFingerprint.logMatch.method.addInstruction(
@@ -61,6 +66,7 @@ val backupRestorePatch = patch(
         )
 
         val transfer = OpenTransferDialogFingerprint.logMatch.method
+        transfer.requireFreeRegisters(1)
         transfer.addInstructionsWithLabels(
             0,
             """
@@ -87,6 +93,8 @@ val backupRestorePatch = patch(
                 "ZBackupActivity",
                 "android:theme" to "@android:style/Theme.DeviceDefault.DayNight",
                 "android:label" to "Backup & restore",
+                // Keep the running job's screen across rotation, resizing and dark mode instead of recreating it.
+                "android:configChanges" to "orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode",
             )
             activity(
                 "ZRestartActivity",

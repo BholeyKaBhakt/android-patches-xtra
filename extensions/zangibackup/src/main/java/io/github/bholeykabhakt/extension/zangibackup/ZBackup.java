@@ -23,6 +23,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -37,11 +38,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.zip.CRC32;
+import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -282,10 +285,17 @@ public final class ZBackup {
     public static void exportToUri(Context ctx, Uri dest, boolean includeMedia, Progress pr) throws IOException {
         if (!hasPassword(ctx)) throw new IOException("Set a backup password first");
         if (!BUSY.compareAndSet(false, true)) throw new IOException("A backup or restore is already running");
+        ContentResolver cr = ctx.getContentResolver();
         try {
-            OutputStream raw = ctx.getContentResolver().openOutputStream(dest, "wt");
+            OutputStream raw = cr.openOutputStream(dest, "wt");
             if (raw == null) throw new IOException("Cannot open the destination");
-            writeArchive(ctx, ZCrypto.encrypt(new BufferedOutputStream(raw, 1 << 16), password(ctx)), includeMedia, pr);
+            try (OutputStream r = raw) {
+                writeArchive(ctx, ZCrypto.encrypt(new BufferedOutputStream(r, 1 << 16), password(ctx)), includeMedia, pr);
+            } catch (IOException | RuntimeException e) {
+                // Opened with "wt" (truncated): don't leave a partial file behind.
+                try { DocumentsContract.deleteDocument(cr, dest); } catch (Exception ignored) {}
+                throw e;
+            }
             prefs(ctx).edit().putLong("last_export", System.currentTimeMillis()).apply();
         } finally {
             BUSY.set(false);
@@ -318,6 +328,8 @@ public final class ZBackup {
                 File ext = ctx.getExternalFilesDir(null);
                 if (ext != null) addTree(zos, ext, "external/", false, pr);
             }
+            zos.finish();
+            ZCrypto.commit(os);   // only a complete archive gets the authenticated end marker
         } catch (JSONException e) {
             throw new IOException(e);
         } finally {
@@ -391,15 +403,27 @@ public final class ZBackup {
             try {
                 String parent = dirs.dir(dir);
                 String existing = dirs.child(parent, leaf);
-                if (existing != null) DocumentsContract.deleteDocument(cr, DocumentsContract.buildDocumentUriUsingTree(tree, existing));
-                Uri doc = DocumentsContract.createDocument(cr, DocumentsContract.buildDocumentUriUsingTree(tree, parent), MIME, leaf);
-                if (doc == null) throw new IOException("create failed");
-                OutputStream raw = cr.openOutputStream(doc, "w");
-                if (raw == null) throw new IOException("open failed");
-                try (InputStream in = new FileInputStream(f);
-                     OutputStream os = ZCrypto.encrypt(new BufferedOutputStream(raw, 1 << 16), pw, salt)) {
-                    copyStream(in, os);
+                // Write the new copy next to the old one and swap it in only once it's complete. If the
+                // swap itself fails, the complete .part stays: restore falls back to it, the next run replaces it.
+                String stale = dirs.child(parent, leaf + ".part");
+                if (stale != null) delete(cr, tree, stale);
+                Uri part = DocumentsContract.createDocument(cr, DocumentsContract.buildDocumentUriUsingTree(tree, parent), MIME, leaf + ".part");
+                if (part == null) throw new IOException("create failed");
+                try {
+                    try (InputStream in = new FileInputStream(f);
+                         OutputStream raw = cr.openOutputStream(part, "w")) {
+                        if (raw == null) throw new IOException("open failed");
+                        OutputStream os = ZCrypto.encrypt(new BufferedOutputStream(raw, 1 << 16), pw, salt);
+                        copyStream(in, os);
+                        ZCrypto.commit(os);
+                        os.close();
+                    }
+                } catch (IOException | RuntimeException e) {
+                    try { DocumentsContract.deleteDocument(cr, part); } catch (Exception ignored) {}
+                    throw e;
                 }
+                if (existing != null) DocumentsContract.deleteDocument(cr, DocumentsContract.buildDocumentUriUsingTree(tree, existing));
+                if (DocumentsContract.renameDocument(cr, part, leaf) == null) throw new IOException("rename failed");
                 index.put(rel, stamp);
                 copied++;
             } catch (Exception e) {
@@ -416,9 +440,10 @@ public final class ZBackup {
 
     /** Decrypts just enough to read meta.json (also checks the password). */
     public static JSONObject readMeta(Context ctx, Uri uri, char[] pw) throws IOException {
-        InputStream in = ctx.getContentResolver().openInputStream(uri);
-        if (in == null) throw new IOException("Cannot open the file");
-        try (ZipInputStream zis = new ZipInputStream(ZCrypto.decrypt(new BufferedInputStream(in, 1 << 16), pw))) {
+        // `in` is closed even when decrypt() throws on a wrong password.
+        try (InputStream in = ctx.getContentResolver().openInputStream(uri)) {
+            if (in == null) throw new IOException("Cannot open the file");
+            ZipInputStream zis = new ZipInputStream(ZCrypto.decrypt(new BufferedInputStream(in, 1 << 16), pw));
             ZipEntry e = zis.getNextEntry();
             if (e == null || !e.getName().equals("meta.json")) throw new IOException("Not a Zangi backup");
             return new JSONObject(readAll(zis));
@@ -451,11 +476,12 @@ public final class ZBackup {
             new File(ctx.getNoBackupFilesDir(), INDEX_FILE + PENDING_SUFFIX).delete();
             if (!pend.mkdirs()) throw new IOException("Cannot create the staging folder");
             File ext = ctx.getExternalFilesDir(null);
-            InputStream in = ctx.getContentResolver().openInputStream(uri);
-            if (in == null) throw new IOException("Cannot open the file");
             JSONObject meta = null;
             boolean hasDb = false, hasAccount = false;
-            try (ZipInputStream zis = new ZipInputStream(ZCrypto.decrypt(new BufferedInputStream(in, 1 << 16), pw))) {
+            // `in` is closed even when decrypt() throws on a wrong password.
+            try (InputStream in = ctx.getContentResolver().openInputStream(uri)) {
+                if (in == null) throw new IOException("Cannot open the file");
+                ZipInputStream zis = new ZipInputStream(ZCrypto.decrypt(new BufferedInputStream(in, 1 << 16), pw));
                 ZipEntry e;
                 int n = 0;
                 while ((e = zis.getNextEntry()) != null) {
@@ -533,28 +559,36 @@ public final class ZBackup {
 
     static void restoreMedia(ContentResolver cr, Uri tree, String dirId, File dest, File extRoot, char[] pw,
                              Progress pr, int[] count, Map<String, String> index) {
-        for (String[] c : listChildren(cr, tree, dirId)) {
+        List<String[]> children = listChildren(cr, tree, dirId);
+        Set<String> names = new HashSet<>();
+        for (String[] c : children) names.add(c[1]);
+        for (String[] c : children) {
             if (DocumentsContract.Document.MIME_TYPE_DIR.equals(c[2])) {
                 restoreMedia(cr, tree, c[0], new File(dest, c[1]), extRoot, pw, pr, count, index);
                 continue;
             }
-            if (!c[1].endsWith(EXT)) continue;
-            File d = new File(dest, c[1].substring(0, c[1].length() - EXT.length()));
+            String name = c[1];
+            // A copy left as .part by an interrupted swap, used only when the final name is missing
+            // (an incomplete one fails to decrypt and counts as failed). Not indexed, so the next
+            // backup mirrors it again under its final name.
+            boolean fromPart = name.endsWith(EXT + ".part") && !names.contains(name.substring(0, name.length() - 5));
+            if (fromPart) {
+                name = name.substring(0, name.length() - 5);
+            } else if (!name.endsWith(EXT)) {
+                continue;
+            }
+            File d = new File(dest, name.substring(0, name.length() - EXT.length()));
             if (pr != null) pr.update("Media " + d.getName(), count[0], 0);
             try (InputStream in = cr.openInputStream(DocumentsContract.buildDocumentUriUsingTree(tree, c[0]))) {
                 if (in == null) continue;
                 writeAtomically(ZCrypto.decrypt(new BufferedInputStream(in, 1 << 16), pw), d);
-                index.put(extRoot.toURI().relativize(d.toURI()).getPath(), d.length() + ":" + d.lastModified());
+                if (!fromPart) index.put(extRoot.toURI().relativize(d.toURI()).getPath(), d.length() + ":" + d.lastModified());
                 count[0]++;
             } catch (Exception e) {
                 count[1]++;
                 Log.w(TAG, "media restore skip " + c[1] + ": " + e);
             }
         }
-    }
-
-    public static boolean hasPendingRestore(Context ctx) {
-        return new File(new File(dataDir(ctx), PENDING_DIR), READY_MARK).exists();
     }
 
     /** Ends every process of this app and relaunches it through the :zbrestart trampoline. */
@@ -786,27 +820,29 @@ public final class ZBackup {
         zos.closeEntry();
     }
 
-    /** STORED for already-compressed media (needs size + CRC up front), DEFLATED otherwise. */
+    /**
+     * Media is DEFLATED at level 0 rather than STORED: no size/CRC up front, so a file that changes
+     * while it's copied can't fail the archive. A file gone by the time it's opened is skipped.
+     */
     static void putFile(ZipOutputStream zos, String name, File f, boolean deflate) throws IOException {
-        ZipEntry e = new ZipEntry(name);
-        e.setTime(f.lastModified());
-        if (!deflate) {
-            CRC32 crc = new CRC32();
-            byte[] buf = new byte[1 << 16];
-            try (InputStream in = new FileInputStream(f)) {
-                int n;
-                while ((n = in.read(buf)) > 0) crc.update(buf, 0, n);
-            }
-            e.setMethod(ZipEntry.STORED);
-            e.setSize(f.length());
-            e.setCompressedSize(f.length());
-            e.setCrc(crc.getValue());
+        InputStream in;
+        try {
+            in = new BufferedInputStream(new FileInputStream(f), 1 << 16);
+        } catch (FileNotFoundException e) {
+            if (f.exists()) throw e; // unreadable, not gone: the archive would be incomplete
+            Log.w(TAG, "skip " + name + ": " + e.getMessage());
+            return;
         }
-        zos.putNextEntry(e);
-        try (InputStream in = new BufferedInputStream(new FileInputStream(f), 1 << 16)) {
-            copyStream(in, zos);
+        try (InputStream src = in) {
+            ZipEntry e = new ZipEntry(name);
+            e.setTime(f.lastModified());
+            zos.setLevel(deflate ? Deflater.DEFAULT_COMPRESSION : Deflater.NO_COMPRESSION);
+            zos.putNextEntry(e);
+            copyStream(src, zos);
+            zos.closeEntry();
+        } finally {
+            zos.setLevel(Deflater.DEFAULT_COMPRESSION);
         }
-        zos.closeEntry();
     }
 
     static void writeAtomically(InputStream in, File target) throws IOException {
