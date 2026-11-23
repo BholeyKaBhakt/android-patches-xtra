@@ -38,30 +38,19 @@ import app.morphe.patcher.patch.loadPatchesFromJar
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import java.io.File
-import java.net.URLClassLoader
-import java.util.jar.Manifest
+import java.util.jar.JarFile
 
 fun main() {
-    val patchFiles = setOf(
-        File("build/libs/").listFiles { file ->
-            val fileName = file.name
-            !fileName.contains("javadoc") &&
-                    !fileName.contains("sources") &&
-                    fileName.endsWith(".mpp")
-        }!!.maxBy { it.lastModified() }, // newest build; stale bundles linger in build/libs
-    )
-    val loadedPatches = loadPatchesFromJar(patchFiles)
-    val patchClassLoader = URLClassLoader(patchFiles.map { it.toURI().toURL() }.toTypedArray())
-    val manifest = patchClassLoader.getResources("META-INF/MANIFEST.MF")
-
-    while (manifest.hasMoreElements()) {
-        Manifest(manifest.nextElement().openStream())
-            .mainAttributes
-            .getValue("Version")
-            ?.let {
-                generatePatchList(it, loadedPatches)
-            }
-    }
+    val patchFile = File("build/libs/").listFiles { file ->
+        val fileName = file.name
+        !fileName.contains("javadoc") &&
+                !fileName.contains("sources") &&
+                fileName.endsWith(".mpp")
+    }!!.maxBy { it.lastModified() } // newest build; stale bundles linger in build/libs
+    // The patches file's own manifest (a class loader would also return every dependency's).
+    val version = JarFile(patchFile).use { it.manifest?.mainAttributes?.getValue("Version") }
+        ?: error("${patchFile.name} has no Version in its manifest")
+    generatePatchList(version, loadPatchesFromJar(setOf(patchFile)))
 }
 
 @Suppress("DEPRECATION")
@@ -73,7 +62,8 @@ private fun generatePatchList(version: String, patches: Set<Patch>) {
             name = patch.name!!,
             description = patch.description,
             default = patch.default,
-            dependencies = patch.dependencies.map { it.javaClass.simpleName },
+            // Named dependencies only: unnamed ones are internal and can't be selected on their own.
+            dependencies = patch.dependencies.mapNotNull { it.name },
             // Map each Compatibility to a JsonCompatibility object with full metadata.
             // Patches with null compatiblePackages are universal (apply to any app).
             compatiblePackages = patch.compatibility?.map { compat ->
@@ -88,6 +78,7 @@ private fun generatePatchList(version: String, patches: Set<Patch>) {
                     targets = compat.targets.map { target ->
                         JsonCompatibility.Target(
                             version = target.version,
+                            versionCodes = target.versionCodes?.mapKeys { it.key.name },
                             isExperimental = target.isExperimental,
                             minSdk = target.minSdk,
                             description = target.description,
@@ -163,6 +154,8 @@ private class JsonCompatibility(
 ) {
     class Target(
         val version: String?,
+        /** Version code per ABI, when the target pins one. */
+        val versionCodes: Map<String, Int>?,
         val isExperimental: Boolean,
         /** Minimum device SDK version. Null means any SDK version. */
         val minSdk: Int?,
