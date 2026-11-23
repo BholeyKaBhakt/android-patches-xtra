@@ -1,7 +1,11 @@
 package io.github.bholeykabhakt.patches
 
+import io.github.bholeykabhakt.patches.cosmicwatch.COSMIC_WATCH_PRO_PATCHES
+import io.github.bholeykabhakt.patches.cosmicwatch.COSMIC_WATCH_TELEMETRY_SITES
 import io.github.bholeykabhakt.patches.skytonight.SKY_TONIGHT_PREMIUM_PATCHES
 import io.github.bholeykabhakt.patches.skytonight.SKY_TONIGHT_TELEMETRY_SITES
+import io.github.bholeykabhakt.patches.solarwalk2.SOLAR_WALK_2_AD_SITES
+import io.github.bholeykabhakt.patches.solarwalk2.SOLAR_WALK_2_PREMIUM_PATCHES
 import io.github.bholeykabhakt.patches.starwalk2.STAR_WALK_2_PREMIUM_PATCHES
 import io.github.bholeykabhakt.patches.starwalk2.STAR_WALK_2_TELEMETRY_SITES
 import io.github.bholeykabhakt.patches.utils.BinaryPatch
@@ -24,6 +28,10 @@ class NativeOffsetTablesTest {
         "Star Walk 2 telemetry" to STAR_WALK_2_TELEMETRY_SITES,
         "Sky Tonight premium" to SKY_TONIGHT_PREMIUM_PATCHES,
         "Sky Tonight telemetry" to SKY_TONIGHT_TELEMETRY_SITES,
+        "Solar Walk 2 premium" to SOLAR_WALK_2_PREMIUM_PATCHES,
+        "Solar Walk 2 ads" to SOLAR_WALK_2_AD_SITES,
+        "Cosmic Watch pro" to COSMIC_WATCH_PRO_PATCHES,
+        "Cosmic Watch telemetry" to COSMIC_WATCH_TELEMETRY_SITES,
     )
 
     private fun span(p: BinaryPatch) = p.offset until p.offset + 4 * maxOf(p.expected.size, p.replacement.size)
