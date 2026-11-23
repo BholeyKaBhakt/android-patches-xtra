@@ -31,7 +31,10 @@ private const val LIBMTHOOK_PATH = "lib/arm64-v8a/libmthook.so"
 private object Bundled
 
 @Suppress("unused")
-val unlockVipPatch = patch(name = "Unlock VIP") {
+val unlockVipPatch = patch(
+    name = "Unlock VIP",
+    description = "Some features are server-side locked",
+) {
     compatibleWith(COMPATIBILITY_MT_MANAGER)
 
     execute {

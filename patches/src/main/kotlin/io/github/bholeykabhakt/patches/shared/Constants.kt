@@ -55,7 +55,7 @@ object Constants {
         name = "MT Manager",
         packageName = "bin.mt.plus",
         targets = listOf(
-            AppTarget(version = "2.26.11", minSdk = 28),
+            AppTarget(version = "2.26.11", minSdk = 28, versionCode = 26110366),
         ),
     )
 
