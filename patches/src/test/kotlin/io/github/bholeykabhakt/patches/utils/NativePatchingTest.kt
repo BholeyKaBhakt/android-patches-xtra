@@ -77,6 +77,22 @@ class NativePatchingTest {
     }
 
     @Test
+    fun `an applied retHead is recognised by the untouched rest of its prologue`() {
+        val p = retHead("f", 0, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt())
+        val bytes = lib(16, 0 to Arm64.RET, 4 to 0xA9014FF4.toInt())
+        assertEquals(0, bytes.applyBinaryPatches(listOf(p), "stale"))
+    }
+
+    @Test
+    fun `a stale site that happens to hold a RET is not taken as applied`() {
+        // Some other function's RET at the offset, followed by anything but the prologue's 2nd word.
+        val p = retHead("f", 0, 0xA9BE57FE.toInt(), 0xA9014FF4.toInt())
+        val bytes = lib(16, 0 to Arm64.RET, 4 to 0x12345678)
+        val e = assertFailsWith<PatchException> { bytes.applyBinaryPatches(listOf(p), "table is stale") }
+        assertContains(e.message!!, "f @ 0x0")
+    }
+
+    @Test
     fun `misaligned offsets are rejected when the table is built`() {
         assertFailsWith<IllegalArgumentException> { BinaryPatch("f", 2, intArrayOf(0), intArrayOf(0)) }
     }

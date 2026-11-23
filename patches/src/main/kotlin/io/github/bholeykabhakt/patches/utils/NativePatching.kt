@@ -14,6 +14,8 @@ object Arm64 {
     const val NOP = 0xD503201F.toInt()
     const val MOV_W0_0 = 0x52800000
     const val MOV_W0_1 = 0x52800020
+    const val PACIASP = 0xD503233F.toInt()        // PACIASP (function entry with pointer authentication)
+    const val STR_X30_SP_M20 = 0xF81E0FFE.toInt() // STR X30, [SP, #-0x20]!
 
     private const val B_OPCODE = 0x14000000
 
@@ -86,6 +88,17 @@ class BinaryPatch(
 fun retHead(label: String, offset: Int, vararg prologue: Int) =
     BinaryPatch(label, offset, prologue, intArrayOf(Arm64.RET))
 
+/**
+ * Already applied: the replacement is in place and the words past it still hold the rest of
+ * [BinaryPatch.expected] (writing never touches them). Checking that tail too means a stale offset
+ * that happens to hold the replacement, such as a lone `RET`, fails instead of passing as done.
+ */
+private fun BinaryPatch.isAppliedIn(words: (offset: Int, count: Int) -> IntArray): Boolean {
+    if (!words(offset, replacement.size).contentEquals(replacement)) return false
+    val tail = expected.size - replacement.size
+    return tail <= 0 || words(offset + replacement.size * 4, tail).contentEquals(expected.copyOfRange(replacement.size, expected.size))
+}
+
 /** Idempotent; validates every site before writing any. Returns the number of sites written. */
 fun ByteArray.applyBinaryPatches(patches: List<BinaryPatch>, staleHint: String): Int {
     val buffer = ByteBuffer.wrap(this).order(ByteOrder.LITTLE_ENDIAN)
@@ -96,7 +109,7 @@ fun ByteArray.applyBinaryPatches(patches: List<BinaryPatch>, staleHint: String):
         if (p.offset + span > size) {
             throw PatchException("${p.label} @ ${p.offset.hex()} is past the end of the library ($size bytes); $staleHint")
         }
-        if (words(p.offset, p.replacement.size).contentEquals(p.replacement)) return@filter false
+        if (p.isAppliedIn(::words)) return@filter false
         val found = words(p.offset, p.expected.size)
         if (!found.contentEquals(p.expected)) {
             throw PatchException(
