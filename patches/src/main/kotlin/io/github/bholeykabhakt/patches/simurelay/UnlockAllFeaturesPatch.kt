@@ -1,10 +1,10 @@
 package io.github.bholeykabhakt.patches.simurelay
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.patch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_SIMURELAY
 import io.github.bholeykabhakt.patches.utils.logMatch
+import io.github.bholeykabhakt.patches.utils.requireFreeRegisters
 
 /** Play product ids; the Dart side unlocks a feature when `purchased_<id>` is true and never clears it. */
 private val PRODUCT_IDS = listOf("premium_id", "timersproduct", "toolsproduct")
@@ -20,11 +20,7 @@ val unlockAllFeaturesPatch = patch(
 
     execute {
         val method = ConfigureFlutterEngineFingerprint.logMatch.method
-        val impl = method.implementation!!
-        val parameterRegisters = 1 + method.parameterTypes.sumOf { if (it[0] == 'J' || it[0] == 'D') 2L else 1L }
-        if (impl.registerCount - parameterRegisters < 3) {
-            throw PatchException("${method.name} has fewer than 3 local registers")
-        }
+        method.requireFreeRegisters(3)
         method.addInstructions(
             0,
             buildString {

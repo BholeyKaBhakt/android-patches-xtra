@@ -20,9 +20,10 @@ val removeAdsPatch = patch(
     compatibleWith(COMPATIBILITY_INSHORTS)
 
     execute {
+        // Exactly one: with several overloads matching, picking the first could patch the wrong one.
         fun find(clazz: String, predicate: (MutableMethod) -> Boolean): MutableMethod =
-            mutableClassDefBy(clazz).methods.firstOrNull(predicate)
-                ?: throw PatchException("Inshorts Remove Ads: target method not found in $clazz")
+            mutableClassDefBy(clazz).methods.filter(predicate).singleOrNull()
+                ?: throw PatchException("Inshorts Remove Ads: expected exactly one target method in $clazz")
 
         // 1) Ad producers → null.
         find("Lcom/nis/app/ads/StackAdsManager;") {

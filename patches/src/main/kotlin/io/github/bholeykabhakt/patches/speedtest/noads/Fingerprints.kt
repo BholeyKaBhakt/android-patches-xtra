@@ -9,6 +9,8 @@ internal object IsAdFreeAccountFingerprint : Fingerprint(
     definingClass = "Lcom/ookla/speedtest/purchase/google/",
     returnType = "Z",
     parameters = emptyList(),
+    // Logged with the entitlement state right after the check: anchors it beyond the opcode shape.
+    strings = listOf("VERIFIED"),
     filters = OpcodesFilter.opcodesToFilters(
         Opcode.IGET_OBJECT,
         Opcode.INVOKE_STATIC,

@@ -7,6 +7,7 @@ import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_BLOCKERX
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.methodsNamed
 import io.github.bholeykabhakt.patches.utils.returnEarly
+import io.github.bholeykabhakt.patches.utils.requireMethod
 
 /** Every `BlockerXAppSharePref` flag a feature gates on — base Premium, the Premium+ tier, the
  *  per-mode premiums, and the coin-purchased unlocks (logo / block-screen / app-name = Private Mode). */
@@ -38,10 +39,11 @@ val unlockPremiumPatch = patch(
             .methodsNamed(UNLOCK_FLAGS)
             .forEach { it.returnEarly(true) }
 
+        val companion = "Lio/funswitch/blocker/features/mainActivityPage/MainActivity${'$'}Companion_;"
+        requireMethod(companion, "openMainActivityWithPassword", listOf("Landroid/content/Context;"), "V", isStatic = true)
         RedirectToNextScreenFingerprint.logMatch.method.addInstructions(
             0,
-            "invoke-static {p0}, Lio/funswitch/blocker/features/mainActivityPage/MainActivity${'$'}Companion_;" +
-                    "->openMainActivityWithPassword(Landroid/content/Context;)V\n" +
+            "invoke-static {p0}, $companion->openMainActivityWithPassword(Landroid/content/Context;)V\n" +
                     "return-void",
         )
     }

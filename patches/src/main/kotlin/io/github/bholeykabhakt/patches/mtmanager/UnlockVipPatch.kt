@@ -2,6 +2,8 @@ package io.github.bholeykabhakt.patches.mtmanager
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
+import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
+import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.deleteResource
 import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.patch.patch
@@ -9,11 +11,14 @@ import app.morphe.patcher.patch.resourceFile
 import app.morphe.patcher.patch.retainOriginalV2Signature
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import com.android.tools.smali.dexlib2.AccessFlags
+import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
+import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethodParameter
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_MT_MANAGER
 import io.github.bholeykabhakt.patches.utils.logMatch
 import io.github.bholeykabhakt.patches.utils.method
+import io.github.bholeykabhakt.patches.utils.requireFreeRegisters
 
 // Obfuscated classes: l.\u1a7b\u1a76\u06eb = Application superclass (its <clinit> loads libmtprotect);
 // l.\u06e8\u06e1 / l.\u073d\u06ec\u06eb = the two android.app.Dialog subclasses;
@@ -40,7 +45,8 @@ val unlockVipPatch = patch(
     execute {
         retainOriginalV2Signature()
 
-        val lib = Bundled::class.java.getResourceAsStream("/mtmanager/libmthook.so")!!.use { it.readBytes() }
+        val lib = Bundled::class.java.getResourceAsStream("/mtmanager/libmthook.so")?.use { it.readBytes() }
+            ?: throw PatchException("libmthook.so is missing from the patches file")
         resourceFile(LIBMTHOOK_PATH, true).apply { parentFile?.mkdirs() }.writeBytes(lib)
         // libmthook is arm64-only: drop the other ABIs so the APK only installs where it loads.
         for (abi in listOf("armeabi-v7a", "x86", "x86_64")) deleteResource("lib/$abi/")
@@ -63,7 +69,7 @@ val unlockVipPatch = patch(
             ).toMutable(),
         )
         fun bridge(classType: String, method: String, event: Int) =
-            mutableClassDefBy(classType).method(method).addInstructions(
+            mutableClassDefBy(classType).method(method).apply { requireFreeRegisters(1) }.addInstructions(
                 0, "const/4 v0, ${if (event < 0) "-0x1" else "0x$event"}\ninvoke-static { v0 }, $APP_SUPER->dlg(I)V",
             )
         bridge(DIALOG_A, "onStart", 1)
@@ -74,13 +80,19 @@ val unlockVipPatch = patch(
 
         // The network-storage protocol chooser is a SubMenu (not a Dialog): take its unlocked branch.
         NetStorageChooserFingerprint.logMatch.let { match ->
-            match.method.addInstructions(match.instructionMatches.first().index + 2, "const/4 v0, 0x1")
+            val call = match.instructionMatches.first().index
+            val result = match.method.getInstruction(call + 1)
+            if (result.opcode != Opcode.MOVE_RESULT) throw PatchException("NetStorageChooser: isVip()'s result isn't moved")
+            val reg = (result as OneRegisterInstruction).registerA
+            match.method.addInstructions(call + 2, "${if (reg < 16) "const/4" else "const/16"} v$reg, 0x1")
         }
 
         // While VIP is forced, the account-status subtitle can carry a string id of -1: show its text instead.
-        mutableClassDefBy(SUBTITLE).methods.first {
-            it.name == SUBTITLE_RES && it.returnType == "Ljava/lang/String;" && it.parameterTypes.isEmpty()
-        }.addInstructionsWithLabels(
+        (
+            mutableClassDefBy(SUBTITLE).methods.firstOrNull {
+                it.name == SUBTITLE_RES && it.returnType == "Ljava/lang/String;" && it.parameterTypes.isEmpty()
+            } ?: throw PatchException("Account subtitle text getter not found")
+        ).apply { requireFreeRegisters(1) }.addInstructionsWithLabels(
             0,
             """
                 iget v0, p0, $SUBTITLE->$SUBTITLE_RES:I

@@ -59,6 +59,7 @@ internal object OnRtmpEventFingerprint : Fingerprint(
     returnType = "I",
     parameters = listOf("Lcom/beint/project/core/RtmpEvent;"),
     filters = listOf(
-        methodCall(definingClass = "Lcom/beint/project/core/httpclient/RequestHostTypeManager;", name = "setVpnConnectionType"),
+        // Void, so removing the call can't leave a move-result behind.
+        methodCall(definingClass = "Lcom/beint/project/core/httpclient/RequestHostTypeManager;", name = "setVpnConnectionType", returnType = "V"),
     ),
 )

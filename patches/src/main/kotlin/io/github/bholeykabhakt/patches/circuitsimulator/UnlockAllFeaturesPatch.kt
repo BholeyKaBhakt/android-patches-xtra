@@ -22,6 +22,7 @@ import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import io.github.bholeykabhakt.patches.all.disableanalytics.disableAnalyticsPatch
 import io.github.bholeykabhakt.patches.shared.Constants.COMPATIBILITY_CIRCUIT_SIMULATOR
 import io.github.bholeykabhakt.patches.utils.logMatch
+import java.util.logging.Logger
 
 private const val FIRESTORE = "Lcom/google/firebase/firestore/FirebaseFirestore;"
 
@@ -80,7 +81,10 @@ val unlockAllFeaturesPatch = patch(
  * "is this pack owned" query behind every status producer. Skipped unless exactly one matches.
  */
 private fun forcePackOwnership() {
-    val packEnum = AddonPackEnumFingerprint.matchOrNull()?.classDef?.type ?: return
+    // Optional (older builds have no pack store), but say so when it's skipped: on a build that has
+    // the store, a skip leaves the add-on packs locked.
+    fun skip(why: String) = Logger.getLogger("UnlockAllFeatures").warning("Pack ownership not forced: $why")
+    val packEnum = AddonPackEnumFingerprint.matchOrNull()?.classDef?.type ?: return skip("no add-on pack enum")
     fun MethodLike.isOwnershipQuery() = returnType == "Ljava/lang/Object;" &&
         parameterTypes.size == 2 && parameterTypes[0].toString() == packEnum
     val owners = mutableListOf<String>()
@@ -89,9 +93,9 @@ private fun forcePackOwnership() {
             owners += classDef.type
         }
     }
-    if (owners.size != 1) return
+    if (owners.size != 1) return skip("${owners.size} Firestore pack stores")
     val queries = mutableClassDefBy(owners.single()).methods.filter { it.isOwnershipQuery() }
-    if (queries.size != 1) return
+    if (queries.size != 1) return skip("${queries.size} ownership queries in ${owners.single()}")
     queries.single().returnBoxedBooleanEarly(true)
 }
 
