@@ -11,15 +11,30 @@
       "@semantic-release/commit-analyzer",
       {
         "releaseRules": [
-          {
-            "type": "build",
-            "scope": "Needs bump",
-            "release": "patch"
-          }
+          { "breaking": true, "release": "major" },
+          { "type": "fix", "release": "patch" },
+          { "type": "feat", "release": "minor" },
+          { "type": "bump", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          { "type": "build", "scope": "Needs bump", "release": "patch" }
         ]
       }
     ],
-    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            { "type": "feat", "section": "✨ New Features", "hidden": false },
+            { "type": "perf", "section": "🔧 Improvements", "hidden": false },
+            { "type": "fix", "section": "🐛 Bug Fixes", "hidden": false },
+            { "type": "bump", "section": "🚀 Updated App Support", "hidden": false },
+            { "type": "build", "hidden": true }
+          ]
+        }
+      }
+    ],
     [
       "@MorpheApp/changelog",
       {
@@ -35,7 +50,7 @@
       "@semantic-release/exec",
       {
         "prepareCmd": "jq '.version=\"${nextRelease.version}\"' patches-list.json > patches-list.json.tmp && mv patches-list.json.tmp patches-list.json \
-          && python3 .github/scripts/generate_patches_readme.py $GITHUB_REPOSITORY $GITHUB_REF_NAME patches-list.json README.md"
+          && python3 .github/scripts/generate_patches_readme.py $GITHUB_REPOSITORY $GITHUB_REF_NAME patches-list.json README.md PATCHES.md"
       }
     ],
     [
@@ -46,7 +61,8 @@
           "gradle.properties",
           "patches-bundle.json",
           "patches-list.json",
-          "README.md"
+          "README.md",
+          "PATCHES.md"
         ],
         "message": "chore: Release v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
