@@ -1,3 +1,9 @@
+## [2.16.3](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.16.2...v2.16.3) (2026-11-24)
+
+### Bug Fixes
+
+* cleanup emojis ([6f9fcc3](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/6f9fcc3bbdbbb10ed799de907ea705853f5f7e60))
+
 ## [2.16.2](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.16.1...v2.16.2) (2026-11-24)
 
 ### 🐛 Bug Fixes
