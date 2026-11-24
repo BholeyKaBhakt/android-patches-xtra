@@ -1,6 +1,6 @@
 # Patches
 
-> Generated from `patches-list.json` — **v2.16.1** (`main`) · **35 patches** across **20 apps** · back to [README](README.md)
+> Generated from `patches-list.json` — **v2.16.2-dev.1** (`dev`) · **35 patches** across **20 apps** · back to [README](README.md)
 
 ---
 
@@ -100,7 +100,7 @@
 
 ## PROTO - circuit simulator (com.proto.circuitsimulator)
 
-**Supported versions:** `1.53.0` `1.49.0` `1.48.0`
+**Supported versions:** `1.54.0` `1.53.0`
 
 | Patch | Details |
 |---|---|
@@ -206,7 +206,7 @@
 
 ## Zangi (com.beint.zangi)
 
-**Supported versions:** `6.6.4`
+**Supported versions:** `6.6.6` `6.6.4`
 
 | Patch | Details |
 |---|---|
