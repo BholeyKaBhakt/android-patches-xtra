@@ -1,6 +1,5 @@
 package io.github.bholeykabhakt.extension.zangibackup;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.FilterOutputStream;
@@ -37,7 +36,8 @@ public final class ZCrypto {
     static final byte[] MAGIC = {'Z', 'B', 'K', '1'};
     static final int VERSION = 1;
     static final int KDF_PBKDF2_SHA256 = 1;
-    static final int ITERATIONS = 150_000;
+    // OWASP's PBKDF2-HMAC-SHA256 minimum. Each file's header records its count, so older files still decrypt.
+    static final int ITERATIONS = 600_000;
     static final int CHUNK = 1 << 20;
     static final int HEADER_LEN = 4 + 1 + 1 + 4 + 16 + 8 + 4;
     static final int TAG_LEN = 16;
@@ -78,24 +78,27 @@ public final class ZCrypto {
         KEYS.clear();
     }
 
-    /** Encrypts with a fresh random salt. */
+    /**
+     * Encrypts with a fresh random salt. Call {@link #commit} once everything is written: only then
+     * does close() write the authenticated final chunk, so a failed write never decrypts as complete.
+     */
     public static OutputStream encrypt(OutputStream out, char[] password) throws IOException {
         return encrypt(out, password, newSalt());
     }
 
-    /** Encrypts with the given salt (lets many files share one derived key). */
+    /** Encrypts with the given salt (lets many files share one derived key). See {@link #commit}. */
     public static OutputStream encrypt(OutputStream out, char[] password, byte[] salt) throws IOException {
         return new EncOut(out, key(password, salt, ITERATIONS), salt);
     }
 
-    public static InputStream decrypt(InputStream in, char[] password) throws IOException {
-        return new DecIn(in, password);
+    /** Marks a stream from {@link #encrypt} complete, so closing it ends the file with the final chunk. */
+    public static void commit(OutputStream encrypted) {
+        if (!(encrypted instanceof EncOut)) throw new IllegalArgumentException("Not an encrypting stream");
+        ((EncOut) encrypted).committed = true;
     }
 
-    /** True if the stream starts with the backup magic (doesn't consume it if markSupported). */
-    public static boolean looksEncrypted(byte[] head) {
-        return head != null && head.length >= 4 && head[0] == MAGIC[0] && head[1] == MAGIC[1]
-                && head[2] == MAGIC[2] && head[3] == MAGIC[3];
+    public static InputStream decrypt(InputStream in, char[] password) throws IOException {
+        return new DecIn(in, password);
     }
 
     static byte[] aad(byte[] header, int index, boolean last) {
@@ -116,6 +119,7 @@ public final class ZCrypto {
         private int len;
         private int index;
         private boolean closed;
+        boolean committed;
 
         EncOut(OutputStream out, SecretKey key, byte[] salt) throws IOException {
             super(out);
@@ -167,8 +171,11 @@ public final class ZCrypto {
             if (closed) return;
             closed = true;
             try {
-                flushChunk(true);
-                out.flush();
+                // Uncommitted (the write failed): no final chunk, so decryption reports truncation.
+                if (committed) {
+                    flushChunk(true);
+                    out.flush();
+                }
             } finally {
                 Arrays.fill(buf, (byte) 0);
                 out.close();
@@ -267,14 +274,5 @@ public final class ZCrypto {
         @Override public void close() throws IOException {
             in.close();
         }
-    }
-
-    /** Small helper for tests/diagnostics: encrypt a byte array. */
-    static byte[] encryptBytes(byte[] data, char[] password) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        OutputStream os = encrypt(bos, password);
-        os.write(data);
-        os.close();
-        return bos.toByteArray();
     }
 }

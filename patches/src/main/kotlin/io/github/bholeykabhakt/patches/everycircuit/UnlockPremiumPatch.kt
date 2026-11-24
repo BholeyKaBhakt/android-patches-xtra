@@ -80,18 +80,35 @@ private fun Elf64.permanentFeature(): PermanentFeature {
     return PermanentFeature(s, so, e, eo)
 }
 
+/**
+ * The offsets, stride and limits come from the library at patch time, so each encoder checks its
+ * operand fits the field: an out-of-range value would otherwise silently encode another instruction.
+ */
 private object A64 {
-    fun ldpX(rt: Int, rt2: Int, rn: Int, off: Int) = 0xA9400000.toInt() or ((off / 8 and 0x7F) shl 15) or (rt2 shl 10) or (rn shl 5) or rt
-    fun movzX(rd: Int, imm: Int, hw: Int) = 0xD2800000.toInt() or (hw shl 21) or (imm shl 5) or rd
-    fun movkX(rd: Int, imm: Int, hw: Int) = 0xF2800000.toInt() or (hw shl 21) or (imm shl 5) or rd
-    fun movzW(rd: Int, imm: Int) = 0x52800000 or (imm shl 5) or rd
-    fun movnW(rd: Int, imm: Int) = 0x12800000 or (imm shl 5) or rd
-    fun strW(rt: Int, rn: Int, off: Int) = 0xB9000000.toInt() or ((off / 4) shl 10) or (rn shl 5) or rt
-    fun strX(rt: Int, rn: Int, off: Int) = 0xF9000000.toInt() or ((off / 8) shl 10) or (rn shl 5) or rt
+    private fun check(ok: Boolean, what: () -> String) {
+        if (!ok) throw PatchException("EveryCircuit: ${what()} doesn't fit the instruction encoding")
+    }
+    private fun imm16(imm: Int) = check(imm in 0..0xFFFF) { "immediate $imm" }
+    private fun scaled(off: Int, scale: Int, range: IntRange) =
+        check(off % scale == 0 && off in range) { "offset $off (scale $scale)" }
+
+    fun ldpX(rt: Int, rt2: Int, rn: Int, off: Int): Int {
+        scaled(off, 8, -512..504) // signed imm7 * 8
+        return 0xA9400000.toInt() or ((off / 8 and 0x7F) shl 15) or (rt2 shl 10) or (rn shl 5) or rt
+    }
+    fun movzX(rd: Int, imm: Int, hw: Int) = imm16(imm).let { 0xD2800000.toInt() or (hw shl 21) or (imm shl 5) or rd }
+    fun movkX(rd: Int, imm: Int, hw: Int) = imm16(imm).let { 0xF2800000.toInt() or (hw shl 21) or (imm shl 5) or rd }
+    fun movzW(rd: Int, imm: Int) = imm16(imm).let { 0x52800000 or (imm shl 5) or rd }
+    fun movnW(rd: Int, imm: Int) = imm16(imm).let { 0x12800000 or (imm shl 5) or rd }
+    fun strW(rt: Int, rn: Int, off: Int) = scaled(off, 4, 0..4095 * 4).let { 0xB9000000.toInt() or ((off / 4) shl 10) or (rn shl 5) or rt }
+    fun strX(rt: Int, rn: Int, off: Int) = scaled(off, 8, 0..4095 * 8).let { 0xF9000000.toInt() or ((off / 8) shl 10) or (rn shl 5) or rt }
     fun cmpX(rn: Int, rm: Int) = 0xEB00001F.toInt() or (rm shl 16) or (rn shl 5)
-    fun bHs(words: Int) = 0x54000002 or ((words and 0x7FFFF) shl 5)
-    fun addX(rd: Int, rn: Int, imm: Int) = 0x91000000.toInt() or (imm shl 10) or (rn shl 5) or rd
-    fun b(words: Int) = 0x14000000 or (words and 0x03FFFFFF)
+    fun bHs(words: Int) = check(words in -(1 shl 18) until (1 shl 18)) { "branch $words" }
+        .let { 0x54000002 or ((words and 0x7FFFF) shl 5) }
+    fun addX(rd: Int, rn: Int, imm: Int) = check(imm in 0..4095) { "add immediate $imm" }
+        .let { 0x91000000.toInt() or (imm shl 10) or (rn shl 5) or rd }
+    fun b(words: Int) = check(words in -(1 shl 25) until (1 shl 25)) { "branch $words" }
+        .let { 0x14000000 or (words and 0x03FFFFFF) }
 }
 
 internal fun everyCircuitPatches(lib: ByteArray): List<BinaryPatch> {

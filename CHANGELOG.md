@@ -1,3 +1,17 @@
+## [2.16.2-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.16.1...v2.16.2-dev.1) (2026-11-24)
+
+### 🐛 Bug Fixes
+
+* **branding:** handle range-form setSmallIcon calls ([a863c85](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/a863c85e8d3971d0e4e778b22d822eab1d399959))
+* check injected code's registers and call targets at patch time ([28170dc](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/28170dc27daee3d31219064d15b149a06d459306))
+* stricter native patch site checks ([75d0bd1](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/75d0bd1f7c875bc4b2b6a4bd7bc54cbe2ffb4f68))
+* **zangi:** never leave a failed backup that decrypts as complete ([7ed024d](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/7ed024d2da9c282097c8f5db5b435b1271b58ed6))
+
+### 🚀 Updated App Support
+
+* **circuit-simulator:** support v1.54.0 ([24236ab](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/24236ab05410d247df62d4ec54571b4386390dd9))
+* **zangi:** support v6.6.6 ([c4fc513](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/c4fc513f46c1a0709dcb91fe8d1e6d7ca49e5fea))
+
 ## [2.16.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.16.0...v2.16.1) (2026-11-23)
 
 ### 🐛 Bug Fixes

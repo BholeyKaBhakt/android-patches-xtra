@@ -4,9 +4,38 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.Match
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.patch.classDefByOrNull
 import app.morphe.patcher.util.proxy.mutableTypes.MutableClass
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
+import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.iface.Method
+
+/**
+ * Code inserted at index 0 may use the method's local registers (v0…) as scratch: nothing is live
+ * there yet. But the patcher doesn't add registers, so in a method without enough locals `v0` is
+ * `p0`, and writing it breaks the original body (a VerifyError at runtime). Fail at patch time.
+ */
+fun MutableMethod.requireFreeRegisters(count: Int) {
+    val impl = implementation ?: throw PatchException("$definingClass->$name has no code")
+    val parameters = (if (AccessFlags.STATIC.isSet(accessFlags)) 0 else 1) +
+        parameterTypes.sumOf { if (it[0] == 'J' || it[0] == 'D') 2 else 1 }
+    val locals = impl.registerCount - parameters
+    if (locals < count) throw PatchException("$definingClass->$name has $locals local registers, needs $count")
+}
+
+/**
+ * Injected smali names its call targets as plain symbols the patcher never checks: a renamed target
+ * still patches, then crashes the app with NoSuchMethodError. Check the target exists instead, and
+ * with [isStatic] that it fits the invoke (static for invoke-static, instance for direct/virtual).
+ */
+fun requireMethod(type: String, name: String, parameters: List<String>, returnType: String, isStatic: Boolean? = null) {
+    val found = classDefByOrNull(type)?.methods?.any {
+        it.name == name && it.returnType == returnType && it.parameterTypes.map(CharSequence::toString) == parameters &&
+            (isStatic == null || AccessFlags.STATIC.isSet(it.accessFlags) == isStatic)
+    } == true
+    val kind = when (isStatic) { true -> " (static)"; false -> " (instance)"; null -> "" }
+    if (!found) throw PatchException("$type->$name(${parameters.joinToString("")})$returnType$kind not found")
+}
 
 private const val MATCH_LOGGING_ENV_VAR = "MORPHE_PRINT_MATCHES"
 private const val MATCH_LOGGING_PROPERTY = "morphe.printMatches"

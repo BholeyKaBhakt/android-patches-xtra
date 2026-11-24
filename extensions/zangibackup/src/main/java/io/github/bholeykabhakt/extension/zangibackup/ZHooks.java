@@ -29,9 +29,10 @@ public final class ZHooks {
     public static void mainCreated(final Activity a) {
         try {
             if (ZBackup.isLoggedIn(a) || ZBackup.prefs(a).getBoolean("restore_offered", false)) return;
-            ZBackup.prefs(a).edit().putBoolean("restore_offered", true).apply();
             a.getWindow().getDecorView().post(() -> {
                 if (a.isFinishing() || a.isDestroyed()) return;
+                // Marked once actually shown: an onCreate that finishes right away keeps the offer.
+                ZBackup.prefs(a).edit().putBoolean("restore_offered", true).apply();
                 new AlertDialog.Builder(a)
                         .setTitle("Restore a Zangi backup?")
                         .setMessage("If you backed up Zangi with this build before, you can restore your account, "

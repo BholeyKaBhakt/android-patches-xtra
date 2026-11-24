@@ -17,10 +17,10 @@ internal val COSMIC_WATCH_TELEMETRY_SITES = mapOf(
     "3.0.1" to listOf(
         BinaryPatch(
             "AnalyticsService.CanTrack()", 0x164EB28,
-            expected = intArrayOf(PACIASP, STR_X30_SP_M20),
+            expected = intArrayOf(Arm64.PACIASP, Arm64.STR_X30_SP_M20),
             replacement = intArrayOf(Arm64.MOV_W0_0, Arm64.RET),
         ),
-        retHead("AnalyticsService.Flush()", 0x164E8FC, PACIASP, STR_X30_SP_M20),
+        retHead("AnalyticsService.Flush()", 0x164E8FC, Arm64.PACIASP, Arm64.STR_X30_SP_M20),
     ),
 )
 

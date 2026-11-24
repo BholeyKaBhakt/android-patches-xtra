@@ -45,9 +45,8 @@ object Constants {
         packageName = "com.proto.circuitsimulator",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "1.54.0"),
             AppTarget(version = "1.53.0"),
-            AppTarget(version = "1.49.0"),
-            AppTarget(version = "1.48.0"),
         ),
     )
 
@@ -173,6 +172,7 @@ object Constants {
         name = "Zangi",
         packageName = "com.beint.zangi",
         targets = listOf(
+            AppTarget(version = "6.6.6"),
             AppTarget(version = "6.6.4"),
         ),
     )

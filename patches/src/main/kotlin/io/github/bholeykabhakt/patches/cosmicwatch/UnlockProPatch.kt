@@ -13,13 +13,11 @@ import io.github.bholeykabhakt.patches.utils.patchNativeLibraryForVersion
  */
 
 // ARM64 instruction encodings (little-endian)
-internal const val PACIASP = 0xD503233F.toInt()
-internal const val STR_X30_SP_M20 = 0xF81E0FFE.toInt()  // STR X30, [SP, #-0x20]!
 private const val MOV_W0_100 = 0x52800C80               // MOV W0, #100
 
 private fun effectiveTierPro(offset: Int) = BinaryPatch(
     "AccessManager.EffectiveTier()", offset,
-    expected = intArrayOf(PACIASP, STR_X30_SP_M20),
+    expected = intArrayOf(Arm64.PACIASP, Arm64.STR_X30_SP_M20),
     replacement = intArrayOf(MOV_W0_100, Arm64.RET),
 )
 

@@ -21,20 +21,24 @@ import io.github.bholeykabhakt.patches.utils.patchNativeLibraryForVersion
 
 // ARM64 instruction encodings (little-endian)
 private const val MOV_W8_4 = 0x52800088                 // MOV W8, #4
-private const val STR_X30_SP_M20 = 0xF81E0FFE.toInt()   // STR X30, [SP, #-0x20]!
 private const val SUB_SP_SP_60 = 0xD10183FF.toInt()     // SUB SP, SP, #0x60
 private const val STR_X30_SP_30 = 0xF9001BFE.toInt()    // STR X30, [SP, #0x30]
 
 private fun hasFullAccess(offset: Int) = BinaryPatch(
     "StorePanelManager.get_HasFullAccess()", offset,
-    expected = intArrayOf(STR_X30_SP_M20, STP_X20_X19_SP10),
+    expected = intArrayOf(Arm64.STR_X30_SP_M20, STP_X20_X19_SP10),
     replacement = intArrayOf(Arm64.MOV_W0_1, Arm64.RET),
 )
 
+// `MOV W8,#1` alone matches almost anywhere: the branches on both sides pin the site.
+private const val B_FWD_0x20 = 0x14000008  // B .+0x20
+private const val B_FWD_0x1C = 0x14000007  // B .+0x1C
+
+/** [offset] is the `MOV W8,#1` itself. */
 private fun showInstallNotBuy(offset: Int) = BinaryPatch(
-    "StoreEntry.set_State(None): action button Buy -> Download (\"Install\")", offset,
-    expected = intArrayOf(MOV_W8_1),
-    replacement = intArrayOf(MOV_W8_4),
+    "StoreEntry.set_State(None): action button Buy -> Download (\"Install\")", offset - 4,
+    expected = intArrayOf(B_FWD_0x20, MOV_W8_1, B_FWD_0x1C),
+    replacement = intArrayOf(B_FWD_0x20, MOV_W8_4, B_FWD_0x1C),
 )
 
 private fun itemBought(offset: Int) = BinaryPatch(

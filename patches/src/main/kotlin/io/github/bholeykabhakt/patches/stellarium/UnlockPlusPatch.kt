@@ -56,8 +56,10 @@ private fun Elf64.forcePlusVariant(): BinaryPatch {
         Arm64.isLdrbW(ldrb) && Arm64.isCbzW(insn) && Arm64.rt(ldrb) == Arm64.rt(insn) &&
             loadsString(Arm64.cbTarget(pc, insn)) == "free"
     }?.second
-        // Already patched: the flag load is followed by our NOP.
-        ?: pcs.zipWithNext().firstOrNull { (prev, pc) -> Arm64.isLdrbW(word(prev)) && word(pc) == Arm64.NOP }?.second
+        // Already patched: the flag load is followed by our NOP. Only accepted as the single such pair
+        // in a function that still loads "free", which keeps an unrelated NOP from passing as patched.
+        ?: pcs.zipWithNext().filter { (prev, pc) -> Arm64.isLdrbW(word(prev)) && word(pc) == Arm64.NOP }
+            .singleOrNull()?.second?.takeIf { pcs.any { loadsString(it) == "free" } }
         ?: throw PatchException("Stellarium: getAppVariant() flag branch not found")
     return BinaryPatch("StelAPI::getAppVariant() force plus", fileOffset(cbz), intArrayOf(word(cbz)), intArrayOf(Arm64.NOP))
 }
