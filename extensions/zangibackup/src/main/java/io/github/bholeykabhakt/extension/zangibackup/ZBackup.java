@@ -44,7 +44,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.zip.Deflater;
+import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -821,27 +821,44 @@ public final class ZBackup {
     }
 
     /**
-     * Media is DEFLATED at level 0 rather than STORED: no size/CRC up front, so a file that changes
-     * while it's copied can't fail the archive. A file gone by the time it's opened is skipped.
+     * Media is STORED, sized and checksummed by a first read: it doesn't compress, and changing the
+     * deflate level between entries corrupts the stream on zlib 1.2.11 (older Android releases). A
+     * file that changes between the two reads fails the zip's size/CRC check instead of being stored.
      */
     static void putFile(ZipOutputStream zos, String name, File f, boolean deflate) throws IOException {
-        InputStream in;
-        try {
-            in = new BufferedInputStream(new FileInputStream(f), 1 << 16);
-        } catch (FileNotFoundException e) {
-            if (f.exists()) throw e; // unreadable, not gone: the archive would be incomplete
-            Log.w(TAG, "skip " + name + ": " + e.getMessage());
-            return;
+        ZipEntry e = new ZipEntry(name);
+        e.setTime(f.lastModified());
+        if (!deflate) {
+            InputStream pre = open(f, name);
+            if (pre == null) return;
+            CRC32 crc = new CRC32();
+            long size = 0;
+            try (InputStream src = pre) {
+                byte[] buf = new byte[1 << 16];
+                for (int n; (n = src.read(buf)) > 0; size += n) crc.update(buf, 0, n);
+            }
+            e.setMethod(ZipEntry.STORED);
+            e.setSize(size);
+            e.setCompressedSize(size);
+            e.setCrc(crc.getValue());
         }
+        InputStream in = open(f, name);
+        if (in == null) return;
         try (InputStream src = in) {
-            ZipEntry e = new ZipEntry(name);
-            e.setTime(f.lastModified());
-            zos.setLevel(deflate ? Deflater.DEFAULT_COMPRESSION : Deflater.NO_COMPRESSION);
             zos.putNextEntry(e);
             copyStream(src, zos);
             zos.closeEntry();
-        } finally {
-            zos.setLevel(Deflater.DEFAULT_COMPRESSION);
+        }
+    }
+
+    /** Null if the file is gone (skipped); one that exists but can't be read throws. */
+    static InputStream open(File f, String name) throws IOException {
+        try {
+            return new BufferedInputStream(new FileInputStream(f), 1 << 16);
+        } catch (FileNotFoundException e) {
+            if (f.exists()) throw e; // unreadable, not gone: the archive would be incomplete
+            Log.w(TAG, "skip " + name + ": " + e.getMessage());
+            return null;
         }
     }
 
