@@ -40,13 +40,10 @@ import com.google.gson.JsonObject
 import java.io.File
 import java.util.jar.JarFile
 
-fun main() {
-    val patchFile = File("build/libs/").listFiles { file ->
-        val fileName = file.name
-        !fileName.contains("javadoc") &&
-                !fileName.contains("sources") &&
-                fileName.endsWith(".mpp")
-    }!!.maxBy { it.lastModified() } // newest build; stale bundles linger in build/libs
+/** Usage: PatchListGenerator <patches file> (passed by the generatePatchesList task). */
+fun main(args: Array<String>) {
+    require(args.size == 1) { "Expected the patches file path." }
+    val patchFile = File(args[0])
     // The patches file's own manifest (a class loader would also return every dependency's).
     val version = JarFile(patchFile).use { it.manifest?.mainAttributes?.getValue("Version") }
         ?: error("${patchFile.name} has no Version in its manifest")
