@@ -172,6 +172,7 @@ object Constants {
         name = "Zangi",
         packageName = "com.beint.zangi",
         targets = listOf(
+            AppTarget(version = "7.0.0"),
             AppTarget(version = "6.6.6"),
             AppTarget(version = "6.6.4"),
         ),
