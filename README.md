@@ -9,7 +9,7 @@ Collection of patches for the apps I find useful.
 ## 🩹 Patches list
 
 <!-- PATCHES_START -->
-> **[v2.16.3](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.16.3)**&nbsp;&nbsp;&middot;&nbsp;&nbsp;`main`&nbsp;&nbsp;&middot;&nbsp;&nbsp;**35 patches** across **20 apps**&nbsp;&nbsp;&middot;&nbsp;&nbsp;[Full details](PATCHES.md)
+> **[v2.16.4-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/releases/tag/v2.16.4-dev.1)**&nbsp;&nbsp;&middot;&nbsp;&nbsp;`dev`&nbsp;&nbsp;&middot;&nbsp;&nbsp;**35 patches** across **20 apps**&nbsp;&nbsp;&middot;&nbsp;&nbsp;[Full details](PATCHES.md)
 
 - [ATM Fee Saver](PATCHES.md#atm-fee-saver-comatmfee) <kbd>3.8</kbd> <kbd>3.7.9</kbd>
 - [Automate](PATCHES.md#automate-comllamalabautomate) <kbd>1.54.0-play</kbd> <kbd>1.51.1</kbd>
@@ -24,13 +24,13 @@ Collection of patches for the apps I find useful.
 - [Simurelay](PATCHES.md#simurelay-commordiastudiosimurelayfree) <kbd>3.0.6</kbd>
 - [Sky Tonight](PATCHES.md#sky-tonight-comvitotechnologyskytonightmapstarwalk) <kbd>2.6.0</kbd> <kbd>2.5.3</kbd>
 - [Solar Walk 2](PATCHES.md#solar-walk-2-comvitotechnologysolarwalk2free) <kbd>1.6.9</kbd>
-- [Solid Explorer](PATCHES.md#solid-explorer-plsolidexplorer2) <kbd>3.6.5</kbd> <kbd>3.6.4</kbd>
+- [Solid Explorer](PATCHES.md#solid-explorer-plsolidexplorer2) <kbd>3.6.6</kbd> <kbd>3.6.5</kbd> <kbd>3.6.4</kbd>
 - [Speedtest](PATCHES.md#speedtest-orgzwanooandroidspeedtest) <kbd>7.1.4</kbd> <kbd>7.0.4</kbd>
 - [Star Walk 2](PATCHES.md#star-walk-2-comvitotechnologystarwalk2free) <kbd>2.22.0</kbd>
 - [Stellarium](PATCHES.md#stellarium-comnoctuasoftwarestellarium_free) <kbd>1.16.10</kbd> <kbd>1.16.9</kbd> <kbd>1.16.8</kbd>
 - [UFO VPN](PATCHES.md#ufo-vpn-comufovpnconnectvelnet) <kbd>2.5.8</kbd> <kbd>2.5.5</kbd>
 - [vpnify](PATCHES.md#vpnify-comvpnfreehotspotsecurevpnify) <kbd>2.2.9</kbd>
-- [Zangi](PATCHES.md#zangi-combeintzangi) <kbd>6.6.6</kbd> <kbd>6.6.4</kbd>
+- [Zangi](PATCHES.md#zangi-combeintzangi) <kbd>7.0.0</kbd> <kbd>6.6.6</kbd> <kbd>6.6.4</kbd>
 - [Universal](PATCHES.md#universal)
 <!-- PATCHES_END -->
 
