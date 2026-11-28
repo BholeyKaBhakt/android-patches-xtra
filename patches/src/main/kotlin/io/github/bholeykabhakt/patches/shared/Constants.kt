@@ -154,6 +154,7 @@ object Constants {
         packageName = "pl.solidexplorer2",
         targets = listOf(
             AppTarget(version = null, isExperimental = true),
+            AppTarget(version = "3.6.6"),
             AppTarget(version = "3.6.5"),
             AppTarget(version = "3.6.4"),
         ),
