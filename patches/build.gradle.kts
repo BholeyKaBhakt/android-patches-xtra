@@ -47,6 +47,8 @@ animalsniffer {
 }
 
 tasks {
+    val patchesFile = jar.flatMap { it.archiveFile }
+
     test {
         useJUnitPlatform()
     }
@@ -55,7 +57,6 @@ tasks {
     // but outputs class files instead of dex, so the check sees the code as it runs on Android,
     // after D8 has replaced methods it backports such as List.of() and Optional.isEmpty().
     val desugarPatchesClasses = register("desugarPatchesClasses") {
-        val patchesFile = jar.flatMap { it.archiveFile }
         val classpath = sourceSets["main"].compileClasspath
         val output = layout.buildDirectory.file("animalsniffer/patches-desugared.jar")
 
@@ -114,6 +115,8 @@ tasks {
 
         classpath = sourceSets["main"].runtimeClasspath + patchListGeneratorClasspath
         mainClass.set("util.PatchListGeneratorKt")
+        // The bundle this build just made, not whichever .mpp is newest in build/libs.
+        argumentProviders.add(CommandLineArgumentProvider { listOf(patchesFile.get().asFile.absolutePath) })
     }
 
     // Used by gradle-semantic-release-plugin.

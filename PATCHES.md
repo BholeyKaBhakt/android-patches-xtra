@@ -1,6 +1,6 @@
 # Patches
 
-> Generated from `patches-list.json` — **v2.16.3** (`main`) · **35 patches** across **20 apps** · back to [README](README.md)
+> Generated from `patches-list.json` — **v2.16.4-dev.1** (`dev`) · **35 patches** across **20 apps** · back to [README](README.md)
 
 ---
 
@@ -142,7 +142,7 @@
 
 ## Solid Explorer (pl.solidexplorer2)
 
-**Supported versions:** `3.6.5` `3.6.4`
+**Supported versions:** `3.6.6` `3.6.5` `3.6.4`
 
 | Patch | Details |
 |---|---|
@@ -206,7 +206,7 @@
 
 ## Zangi (com.beint.zangi)
 
-**Supported versions:** `6.6.6` `6.6.4`
+**Supported versions:** `7.0.0` `6.6.6` `6.6.4`
 
 | Patch | Details |
 |---|---|
