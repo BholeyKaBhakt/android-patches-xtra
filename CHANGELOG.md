@@ -1,3 +1,10 @@
+## [2.16.4](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.16.3...v2.16.4) (2026-11-28)
+
+### Updated App Support
+
+* **solid-explorer:** support v3.6.6 ([7dd2bb8](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/7dd2bb801d3169359685ab3f8c7582155771dcb1))
+* **zangi:** support v7.0.0 ([2f53620](https://github.com/BholeyKaBhakt/android-patches-xtra/commit/2f536209ae94c102ec042abea0b2a33b8e331a4b))
+
 ## [2.16.4-dev.1](https://github.com/BholeyKaBhakt/android-patches-xtra/compare/v2.16.3...v2.16.4-dev.1) (2026-11-28)
 
 ### Updated App Support
